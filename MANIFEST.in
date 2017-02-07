@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include metalgrafica *.css
+recursive-include metalgrafica *.csv
+recursive-include metalgrafica *.html
+recursive-include metalgrafica *.ico
+recursive-include metalgrafica *.js
+recursive-include metalgrafica *.json
+recursive-include metalgrafica *.md
+recursive-include metalgrafica *.png
+recursive-include metalgrafica *.py
+recursive-include metalgrafica *.svg
+recursive-include metalgrafica *.txt
+recursive-exclude metalgrafica *.pyc
