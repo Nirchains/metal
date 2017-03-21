@@ -4,5 +4,8 @@
     ],
     "css/custom.css": [
         "public/css/custom.css"
+    ],
+    "js/custom.js": [
+        "public/js/custom.js"
     ]
 }

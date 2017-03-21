@@ -16,18 +16,23 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 app_include_css = ["/assets/metalgrafica/css/material.css", "/assets/metalgrafica/css/custom.css"]
-# app_include_js = "/assets/metalgrafica/js/metalgrafica.js"
+app_include_js = "/assets/metalgrafica/js/custom.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/metalgrafica/css/metalgrafica.css"
 # web_include_js = "/assets/metalgrafica/js/metalgrafica.js"
 
 #fixtures = ['Custom Field', 'Property Setter', "Print Format","Custom Script"]
-fixtures=['Property Setter']
+fixtures=['Custom Field', 'Property Setter','Print Format','Custom Script']
 
 
 doctype_js = {
-    "Workstation":["custom_script/workstation.js"]
+    "Workstation":[
+        "custom_script/workstation.js"
+    ],
+    "Custom Field": [
+        "custom_script/custom_field.js"
+    ]
 }
 
 # Home Pages
