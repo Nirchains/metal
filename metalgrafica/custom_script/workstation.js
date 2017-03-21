@@ -1,0 +1,1 @@
+//cur_frm.set_df_property("holiday_list", "hidden", true);

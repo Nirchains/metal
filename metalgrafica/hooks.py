@@ -22,6 +22,14 @@ app_include_css = ["/assets/metalgrafica/css/material.css", "/assets/metalgrafic
 # web_include_css = "/assets/metalgrafica/css/metalgrafica.css"
 # web_include_js = "/assets/metalgrafica/js/metalgrafica.js"
 
+#fixtures = ['Custom Field', 'Property Setter', "Print Format","Custom Script"]
+fixtures=['Property Setter']
+
+
+doctype_js = {
+    "Workstation":["custom_script/workstation.js"]
+}
+
 # Home Pages
 # ----------
 

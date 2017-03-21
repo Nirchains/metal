@@ -1,0 +1,19 @@
+[
+ {
+  "_assign": null, 
+  "_comments": null, 
+  "_liked_by": null, 
+  "_user_tags": null, 
+  "default_value": null, 
+  "doc_type": "Workstation", 
+  "docstatus": 0, 
+  "doctype": "Property Setter", 
+  "doctype_or_field": "DocField", 
+  "field_name": "holiday_list", 
+  "modified": "2017-03-21 07:33:27.909178", 
+  "name": "Workstation-holiday_list-hidden", 
+  "property": "hidden", 
+  "property_type": "Check", 
+  "value": "1"
+ }
+]
