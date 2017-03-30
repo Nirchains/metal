@@ -22,6 +22,8 @@ app_include_js = "/assets/metalgrafica/js/custom.js"
 # web_include_css = "/assets/metalgrafica/css/metalgrafica.css"
 # web_include_js = "/assets/metalgrafica/js/metalgrafica.js"
 
+get_help_messages = "metalgrafica.util.get_help_messages"
+
 #fixtures = ['Custom Field', 'Property Setter', "Print Format","Custom Script"]
 fixtures=['Custom Field', 'Property Setter','Print Format','Custom Script']
 

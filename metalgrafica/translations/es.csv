@@ -1,6 +1,9 @@
-DocType: Item,Standard Selling Rate,Precio estándar
+DocType: Item,Standard Selling Rate,Precio de venta estándar
 DocType: Contact Us Settings,Contact Us Settings,Configuración de contacto
 DocType: Property Setter,Property Type,Tipo de propiedad
 DocType: Custom Field,Insert After,Insertar después
 DocType: DocType,Image Field,Campo de imagen
 apps/frappe/frappe/public/js/frappe/views/treeview.js +235,Group Node,Grupo
+DocType: Item Attribute,From Range,Desde
+DocType: Item Attribute,To Range,Hasta
+DocType: Purchase Invoice Item,Valuation Rate,Precio de compra
