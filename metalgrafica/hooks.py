@@ -16,7 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 app_include_css = ["/assets/metalgrafica/css/material.css", "/assets/metalgrafica/css/custom.css"]
-app_include_js = ["/assets/metalgrafica/js/custom.js", "/assets/metalgrafica/js/vuejs/vue.min.js"]
+app_include_js = ["/assets/metalgrafica/js/custom.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/metalgrafica/css/metalgrafica.css"

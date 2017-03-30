@@ -7,8 +7,5 @@
     ],
     "js/custom.js": [
         "public/js/custom.js"
-    ],
-    "js/vue.min.js": [
-        "public/js/vuejs/vue.min.js"
     ]
 }
