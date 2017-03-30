@@ -6,4 +6,5 @@ DocType: DocType,Image Field,Campo de imagen
 apps/frappe/frappe/public/js/frappe/views/treeview.js +235,Group Node,Grupo
 DocType: Item Attribute,From Range,Desde
 DocType: Item Attribute,To Range,Hasta
+DocType: Item,Barcode,Código de barras
 DocType: Purchase Invoice Item,Valuation Rate,Precio de compra
