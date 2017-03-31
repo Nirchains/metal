@@ -9,3 +9,5 @@ DocType: Item Attribute,To Range,Hasta
 DocType: Item,Barcode,Código de barras
 DocType: Purchase Invoice Item,Valuation Rate,Precio de compra
 apps/frappe/frappe/core/doctype/communication/communication.js +19,Make,Crear
+DocType: Address,Email Id,Correo electrónico
+DocType: Address,Open,Abierto
