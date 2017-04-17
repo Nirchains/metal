@@ -11,3 +11,8 @@ DocType: Purchase Invoice Item,Valuation Rate,Precio de compra
 apps/frappe/frappe/core/doctype/communication/communication.js +19,Make,Crear
 DocType: Address,Email Id,Correo electrónico
 DocType: Address,Open,Abierto
+apps/frappe/frappe/www/login.html +15,Sign In,Acceso
+apps/frappe/frappe/www/login.html +25,Sign in,Aceptar
+apps/frappe/frappe/www/login.html +78,Sign up,Aceptar
+apps/frappe/frappe/www/login.html +78,Sign Up,Regístrate
+apps/frappe/frappe/www/login.html +19,Email address,Dirección de correo electrónico
