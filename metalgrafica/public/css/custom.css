@@ -10,3 +10,7 @@ textarea.form-control {
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
+/*Deshabilitamos los mensajes de ayuda*/
+.help-message-wrapper {
+  display: none;
+}
