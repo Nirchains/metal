@@ -38,7 +38,8 @@ doctype_js = {
 }
 
 doctype_list_js = {
-	"Item": ["custom_script/item_list.js"]
+	"Item": ["custom_script/item_list.js"],
+    "Customer": ["custom_script/customer_list.js"]
 }
 
 # Home Pages

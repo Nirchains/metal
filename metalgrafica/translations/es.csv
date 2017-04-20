@@ -17,3 +17,4 @@ apps/frappe/frappe/www/login.html +78,Sign up,Aceptar
 apps/frappe/frappe/www/login.html +78,Sign Up,Regístrate
 apps/frappe/frappe/www/login.html +19,Email address,Dirección de correo electrónico
 apps/frappe/frappe/templates/includes/login/login.js +152,Success,Accediendo...
+apps/frappe/frappe/public/js/frappe/form/toolbar.js +182,Request Feedback,Solicitar comentarios
