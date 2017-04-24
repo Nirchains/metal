@@ -7,5 +7,10 @@
     ],
     "js/custom.js": [
         "public/js/custom.js"
-    ]
+    ],
+    "js/templates.min.js": [
+		"public/js/list/list_item_main.html",
+		"public/js/list/list_item_row.html",
+        "public/js/list/list_item_subject.html"
+	]
 }

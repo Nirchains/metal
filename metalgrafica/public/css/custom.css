@@ -14,3 +14,8 @@ textarea.form-control {
 .help-message-wrapper {
   display: none;
 }
+/*Altura de las columnas en las listas*/
+.list-item {
+  height: auto;
+  min-height: 40px;
+}

@@ -2212,7 +2212,7 @@ mark,
   text-transform: capitalize;
 }
 .text-muted {
-  color: #8d99a6;
+  color: #444444;
 }
 .text-primary {
   color: #5e64ff;
@@ -2457,17 +2457,17 @@ pre code {
 }
 @media (min-width: 768px) {
   .container {
-    width: 98%;
+    width: 99%;
   }
 }
 @media (min-width: 992px) {
   .container {
-    width: 98%;
+    width: 99%;
   }
 }
 @media (min-width: 1200px) {
   .container {
-    width: 95%;
+    width: 99%;
   }
 }
 .container-fluid {
@@ -9411,7 +9411,7 @@ p {
   color: #36414C !important;
 }
 .text-muted {
-  color: #8D99A6 !important;
+  color: #444444 !important;
 }
 .text-extra-muted {
   color: #d1d8dd !important;
