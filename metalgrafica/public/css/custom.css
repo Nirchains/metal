@@ -30,3 +30,17 @@ textarea.form-control {
   padding-bottom: 3px;
   padding-top: 3px;
 }
+/*Estilos Home*/
+h6.uppercase,
+.h6.uppercase {
+  font-size: 14px;
+}
+.app-icon {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.app-icon:hover {
+  box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.7);
+  -webkit-transition: all 0.2s ease 0s;
+  -o-transition: all 0.2s ease 0s;
+  transition: all 0.2s ease 0s;
+}
