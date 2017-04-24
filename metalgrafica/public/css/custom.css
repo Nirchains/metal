@@ -1,5 +1,5 @@
 .grid-static-col.bold {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 .help-box {
   font-size: 11px;
@@ -18,4 +18,15 @@ textarea.form-control {
 .list-item {
   height: auto;
   min-height: 40px;
+}
+.ellipsis-mul-lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.list-item__content {
+  padding-bottom: 3px;
+  padding-top: 3px;
 }

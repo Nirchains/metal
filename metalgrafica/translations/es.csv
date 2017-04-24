@@ -20,3 +20,4 @@ apps/frappe/frappe/templates/includes/login/login.js +152,Success,Accediendo...
 apps/frappe/frappe/public/js/frappe/form/toolbar.js +182,Request Feedback,Solicitar comentarios
 DocType: Customer,Spain,España
 apps/erpnext/erpnext/public/js/templates/address_list.html +5,Billing,Facturación
+apps/frappe/frappe/public/js/frappe/ui/filters/edit_filter.html +24,Remove,Quitar
