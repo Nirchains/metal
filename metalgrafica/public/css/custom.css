@@ -44,3 +44,6 @@ h6.uppercase,
   -o-transition: all 0.2s ease 0s;
   transition: all 0.2s ease 0s;
 }
+.case-wrapper[data-name="Explore"] {
+  display: none !important;
+}
