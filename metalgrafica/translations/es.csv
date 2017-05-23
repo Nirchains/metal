@@ -1,4 +1,5 @@
 DocType: Item,Standard Selling Rate,Precio de venta estándar
+DocType: Communication,Email,Email
 DocType: Contact Us Settings,Contact Us Settings,Configuración de contacto
 DocType: Property Setter,Property Type,Tipo de propiedad
 DocType: Custom Field,Insert After,Insertar después

@@ -137,3 +137,5 @@ doctype_list_js = {
 # 	"frappe.desk.doctype.event.event.get_events": "metalgrafica.event.get_events"
 # }
 
+default_mail_footer = """<div style="text-align: center;">
+</div>"""
