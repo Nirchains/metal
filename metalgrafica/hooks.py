@@ -40,6 +40,9 @@ doctype_js = {
     ],
     "Custom Field": [
         "custom_script/custom_field.js"
+    ],
+    "Item": [
+        "custom_script/item.js"
     ]
 }
 
