@@ -3,32 +3,40 @@
 
 frappe.ui.form.on('Formato', {
 	refresh: function(frm) {
-
-	},
-	validate: function(frm) {
-
-	},
-	//Evento selección de "Tipo de formato"
-	tipo_de_formato: function(frm) {
-		if (frm.doc['tipo_de_formato'] == 'Cilíndrico') {
-			frm.get_docfield('diametro').reqd = true;
-			frm.get_docfield('ancho').reqd = false;
-			frm.get_docfield('largo').reqd = false;
-
-		} else if (frm.doc['tipo_de_formato'] == 'Cilíndrico') {
-			frm.get_docfield('diametro').reqd = false;
-			frm.get_docfield('ancho').reqd = true;
-			frm.get_docfield('largo').reqd = true;
-		}
+		cur_frm.cscript.formato.if_tipo_de_formato(frm);
+		cur_frm.cscript.formato.if_es_producto_final(frm);
 		frm.refresh_fields();
 	},
+
+	//Evento selección de "Tipo de formato"
+	tipo_de_formato: function(frm) {
+		cur_frm.cscript.formato.if_tipo_de_formato(frm);
+		frm.refresh_fields();
+	},
+
 	//Evento selección de "Es producto final"
 	es_producto_final: function(frm) {
-		if (frm.doc['es_producto_final'] == 1) {
-			frm.get_docfield('alto').reqd = true;
-		} else {
-			frm.get_docfield('alto').reqd = false;
-		}	
+		cur_frm.cscript.formato.if_es_producto_final(frm);
 		frm.refresh_fields();
 	}
 });
+
+cur_frm.cscript.formato = {
+	if_es_producto_final: function(frm) {
+		frm.toggle_display("alto", frm.doc['es_producto_final'] == 1);
+		frm.toggle_reqd("alto", frm.doc['es_producto_final'] == 1);
+	},
+
+	if_tipo_de_formato: function (frm) {
+		frm.toggle_display("diametro", frm.doc['tipo_de_formato'] == 'Cilíndrico');
+		frm.toggle_reqd("diametro", frm.doc['tipo_de_formato'] == 'Cilíndrico');
+
+		frm.toggle_display("ancho", frm.doc['tipo_de_formato'] == 'Rectangular');
+		frm.toggle_reqd("ancho", frm.doc['tipo_de_formato'] == 'Rectangular');
+
+		frm.toggle_display("largo", frm.doc['tipo_de_formato'] == 'Rectangular');
+		frm.toggle_reqd("largo", frm.doc['tipo_de_formato'] == 'Rectangular');
+
+	}
+
+}

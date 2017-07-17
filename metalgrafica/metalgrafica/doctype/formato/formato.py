@@ -8,13 +8,20 @@ from frappe.model.document import Document
 
 class Formato(Document):
 	def autoname(self):
-		
+
+		#Añadimos al nombre el formato y la capacidad
+		formato = frappe.db.get_value('Formato denominaciones', self.formato,'abreviatura')
+		name = ("{0}").format(formato)
+
+		#Añadimos la capacidad
+		if self.capacidad:
+			name = ("{0}-{1}").format(name, self.capacidad)
+
+		#Añadimos al nombre el Tipo de formato
 		if self.tipo_de_formato == "Cilíndrico":
-			name = ("C-{0}").format(self.diametro)
+			name = ("{0}-C-{1}").format(name, self.diametro)
 		else:
-			name = ("R-{0}-{1}").format(self.ancho, self.largo)
-
-
+			name = ("{0}-R-{1}-{2}").format(name, self.largo, self.ancho)
 
 		#Si es producto final lleva 'alto'
 		if self.es_producto_final:

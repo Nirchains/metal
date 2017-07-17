@@ -43,6 +43,9 @@ doctype_js = {
     ],
     "Item": [
         "custom_script/item.js"
+    ],
+    "Production Order": [
+        "custom_script/production_order.js"
     ]
 }
 
@@ -106,6 +109,12 @@ doctype_list_js = {
 # 		"on_trash": "method"
 #	}
 # }
+
+doc_events = {
+    "Item": {
+        "autoname": "metalgrafica.util.item_autoname"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
