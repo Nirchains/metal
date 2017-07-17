@@ -31,6 +31,7 @@ frappe.db = Class.extend ({
 			}
 		});
 	}
+
 });
 
 util = {
@@ -38,7 +39,7 @@ util = {
 		
 	},
 
-	get: function(doctype, name, filters, callback, frm) {
+	get: function(frm, doctype, name, filters, callback) {
 		return frappe.call({
 			method: "frappe.client.get",
 			args: {
