@@ -149,13 +149,11 @@ cur_frm.cscript.item = {
 		frm.toggle_display("litografia", frm.doc.item_group=="Productos"
 														|| frm.doc.item_group=="Tapas litografiadas"
 														|| frm.doc.item_group=="Tapas"
+														|| frm.doc.item_group=="Tapas sin terminar"
 														|| frm.doc.item_group=="Hojas"
 														|| frm.doc.item_group=="Cuerpos");
 
-		util.toggle_display_and_required(frm, "composicion", (frm.doc.item_group=="Productos"
-														|| frm.doc.item_group=="Cuerpos"
-														|| frm.doc.item_group=="Hojas")
-														&& frm.doc.litografia == true);
+		util.toggle_display_and_required(frm, "composicion", frm.doc.litografia == true);
 
 		util.toggle_display_and_required(frm, "fondo", frm.doc.item_group=="Productos");
 

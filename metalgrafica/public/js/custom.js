@@ -69,6 +69,11 @@ util = {
 	toggle_display_and_required: function(frm,name,condition) {
 		frm.toggle_display(name, condition);
 		frm.toggle_reqd(name, condition);
+	},
+
+	toggle_display_and_not_required: function(frm,name,condition) {
+		frm.toggle_display(name, condition);
+		frm.toggle_reqd(name, false);
 	}
 };
 

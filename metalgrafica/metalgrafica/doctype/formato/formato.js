@@ -3,25 +3,25 @@
 
 frappe.ui.form.on('Formato', {
 	refresh: function(frm) {
-		cur_frm.cscript.formato.if_tipo_de_formato(frm);
-		cur_frm.cscript.formato.if_es_producto_final(frm);
+		cur_frm.cscript.if_tipo_de_formato(frm);
+		cur_frm.cscript.if_es_producto_final(frm);
 		frm.refresh_fields();
 	},
 
 	//Evento selección de "Tipo de formato"
 	tipo_de_formato: function(frm) {
-		cur_frm.cscript.formato.if_tipo_de_formato(frm);
+		cur_frm.cscript.if_tipo_de_formato(frm);
 		frm.refresh_fields();
 	},
 
 	//Evento selección de "Es producto final"
 	es_producto_final: function(frm) {
-		cur_frm.cscript.formato.if_es_producto_final(frm);
+		cur_frm.cscript.if_es_producto_final(frm);
 		frm.refresh_fields();
 	}
 });
 
-cur_frm.cscript.formato = {
+$.extend(cur_frm.cscript, {
 	if_es_producto_final: function(frm) {
 		frm.toggle_display("alto", frm.doc['es_producto_final'] == 1);
 		frm.toggle_reqd("alto", frm.doc['es_producto_final'] == 1);
@@ -38,5 +38,4 @@ cur_frm.cscript.formato = {
 		frm.toggle_reqd("largo", frm.doc['tipo_de_formato'] == 'Rectangular');
 
 	}
-
-}
+});
