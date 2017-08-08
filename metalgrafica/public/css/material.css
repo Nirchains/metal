@@ -956,9 +956,12 @@ html {
 .has-error .form-control:focus {box-shadow: none;}
 
 .btn-default {
-
   background-color: #fafbfc;
-
+}
+.btn-primary {
+    color: #fff;
+    background-color: #5e64ff;
+    border-color: #444bff;
 }
 .btn-default:hover,
 .btn-default:focus,

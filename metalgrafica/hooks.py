@@ -44,6 +44,9 @@ doctype_js = {
     "Item": [
         "custom_script/item.js"
     ],
+    "BOM": [
+        "custom_script/bom.js"
+    ],
     "Production Order": [
         "custom_script/production_order.js"
     ]
@@ -151,3 +154,5 @@ doc_events = {
 
 default_mail_footer = """<div style="text-align: center;">
 </div>"""
+
+error_report_email = "pedro@hispalisdigital.com"
