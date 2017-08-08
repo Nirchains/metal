@@ -18,6 +18,21 @@ frappe.ui.Page = frappe.ui.Page.extend({
 	}
 });
 
+frappe.ui.form.ControlButton = frappe.ui.form.ControlButton.extend({
+	make_input: function() {
+		var me = this;
+		this.$input = $('<button class="btn btn-warning">')
+			.prependTo(me.input_area)
+			.on("click", function() {
+				me.onclick();
+			});
+		this.input = this.$input.get(0);
+		this.set_input_attributes();
+		this.has_input = true;
+		this.toggle_label(false);
+	}
+});
+
 frappe.db = Class.extend ({
 	get: function(doctype, filters, callback) {
 		return frappe.call({
@@ -60,6 +75,12 @@ util = {
 		}
 	},
 
+	set_value_only_if_no_null(frm, name, value) {
+		if (!helper.IsNullOrEmpty(value)) {
+			frm.set_value(name,value);
+		}
+	},
+
 	transform_zero_to_empty: function(frm, name) {
 		if (helper.IsNullOrEmpty(frm.doc[name])) {
 			frm.set_value(name, '');
@@ -70,6 +91,11 @@ util = {
 		frm.toggle_display(name, condition);
 		frm.toggle_reqd(name, condition);
 	},
+
+	toggle_enable_and_required: function(frm,name,condition) {
+		frm.toggle_enable(name, condition);
+		frm.toggle_reqd(name, condition);
+	},	
 
 	toggle_display_and_not_required: function(frm,name,condition) {
 		frm.toggle_display(name, condition);
@@ -120,6 +146,10 @@ helper = {
     
     ParseInt: function (num) {
         return parseInt(num);
+    },
+
+    In: function(arr,obj) {
+    	return (arr.indexOf(obj) != -1);
     }
 
 }

@@ -28,41 +28,79 @@ def get_help_messages():
 	return messages
 
 @frappe.whitelist()
-def item_name_generate():
+def item_description_generate():
 	args = frappe.form_dict
 	doc = literal_eval(args.doc)
 	descripciones = []
 	doc["description"] = ""
 
-	append_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
-	append_if_no_null(doc, descripciones, "FORMATO", "formato")
-	append_if_no_null(doc, descripciones, "MARCA", "brand")
+	append_description_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
+	append_description_if_no_null(doc, descripciones, "FORMATO", "formato")
+	append_description_if_no_null(doc, descripciones, "MARCA", "brand")
 
-	append_if_no_null(doc, descripciones, "FONDO", "fondo")
-	append_if_no_null(doc, descripciones, "TAPA", "tapa")
-	append_if_no_null(doc, descripciones, "CUERPO", "cuerpo")
-	append_if_no_null(doc, descripciones, "HOJA", "hoja")
-	append_if_no_null(doc, descripciones, "TIRA", "tira")
-	append_if_no_null(doc, descripciones, "ASA", "asa")
-	append_if_no_null(doc, descripciones, "SOPORTE PARA ASA", "soporte_asa")
-	append_if_no_null(doc, descripciones, "TAPON", "tapon")
-
-	append_if_no_null(doc, descripciones, "ACABADO", "acabado")
-	append_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
-	append_if_no_null(doc, descripciones, "LARGO", "largo")
-	append_if_no_null(doc, descripciones, "ANCHO", "ancho")
-	append_if_no_null(doc, descripciones, "ALTO", "alto")
-	append_if_no_null(doc, descripciones, "ESPESOR", "espesor")
-	append_if_no_null(doc, descripciones, "COLOR", "color")
-	append_if_no_null(doc, descripciones, "POSICION", "posicion")
-	append_if_no_null(doc, descripciones, "PANELADO", "panelado")
-	append_if_no_null(doc, descripciones, "PALET", "palet")
-	append_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
-	append_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
+	append_description_if_no_null(doc, descripciones, "ACABADO", "acabado")
+	append_description_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
+	append_description_if_no_null(doc, descripciones, "LARGO", "largo")
+	append_description_if_no_null(doc, descripciones, "ANCHO", "ancho")
+	append_description_if_no_null(doc, descripciones, "ALTO", "alto")
+	append_description_if_no_null(doc, descripciones, "ESPESOR", "espesor")
+	append_description_if_no_null(doc, descripciones, "COLOR", "color")
+	append_description_if_no_null(doc, descripciones, "POSICION", "posicion")
+	append_description_if_no_null(doc, descripciones, "PANELADO", "panelado")
+	append_description_if_no_null(doc, descripciones, "PALET", "palet")
+	append_description_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
+	append_description_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
 		
 	doc["description"] = "{0}".format("<br>".join(descripciones))
 		
 	return doc["description"]
+
+@frappe.whitelist()
+def item_name_generate():
+	args = frappe.form_dict
+	doc = literal_eval(args.doc)
+	descripciones = []
+	doc["item_name"] = ""
+
+	append_item_code_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
+	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
+	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
+
+	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
+	append_item_code_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
+	append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
+	append_item_code_if_no_null(doc, descripciones, "ANCHO", "ancho")
+	append_item_code_if_no_null(doc, descripciones, "ALTO", "alto")
+	append_item_code_if_no_null(doc, descripciones, "ESPESOR", "espesor")
+	append_item_code_if_no_null(doc, descripciones, "COLOR", "color")
+	append_item_code_if_no_null(doc, descripciones, "POSICION", "posicion")
+	append_item_code_if_no_null(doc, descripciones, "PANELADO", "panelado")
+	append_item_code_if_no_null(doc, descripciones, "PALET", "palet")
+	append_item_code_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
+	append_item_code_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
+		
+	doc["item_name"] = "{0}".format("-".join(descripciones))
+		
+	return doc["item_name"]
+
+@frappe.whitelist()
+def cargar_materiales_desde_plantilla(item_group):
+	materiales = frappe.get_list("BOM Item Plantilla", 
+								filters={'parent': item_group,
+										'parenttype': 'Plantilla de grupo de productos',
+										'parentfield': 'materiales' },
+								fields="*")
+	return materiales
+
+@frappe.whitelist()
+def cargar_materiales_desde_producto(item):
+	materiales = frappe.get_list("BOM Item", 
+								filters={'parent': item,
+										'parenttype': 'Item',
+										'parentfield': 'materiales' },
+								fields="*")
+	return materiales
+
 
 @frappe.whitelist()
 def get_prueba_filas():
@@ -70,10 +108,18 @@ def get_prueba_filas():
 	filas.extend([{"id": 100, "name": "asdf"}, {"id": 101, "name": "asdff"}])
 	return filas
 
-def append_if_no_null(doc, arr, label, key=None, value=None):
+def append_description_if_no_null(doc, arr, label, key=None, value=None):
 	if key in doc.keys():
 		if doc[key]:
 			arr.append("<b>{0}</b>: {1}".format(label, doc[key]))
 
 	if value:
 		arr.append("<b>{0}</b>: {1}".format(label, value))
+
+def append_item_code_if_no_null(doc, arr, label, key=None, value=None):
+	if key in doc.keys():
+		if doc[key]:
+			arr.append("{0}".format(doc[key]))
+
+	if value:
+		arr.append("{0}".format(value))
