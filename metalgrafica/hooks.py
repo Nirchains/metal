@@ -20,7 +20,7 @@ app_include_css = [
 	"/assets/metalgrafica/css/custom.css"
 ]
 app_include_js = [
-	"/assets/metalgrafica/js/custom.js",
+	"/assets/js/custom.js",
 	"assets/js/templates.min.js"
 ]
 
@@ -115,7 +115,7 @@ doctype_list_js = {
 
 doc_events = {
     "Item": {
-        "autoname": "metalgrafica.util.item_autoname"
+        
     }
 }
 

@@ -3,7 +3,7 @@ frappe.ui.form.on("Item", {
 
 		//Filtramos los formatos
 		frm.fields_dict['formato'].get_query = function(doc) {
-			if (frm.doc.item_group=='Productos') {
+			if (frm.doc.item_group=='PRODUCTO') {
 				return {
 					filters: [
 						['Formato', 'es_producto_final', '=', 1]
@@ -16,14 +16,18 @@ frappe.ui.form.on("Item", {
 					]
 				}
 			}
-		}
+		};
+
+		//Visibilidad de las columnas de la tabla de materiales
+		frm.fields_dict.materiales.grid.toggle_reqd("rate", false);
+		frm.fields_dict.materiales.grid.toggle_display("rate", false);
 	},
 
 	setup: function(frm) {
 		//Evento de carga de fila en la tabla de materiales
 		$(frm.wrapper).on('grid-row-render', function(e, grid_row) {
 			if(in_list(['BOM Item'], grid_row.doc.doctype)) {
-				cur_frm.cscript.inicializa_fila_materiales(grid_row);
+				cur_frm.cscript.init_row_bom_items(grid_row);
 			}
 		});
 	},
@@ -33,7 +37,7 @@ frappe.ui.form.on("Item", {
 	},
 
 	refresh: function(frm) {
-		cur_frm.cscript.item.inicializa(frm);
+		cur_frm.cscript.item.init(frm);
 		cur_frm.cscript.item.if_item_group(frm);
 		cur_frm.cscript.item.if_formato(frm);
 		frm.refresh_fields();
@@ -42,7 +46,7 @@ frappe.ui.form.on("Item", {
 	item_group: function(frm) {
 		cur_frm.cscript.item.if_item_group(frm);
 		////meter parche de doc.__islocal
-		cur_frm.cscript.item.resetea(frm);
+		cur_frm.cscript.item.reset(frm);
 		frm.refresh_fields();
 	},
 
@@ -66,12 +70,12 @@ frappe.ui.form.on("Item", {
 	},
 
 	generar_descripcion: function(frm) {
-		cur_frm.cscript.item.generar_descripcion(frm);
-		cur_frm.cscript.item.generar_nombre(frm);
+		cur_frm.cscript.item.item_description_generate(frm);
+		cur_frm.cscript.item.item_name_generate(frm);
 	},
 
 	cargar_materiales: function(frm) {
-		cur_frm.cscript.item.cargar_materiales_desde_plantilla(frm);
+		cur_frm.cscript.item.load_bom_from_template(frm);
 	}
 })
 
@@ -79,7 +83,7 @@ frappe.ui.form.on("Item", {
 frappe.ui.form.on('BOM Item', {
 
 	form_render: function (frm, cdt, cdn) {
-		cur_frm.cscript.inicializa_fila_materiales(frm.open_grid_row());
+		cur_frm.cscript.init_row_bom_items(frm.open_grid_row());
 		frm.refresh_fields();
 	},
 
@@ -90,22 +94,22 @@ frappe.ui.form.on('BOM Item', {
 		util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
 			
 			//Para heredar el formato y las dimensiones
-			if ((frm.doc.item_group == 'Productos' && response.item_group == 'Cuerpos')
-			 || (frm.doc.item_group == 'Tapas' && response.item_group == 'Tapas sin terminar')) {
-				util.set_value_only_if_no_null(frm,'formato',response.formato);
+			if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
+			 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
+				util.set_value_if_no_null(frm,'formato',response.formato);
 			}
 
 			//Para heredar la composición, litografía, marca, acabado, etc
-			if ((frm.doc.item_group == 'Cuerpos' && response.item_group == 'Hojas')
-			 || (frm.doc.item_group == 'Productos' && response.item_group == 'Cuerpos')
-			 || (frm.doc.item_group == 'Tiras' && response.item_group == 'Hojas')
-			 || (frm.doc.item_group == 'Tapas sin terminar' && response.item_group == 'Tiras')
-			 || (frm.doc.item_group == 'Fondos' && response.item_group == 'Tiras')) {
-				util.set_value_only_if_no_null(frm,'litografia',response.litografia);
-				util.set_value_only_if_no_null(frm,'composicion',response.composicion);
-				util.set_value_only_if_no_null(frm,'brand',response.brand); //marca
-				util.set_value_only_if_no_null(frm,'acabado',response.acabado);
-				util.set_value_only_if_no_null(frm,'litografia',response.litografia);
+			if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA')
+			 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
+			 || (frm.doc.item_group == 'TIRA' && response.item_group == 'HOJA')
+			 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA')
+			 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA')) {
+				util.set_value_if_no_null(frm,'litografia',response.litografia);
+				util.set_value_if_no_null(frm,'composicion',response.composicion);
+				util.set_value_if_no_null(frm,'brand',response.brand); //marca
+				util.set_value_if_no_null(frm,'acabado',response.acabado);
+				util.set_value_if_no_null(frm,'litografia',response.litografia);
 			}
 
 		});
@@ -116,8 +120,8 @@ frappe.ui.form.on('BOM Item', {
 
 //Funciones child tables
 $.extend(cur_frm.cscript, {
-	inicializa_fila_materiales: function(grid_row) {
-		//Filtramos para que solo se muestren los productos del grupo seleccionado
+	init_row_bom_items: function(grid_row) {
+		//Filtramos para que solo se muestren los PRODUCTO del grupo seleccionado
 		grid_row.frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
 			return {
 				filters: {
@@ -132,37 +136,45 @@ $.extend(cur_frm.cscript, {
 cur_frm.cscript.item = {
 	if_item_group: function(frm) {
 		//Visibilidad
-		frm.toggle_enable("litografia", frm.doc.item_group=="Hojas");
+		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA");
 
-		util.toggle_enable_and_required(frm, "acabado", frm.doc.item_group=="Hojas" && frm.doc.litografia!=true);
+		util.toggle_enable_and_required(frm, "acabado", frm.doc.item_group=="HOJA" && frm.doc.litografia!=true);
 
-		util.toggle_enable_and_required(frm, "brand", frm.doc.item_group=="Hojas" && frm.doc.litografia==true);
+		util.toggle_enable_and_required(frm, "brand", frm.doc.item_group=="HOJA" && frm.doc.litografia==true);
 
-		util.toggle_enable_and_required(frm, "composicion", frm.doc.item_group=="Hojas" && frm.doc.litografia == true);
+		util.toggle_enable_and_required(frm, "composicion", frm.doc.item_group=="HOJA" && frm.doc.litografia == true);
 
-		util.toggle_display_and_required(frm, "panelado", frm.doc.item_group=="Productos");
+		util.toggle_display_and_required(frm, "panelado", frm.doc.item_group=="PRODUCTO");
 
-		util.toggle_display_and_required(frm, "numero_de_capas", frm.doc.item_group=="Productos");
+		util.toggle_display_and_required(frm, "numero_de_capas", frm.doc.item_group=="PRODUCTO");
 
-		util.toggle_display_and_required(frm, "numero_envases_capa", frm.doc.item_group=="Productos");
+		util.toggle_display_and_required(frm, "numero_envases_capa", frm.doc.item_group=="PRODUCTO");
 
-		util.toggle_display_and_required(frm, "posicion", frm.doc.item_group=="Productos");
+		util.toggle_display_and_required(frm, "posicion", frm.doc.item_group=="PRODUCTO");
 
-		util.toggle_enable_and_required(frm, "formato", frm.doc.item_group=="Fondos" 
-														|| frm.doc.item_group=="Tapas sin terminar"
-														|| frm.doc.item_group=="Cuerpos");
+		util.toggle_enable_and_required(frm, "formato", frm.doc.item_group=="FONDO" 
+														|| frm.doc.item_group=="TAPA SIN TERMINAR"
+														|| frm.doc.item_group=="CUERPO");
 
-		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="Tapones");
+		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
 				
-		util.toggle_display_and_required(frm, "color", frm.doc.item_group=="Tapones"
-														|| frm.doc.item_group=="Respiradores"
-														|| frm.doc.item_group=="Asas");
+		util.toggle_display_and_required(frm, "color", frm.doc.item_group=="TAPON"
+														|| frm.doc.item_group=="RESPIRADOR"
+														|| frm.doc.item_group=="ASA");
 		
-		util.toggle_enable_and_required(frm, "espesor", frm.doc.item_group=="Hojas");
+		util.toggle_enable_and_required(frm, "espesor", frm.doc.item_group=="HOJA");
 		
-		util.toggle_enable_and_required(frm, "largo", frm.doc.item_group=="Hojas");
+		util.toggle_enable_and_required(frm, "largo", frm.doc.item_group=="HOJA"
+														|| frm.doc.item_group=="SEPARADOR");
 		
-		util.toggle_enable_and_required(frm, "ancho", frm.doc.item_group=="Hojas");
+		util.toggle_enable_and_required(frm, "ancho", frm.doc.item_group=="HOJA"
+														|| frm.doc.item_group=="SEPARADOR");
+
+		frm.toggle_enable("espesor", frm.doc.item_group=="SEPARADOR");
+
+		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
+
+		frm.toggle_enable("acabado", frm.doc.item_group=="CAJA");
 
 		if (frm.doc.item_group) {
 			
@@ -171,21 +183,21 @@ cur_frm.cscript.item = {
 				switch (response.parent_item_group) {
 
 					case 'Todos los Grupos de Artículos':
-						//Si seleccionamos el tipo "Productos" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
+						//Si seleccionamos el tipo "PRODUCTO" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Productos terminados - MDS');
+						frm.set_value('default_warehouse','PRODUCTO terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',1);
 						break;
 
-					case 'Sub-Ensamblajes':
+					case 'SUB-ENSAMBLE':
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
+						frm.set_value('default_warehouse','PRODUCTO semi-terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						break;
 
-					case 'Materia prima':
+					case 'MATERIA PRIMA':
 						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
@@ -201,7 +213,7 @@ cur_frm.cscript.item = {
 	},
 
 	if_formato: function(frm) {
-		
+		//Obtenemos las dimensiones
 		if (frm.doc.formato) {
 			//get: function(frm, doctype, name, filters, callback)
 			var formato = util.get(frm, 'Formato', frm.doc.formato,undefined,this.set_formato);
@@ -221,7 +233,7 @@ cur_frm.cscript.item = {
 	},
 
 	set_acabado: function(frm) {
-		if (frm.doc.item_group == 'Cuerpos' || frm.doc.item_group == 'Tiras') {
+		if (frm.doc.item_group == 'CUERPO' || frm.doc.item_group == 'TIRA') {
 			util.get(frm, 'Item', frm.doc.hoja, undefined ,function(response,frm) {
 				frm.set_value('acabado',response.acabado);
 				frm.refresh_fields();
@@ -229,18 +241,17 @@ cur_frm.cscript.item = {
 		}
 	},
 
-	cargar_materiales_desde_plantilla: function(frm) {
+	load_bom_from_template: function(frm) {
 		if (frm.doc["item_group"]) {
 			frappe.call({
-				method: "metalgrafica.util.cargar_materiales_desde_plantilla",
+				method: "metalgrafica.bom.load_bom_from_template",
 				args: {
 					"item_group": frm.doc["item_group"]
 				},
 				callback: function(r) {
 					if(!r.message) {
-						frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
+						frappe.throw(__("El grupo de PRODUCTO no contiene ninguna plantilla de materiales"))
 					} else {
-						console.log(r.message);
 						$.each(r.message, function(i, item) {
 							var d = frappe.model.add_child(frm.doc, "BOM Item", "materiales");
 							d.item_group = item.item_group;
@@ -253,11 +264,11 @@ cur_frm.cscript.item = {
 		}
 	},
 
-	generar_descripcion: function(frm) {
+	item_description_generate: function(frm) {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'formato', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
+			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
 						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
 			doc = {}
@@ -267,7 +278,7 @@ cur_frm.cscript.item = {
 
 			frappe.call({
 				type: "POST",
-				method: "metalgrafica.util.item_description_generate",
+				method: "metalgrafica.bom.item_description_generate",
 				freeze: true,
 				args: {
 					"doc": doc
@@ -279,12 +290,13 @@ cur_frm.cscript.item = {
 		}
 	},
 
-	generar_nombre: function(frm) {
+	item_name_generate: function(frm) {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'formato', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
-						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
+			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
+						'color', 'color_codigo']
+						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
 			doc = {}
 			$.each(keys, function(index, value) {
@@ -293,20 +305,33 @@ cur_frm.cscript.item = {
 
 			frappe.call({
 				type: "POST",
-				method: "metalgrafica.util.item_name_generate",
+				method: "metalgrafica.bom.item_code_generate",
 				freeze: true,
 				args: {
 					"doc": doc
 				},
 				callback: function(r) {
 					frm.set_value('item_code', r.message);
-					frm.set_value('item_name', r.message.replace(/-/g, ' '));
+				}
+			});
+
+			frappe.call({
+				type: "POST",
+				method: "metalgrafica.bom.item_name_generate",
+				freeze: true,
+				args: {
+					"doc": doc
+				},
+				callback: function(r) {
+					//frm.set_value('item_name', r.message.replace(/-/g, ' '));
+					frm.set_value('item_name', r.message);
+					frm.set_value('nombre_para_cliente', r.message);
 				}
 			});
 		}
 	},
 
-	inicializa: function(frm) {
+	init: function(frm) {
 
 		util.transform_zero_to_empty(frm,'diametro');
 		util.transform_zero_to_empty(frm,'largo');
@@ -316,7 +341,7 @@ cur_frm.cscript.item = {
 
 	},
 
-	resetea: function(frm) {
+	reset: function(frm) {
 		frm.doc.diametro = '';
 		frm.doc.largo = '';
 		frm.doc.ancho = '';

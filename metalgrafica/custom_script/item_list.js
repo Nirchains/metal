@@ -1,9 +1,11 @@
+/*
 frappe.listview_settings['Item']['onload'] =
     function(listview) {
 		frappe.route_options = {
 			"has_variants": "No"
 		};
 	}
+
 
 frappe.listview_settings['Item']['refresh'] =
 	function(me) {
@@ -22,3 +24,4 @@ frappe.listview_settings['Item']['refresh'] =
 			me.run();
 		});
 	}
+*/

@@ -6,6 +6,8 @@
         "public/css/custom.css"
     ],
     "js/custom.js": [
+        "public/js/fix.js",
+        "public/js/extra.js",
         "public/js/custom.js"
     ],
     "js/templates.min.js": [

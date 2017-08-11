@@ -1,15 +1,15 @@
 frappe.ui.form.on('BOM', {
 	cargar_materiales: function(frm) {
-		cur_frm.cscript.cargar_materiales_desde_producto(frm);
+		cur_frm.cscript.load_bom_from_item(frm);
 	}
 });
 
 //Funciones adicionales
 $.extend(cur_frm.cscript, {
-	cargar_materiales_desde_producto: function(frm) {
+	load_bom_from_item: function(frm) {
 		if (frm.doc["item"]) {
 			frappe.call({
-				method: "metalgrafica.util.cargar_materiales_desde_producto",
+				method: "metalgrafica.bom.load_bom_from_item",
 				args: {
 					"item": frm.doc["item"]
 				},
