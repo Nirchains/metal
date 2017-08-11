@@ -91,29 +91,30 @@ frappe.ui.form.on('BOM Item', {
 		var d = frappe.get_doc(cdt, cdn);
 
 		//get: function(frm, doctype, name, filters, callback)
-		util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
-			
-			//Para heredar el formato y las dimensiones
-			if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
-			 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
-				util.set_value_if_no_null(frm,'formato',response.formato);
-			}
+		if (!Helper.IsNull(d.item_code)) {
+			util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
+				
+				//Para heredar el formato y las dimensiones
+				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
+				 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
+					util.set_value_if_no_null(frm,'formato',response.formato);
+				}
 
-			//Para heredar la composición, litografía, marca, acabado, etc
-			if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA')
-			 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
-			 || (frm.doc.item_group == 'TIRA' && response.item_group == 'HOJA')
-			 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA')
-			 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA')) {
-				util.set_value_if_no_null(frm,'litografia',response.litografia);
-				util.set_value_if_no_null(frm,'composicion',response.composicion);
-				util.set_value_if_no_null(frm,'brand',response.brand); //marca
-				util.set_value_if_no_null(frm,'acabado',response.acabado);
-				util.set_value_if_no_null(frm,'litografia',response.litografia);
-			}
+				//Para heredar la composición, litografía, marca, acabado, etc
+				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA')
+				 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
+				 || (frm.doc.item_group == 'TIRA' && response.item_group == 'HOJA')
+				 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA')
+				 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA')) {
+					util.set_value_if_no_null(frm,'litografia',response.litografia);
+					util.set_value_if_no_null(frm,'composicion',response.composicion);
+					util.set_value_if_no_null(frm,'brand',response.brand); //marca
+					util.set_value_if_no_null(frm,'acabado',response.acabado);
+					util.set_value_if_no_null(frm,'litografia',response.litografia);
+				}
 
-		});
-
+			});
+		}
 	}
 });
 
