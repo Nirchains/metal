@@ -67,6 +67,7 @@ frappe.ui.form.on("Item", {
 
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.item.load_bom_from_template(frm);
+		cur_frm.cscript.item.load_qty_from_template(frm);
 	}
 })
 
@@ -252,6 +253,21 @@ cur_frm.cscript.item = {
 						});
 					}
 					refresh_field("materiales");
+				}
+			});
+		}
+	},
+
+	load_qty_from_template: function(frm) {
+		if (frm.doc["item_group"]) {
+			frappe.call({
+				method: "metalgrafica.bom.load_qty_from_template",
+				args: {
+					"item_group": frm.doc["item_group"]
+				},
+				callback: function(r) {
+					frm.doc.quantity = r.message;
+					refresh_field("quantity");
 				}
 			});
 		}

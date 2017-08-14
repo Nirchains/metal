@@ -115,6 +115,21 @@ def load_bom_from_template(item_group):
 	return materiales
 
 @frappe.whitelist()
+#Carga la lista de materiales desde la plantilla
+def load_qty_from_template(item_group):
+	
+	qty = 0
+
+	try:
+		qty = frappe.get_value("Plantilla de grupo de productos", item_group, 'quantity')
+	
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		raise e
+	
+	return qty
+
+@frappe.whitelist()
 #Carga la lista de materiales desde el producto
 def load_bom_from_item(item):
 	
