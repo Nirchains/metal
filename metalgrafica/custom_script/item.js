@@ -50,23 +50,14 @@ frappe.ui.form.on("Item", {
 		frm.refresh_fields();
 	},
 
-	litografia: function(frm) {
-		cur_frm.cscript.item.if_item_group(frm);
-		frm.refresh_fields();
-	},
-
-	no_lleva_tapa: function(frm) {
-		cur_frm.cscript.item.if_item_group(frm);
-		frm.refresh_fields();
-	},
-
 	formato: function(frm) {
 		cur_frm.cscript.item.if_formato(frm);
 		frm.refresh_fields();
 	},
 
-	hoja: function (frm) {
-		cur_frm.cscript.item.set_acabado(frm);
+	litografia: function(frm) {
+		cur_frm.cscript.item.if_item_group(frm);
+		frm.refresh_fields();
 	},
 
 	generar_descripcion: function(frm) {
@@ -91,9 +82,10 @@ frappe.ui.form.on('BOM Item', {
 		var d = frappe.get_doc(cdt, cdn);
 
 		//get: function(frm, doctype, name, filters, callback)
-		if (!Helper.IsNull(d.item_code)) {
+
+		if (!helper.IsNull(d.item_code)) {
 			util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
-				
+				alert(d.item_code);
 				//Para heredar el formato y las dimensiones
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
 				 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
@@ -111,6 +103,7 @@ frappe.ui.form.on('BOM Item', {
 					util.set_value_if_no_null(frm,'brand',response.brand); //marca
 					util.set_value_if_no_null(frm,'acabado',response.acabado);
 					util.set_value_if_no_null(frm,'litografia',response.litografia);
+					util.set_value_if_no_null(frm,'image',response.image);
 				}
 
 			});
@@ -139,7 +132,9 @@ cur_frm.cscript.item = {
 		//Visibilidad
 		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA");
 
-		util.toggle_enable_and_required(frm, "acabado", frm.doc.item_group=="HOJA" && frm.doc.litografia!=true);
+		frm.toggle_enable("acabado", (frm.doc.item_group=="HOJA" && frm.doc.litografia!=true)
+									|| frm.doc.item_group=="CAJA");
+		frm.toggle_reqd("acabado", frm.doc.item_group=="HOJA" && frm.doc.litografia!=true );
 
 		util.toggle_enable_and_required(frm, "brand", frm.doc.item_group=="HOJA" && frm.doc.litografia==true);
 
@@ -163,7 +158,8 @@ cur_frm.cscript.item = {
 														|| frm.doc.item_group=="RESPIRADOR"
 														|| frm.doc.item_group=="ASA");
 		
-		util.toggle_enable_and_required(frm, "espesor", frm.doc.item_group=="HOJA");
+		frm.toggle_enable("espesor", frm.doc.item_group=="HOJA" || frm.doc.item_group=="SEPARADOR");
+		frm.toggle_reqd("espesor", frm.doc.item_group=="HOJA");
 		
 		util.toggle_enable_and_required(frm, "largo", frm.doc.item_group=="HOJA"
 														|| frm.doc.item_group=="SEPARADOR");
@@ -171,11 +167,7 @@ cur_frm.cscript.item = {
 		util.toggle_enable_and_required(frm, "ancho", frm.doc.item_group=="HOJA"
 														|| frm.doc.item_group=="SEPARADOR");
 
-		frm.toggle_enable("espesor", frm.doc.item_group=="SEPARADOR");
-
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
-
-		frm.toggle_enable("acabado", frm.doc.item_group=="CAJA");
 
 		if (frm.doc.item_group) {
 			
@@ -186,14 +178,14 @@ cur_frm.cscript.item = {
 					case 'Todos los Grupos de Artículos':
 						//Si seleccionamos el tipo "PRODUCTO" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','PRODUCTO terminados - MDS');
+						frm.set_value('default_warehouse','Productos terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',1);
 						break;
 
 					case 'SUB-ENSAMBLE':
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','PRODUCTO semi-terminados - MDS');
+						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						break;
