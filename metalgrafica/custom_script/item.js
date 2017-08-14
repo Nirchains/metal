@@ -86,7 +86,7 @@ frappe.ui.form.on('BOM Item', {
 
 		if (!helper.IsNull(d.item_code)) {
 			util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
-				alert(d.item_code);
+				
 				//Para heredar el formato y las dimensiones
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
 				 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
