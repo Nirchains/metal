@@ -27,13 +27,18 @@ frappe.ui.form.on("Item", {
 		//Evento de carga de fila en la tabla de materiales
 		$(frm.wrapper).on('grid-row-render', function(e, grid_row) {
 			if(in_list(['BOM Item'], grid_row.doc.doctype)) {
-				cur_frm.cscript.init_row_bom_items(grid_row);
+				$('.form-grid [data-fieldname="rate"]').hide();
+				$('.form-grid .grid-static-col[data-fieldname="item_code"]').removeClass('col-xs-3');
+				$('.form-grid .grid-static-col[data-fieldname="item_code"]').addClass('col-xs-5');
 			}
 		});
 	},
 
 	onload_post_render: function(frm) {
 		frm.get_field("materiales").grid.set_multiple_add("item_code", "qty");
+		$('.form-grid .grid-static-col[data-fieldname="item_code"]').removeClass('col-xs-3');
+		$('.form-grid .grid-static-col[data-fieldname="item_code"]').addClass('col-xs-5');
+		$('.form-grid [data-fieldname="rate"]').hide();
 	},
 
 	refresh: function(frm) {
@@ -73,29 +78,23 @@ frappe.ui.form.on("Item", {
 
 //Child tables
 frappe.ui.form.on('BOM Item', {
-
-	form_render: function (frm, cdt, cdn) {
-		cur_frm.cscript.init_row_bom_items(frm.open_grid_row());
-		frm.refresh_fields();
-	},
-
 	item_code: function (frm, cdt, cdn) {
 		var d = frappe.get_doc(cdt, cdn);
 
-		//get: function(frm, doctype, name, filters, callback)
-
-		if (!helper.IsNull(d.item_code)) {
+		if (!helper.IsNullOrEmpty(d.item_code)) {
+			//get: function(frm, doctype, name, filters, callback)
 			util.get(frm, 'Item', d.item_code, undefined ,function(response,frm) {
 				
 				//Para heredar el formato y las dimensiones
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
-				 || (frm.doc.item_group == 'Tapas' && response.item_group == 'TAPA SIN TERMINAR')) {
+				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')) {
 					util.set_value_if_no_null(frm,'formato',response.formato);
 				}
 
 				//Para heredar la composición, litografía, marca, acabado, etc
 				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA')
 				 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
+				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')
 				 || (frm.doc.item_group == 'TIRA' && response.item_group == 'HOJA')
 				 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA')
 				 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA')) {
@@ -112,19 +111,14 @@ frappe.ui.form.on('BOM Item', {
 	}
 });
 
-
-//Funciones child tables
-$.extend(cur_frm.cscript, {
-	init_row_bom_items: function(grid_row) {
-		//Filtramos para que solo se muestren los PRODUCTO del grupo seleccionado
-		grid_row.frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
-			return {
-				filters: {
-					item_group: grid_row.doc.item_group
-				}
-			};
-		});
-	}
+//Para refrescar la los productos en la tabla hija de materiales, en función del grupo de producto
+cur_frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: {
+			item_group: d.item_group
+		}
+	};
 });
 
 //Funciones
@@ -250,6 +244,7 @@ cur_frm.cscript.item = {
 							var d = frappe.model.add_child(frm.doc, "BOM Item", "materiales");
 							d.item_group = item.item_group;
 							d.qty = item.qty;
+							d.rate = 0;
 						});
 					}
 					refresh_field("materiales");
@@ -355,5 +350,6 @@ cur_frm.cscript.item = {
 		frm.doc.largo = '';
 		frm.doc.ancho = '';
 		frm.doc.alto = '';
+		frm.doc.espesor = '';
 	}
 }
