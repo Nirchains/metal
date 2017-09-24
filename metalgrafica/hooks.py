@@ -21,7 +21,7 @@ app_include_css = [
 ]
 app_include_js = [
 	"/assets/js/custom.js",
-	"assets/js/templates.min.js"
+	"/assets/js/templates.min.js"
 ]
 
 # include js, css files in header of web template

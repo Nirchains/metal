@@ -25,6 +25,9 @@ $.extend(cur_frm.cscript, {
 	if_es_producto_final: function(frm) {
 		frm.toggle_display("alto", frm.doc['es_producto_final'] == 1);
 		frm.toggle_reqd("alto", frm.doc['es_producto_final'] == 1);
+
+		frm.toggle_display("numero_de_capas", frm.doc['es_producto_final'] == 1);
+		frm.toggle_display("numero_envases_capa", frm.doc['es_producto_final'] == 1);
 	},
 
 	if_tipo_de_formato: function (frm) {

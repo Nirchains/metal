@@ -129,17 +129,50 @@ def load_qty_from_template(item_group):
 	
 	return qty
 
+
+@frappe.whitelist()
+#Carga la lista de materiales desde la plantilla
+def item_has_template(item_group):
+	if frappe.db.exists("Plantilla de grupo de productos", item_group):
+		return True
+	else:
+		return False
+	#try:
+	#	qty = frappe.get_value("Plantilla de grupo de productos", item_group, 'quantity')
+	#	return True
+	#except Exception as e:
+	#	return False
+
+	
 @frappe.whitelist()
 #Carga la lista de materiales desde el producto
-def load_bom_from_item(item):
+def load_bom_materials_from_item(item):
 	
 	materiales = []
 
 	try:
-		materiales = frappe.get_list("BOM Item", 
+		materiales = frappe.get_list("BOM Item Producto", 
 								filters={'parent': item,
 										'parenttype': 'Item',
 										'parentfield': 'materiales' },
+								fields="*")
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		raise e
+
+	return materiales
+
+@frappe.whitelist()
+#Carga la lista de materiales desde el producto
+def load_bom_operations_from_item(item):
+	
+	materiales = []
+
+	try:
+		materiales = frappe.get_list("BOM Operation Producto", 
+								filters={'parent': item,
+										'parenttype': 'Item',
+										'parentfield': 'operaciones' },
 								fields="*")
 	except Exception as e:
 		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))

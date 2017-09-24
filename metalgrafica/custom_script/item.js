@@ -1,9 +1,27 @@
+frappe.provide("erpnext.bom");
+
+cur_frm.add_fetch("formato", "diametro", "diametro");
+cur_frm.add_fetch("formato", "largo", "largo");
+cur_frm.add_fetch("formato", "ancho", "ancho");
+cur_frm.add_fetch("formato", "alto", "alto");
+cur_frm.add_fetch("formato", "numero_de_capas", "numero_de_capas");
+cur_frm.add_fetch("formato", "numero_envases_capa", "numero_envases_capa");
+
 frappe.ui.form.on("Item", {
 	onload: function(frm) {
 
+		//El grupo no puede ser un árbol
+		frm.fields_dict['item_group'].get_query = function(doc) {
+			return {
+				filters: [
+					['Item Group', 'is_group', '=', 0]
+				]
+			}
+		};
+
 		//Filtramos los formatos
 		frm.fields_dict['formato'].get_query = function(doc) {
-			if (frm.doc.item_group=='PRODUCTO') {
+			if (frm.doc.item_group=='PRODUCTO' || frm.doc.item_group=='CUERPO') {
 				return {
 					filters: [
 						['Formato', 'es_producto_final', '=', 1]
@@ -17,47 +35,27 @@ frappe.ui.form.on("Item", {
 				}
 			}
 		};
-
-		//Visibilidad de las columnas de la tabla de materiales
-		frm.fields_dict.materiales.grid.toggle_reqd("rate", false);
-		frm.fields_dict.materiales.grid.toggle_display("rate", false);
-	},
-
-	setup: function(frm) {
-		//Evento de carga de fila en la tabla de materiales
-		$(frm.wrapper).on('grid-row-render', function(e, grid_row) {
-			if(in_list(['BOM Item'], grid_row.doc.doctype)) {
-				$('.form-grid [data-fieldname="rate"]').hide();
-				$('.form-grid .grid-static-col[data-fieldname="item_code"]').removeClass('col-xs-3');
-				$('.form-grid .grid-static-col[data-fieldname="item_code"]').addClass('col-xs-5');
-			}
-		});
 	},
 
 	onload_post_render: function(frm) {
 		frm.get_field("materiales").grid.set_multiple_add("item_code", "qty");
-		$('.form-grid .grid-static-col[data-fieldname="item_code"]').removeClass('col-xs-3');
-		$('.form-grid .grid-static-col[data-fieldname="item_code"]').addClass('col-xs-5');
-		$('.form-grid [data-fieldname="rate"]').hide();
 	},
 
 	refresh: function(frm) {
 		cur_frm.cscript.item.init(frm);
 		cur_frm.cscript.item.if_item_group(frm);
-		cur_frm.cscript.item.if_formato(frm);
 		frm.refresh_fields();
 	},
 
 	item_group: function(frm) {
 		cur_frm.cscript.item.if_item_group(frm);
-		////meter parche de doc.__islocal
+		////TODO:meter parche de doc.__islocal
 		cur_frm.cscript.item.reset(frm);
 		frm.refresh_fields();
 	},
 
 	formato: function(frm) {
-		cur_frm.cscript.item.if_formato(frm);
-		frm.refresh_fields();
+		cur_frm.cscript.item.init(frm);
 	},
 
 	litografia: function(frm) {
@@ -77,8 +75,9 @@ frappe.ui.form.on("Item", {
 })
 
 //Child tables
-frappe.ui.form.on('BOM Item', {
+frappe.ui.form.on('BOM Item Producto', {
 	item_code: function (frm, cdt, cdn) {
+		refresh_field("materiales");
 		var d = frappe.get_doc(cdt, cdn);
 
 		if (!helper.IsNullOrEmpty(d.item_code)) {
@@ -91,13 +90,20 @@ frappe.ui.form.on('BOM Item', {
 					util.set_value_if_no_null(frm,'formato',response.formato);
 				}
 
+				//Para heredar el espesor de las hojas al crear las tiras
+				if ((frm.doc.item_group == 'TIRA TAPA' && response.item_group == 'HOJA TAPA')
+					|| (frm.doc.item_group == "TIRA FONDO" && response.item_group == 'HOJA FONDO')) {
+					util.set_value_if_no_null(frm,'espesor',response.espesor);
+				}
+
 				//Para heredar la composición, litografía, marca, acabado, etc
-				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA')
+				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA CUERPO')
 				 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
 				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')
-				 || (frm.doc.item_group == 'TIRA' && response.item_group == 'HOJA')
-				 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA')
-				 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA')) {
+				 || (frm.doc.item_group == 'TIRA TAPA' && response.item_group == 'HOJA TAPA')
+				 || (frm.doc.item_group == 'TIRA FONDO' && response.item_group == 'HOJA FONDO')
+				 || (frm.doc.item_group == 'TAPA SIN TERMINAR' && response.item_group == 'TIRA TAPA')
+				 || (frm.doc.item_group == 'FONDO' && response.item_group == 'TIRA FONDO')) {
 					util.set_value_if_no_null(frm,'litografia',response.litografia);
 					util.set_value_if_no_null(frm,'composicion',response.composicion);
 					util.set_value_if_no_null(frm,'brand',response.brand); //marca
@@ -110,6 +116,46 @@ frappe.ui.form.on('BOM Item', {
 		}
 	}
 });
+
+//Child tables add_fetch
+cur_frm.add_fetch("item_code", "description", "description");
+cur_frm.add_fetch("item_code", "image", "image");
+cur_frm.add_fetch("item_code", "item_name", "item_name");
+cur_frm.add_fetch("item_code", "stock_uom", "uom");
+
+cur_frm.add_fetch("operation", "description", "description");
+cur_frm.add_fetch("operation", "workstation", "workstation");
+
+cur_frm.cscript.image = function() {
+	refresh_field("image_view");
+}
+
+/*
+frappe.ui.form.on('BOM Operation Producto', {
+	operation: function (frm, cdt, cdn) {
+		var d = locals[cdt][cdn];
+
+		if(!d.operation) return;
+
+		frappe.call({
+			"method": "frappe.client.get",
+			args: {
+				doctype: "Operation",
+				name: d.operation
+			},
+			callback: function (data) {
+				if(data.message.description) {
+					frappe.model.set_value(d.doctype, d.name, "description", data.message.description);
+				}
+				if(data.message.workstation) {
+					frappe.model.set_value(d.doctype, d.name, "workstation", data.message.workstation);
+				}
+			}
+		});
+	}
+});
+*/
+
 
 //Para refrescar la los productos en la tabla hija de materiales, en función del grupo de producto
 cur_frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
@@ -125,21 +171,18 @@ cur_frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
 cur_frm.cscript.item = {
 	if_item_group: function(frm) {
 		//Visibilidad
-		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA");
+		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO");
 
-		frm.toggle_enable("acabado", (frm.doc.item_group=="HOJA" && frm.doc.litografia!=true)
-									|| frm.doc.item_group=="CAJA");
-		frm.toggle_reqd("acabado", frm.doc.item_group=="HOJA" && frm.doc.litografia!=true );
+		frm.toggle_enable("acabado", ((frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+			&& frm.doc.litografia!=true) || frm.doc.item_group=="CAJA");
 
-		util.toggle_enable_and_required(frm, "brand", frm.doc.item_group=="HOJA" && frm.doc.litografia==true);
+		util.toggle_enable_and_required(frm, "brand", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+			&& frm.doc.litografia==true);
 
-		util.toggle_enable_and_required(frm, "composicion", frm.doc.item_group=="HOJA" && frm.doc.litografia == true);
+		util.toggle_enable_and_required(frm, "composicion", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+			&& frm.doc.litografia == true);
 
 		util.toggle_display_and_required(frm, "panelado", frm.doc.item_group=="PRODUCTO");
-
-		util.toggle_display_and_required(frm, "numero_de_capas", frm.doc.item_group=="PRODUCTO");
-
-		util.toggle_display_and_required(frm, "numero_envases_capa", frm.doc.item_group=="PRODUCTO");
 
 		util.toggle_display_and_required(frm, "posicion", frm.doc.item_group=="PRODUCTO");
 
@@ -153,19 +196,35 @@ cur_frm.cscript.item = {
 														|| frm.doc.item_group=="RESPIRADOR"
 														|| frm.doc.item_group=="ASA");
 		
-		frm.toggle_enable("espesor", frm.doc.item_group=="HOJA" || frm.doc.item_group=="SEPARADOR");
-		frm.toggle_reqd("espesor", frm.doc.item_group=="HOJA");
+		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+														|| frm.doc.item_group=="SEPARADOR");
+		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
 		
-		util.toggle_enable_and_required(frm, "largo", frm.doc.item_group=="HOJA"
+		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
+														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 														|| frm.doc.item_group=="SEPARADOR");
 		
-		util.toggle_enable_and_required(frm, "ancho", frm.doc.item_group=="HOJA"
+		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
+														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 														|| frm.doc.item_group=="SEPARADOR");
 
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
+		
 		if (frm.doc.item_group) {
-			
+
+			frappe.call({
+				method: "metalgrafica.bom.item_has_template",
+				args: {
+					"item_group": frm.doc.item_group
+				},
+				callback: function(r) {
+					frm.toggle_display("seccion_boton_cargar_materiales", r.message);
+				}
+			});
+
+
+			//Agregamos características propias al grupo de producto
 			util.get(frm, 'Item Group', frm.doc.item_group, undefined ,function(response,frm) {
 				
 				switch (response.parent_item_group) {
@@ -178,14 +237,14 @@ cur_frm.cscript.item = {
 						frm.set_value('is_sales_item',1);
 						break;
 
-					case 'SUB-ENSAMBLE':
+					case 'SUB-ENSAMBLE','TIRA':
 						frm.set_value('default_material_request_type','Manufacture');
 						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						break;
 
-					case 'MATERIA PRIMA':
+					case 'MATERIA PRIMA','HOJA':
 						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
@@ -200,33 +259,17 @@ cur_frm.cscript.item = {
 		}
 	},
 
-	if_formato: function(frm) {
-		//Obtenemos las dimensiones
-		if (frm.doc.formato) {
-			//get: function(frm, doctype, name, filters, callback)
-			var formato = util.get(frm, 'Formato', frm.doc.formato,undefined,this.set_formato);
-		}
-
-	},
 
 	set_formato: function(response,frm) {
-
 		util.set_value_if_no_null(frm,'diametro',response.diametro);
-		util.set_value_if_no_null(frm,'largo',response.largo);
+		//util.set_value_if_no_null(frm,'largo',response.largo);
 		util.set_value_if_no_null(frm,'ancho',response.ancho);
 		util.set_value_if_no_null(frm,'alto',response.alto);
 
+		util.set_value_if_no_null(frm,'numero_de_capas',response.numero_de_capas);
+		util.set_value_if_no_null(frm,'numero_envases_capa',response.numero_envases_capa);
+
 		frm.refresh_fields();
-
-	},
-
-	set_acabado: function(frm) {
-		if (frm.doc.item_group == 'CUERPO' || frm.doc.item_group == 'TIRA') {
-			util.get(frm, 'Item', frm.doc.hoja, undefined ,function(response,frm) {
-				frm.set_value('acabado',response.acabado);
-				frm.refresh_fields();
-			});
-		}
 	},
 
 	load_bom_from_template: function(frm) {
@@ -241,10 +284,10 @@ cur_frm.cscript.item = {
 						frappe.throw(__("El grupo de PRODUCTO no contiene ninguna plantilla de materiales"))
 					} else {
 						$.each(r.message, function(i, item) {
-							var d = frappe.model.add_child(frm.doc, "BOM Item", "materiales");
-							d.item_group = item.item_group;
-							d.qty = item.qty;
-							d.rate = 0;
+							var d = frappe.model.add_child(frm.doc, "BOM Item Producto", "materiales");
+							frappe.model.set_value(d.doctype, d.name, "item_group", item.item_group);
+							frappe.model.set_value(d.doctype, d.name, "qty", item.qty);
+							frappe.model.set_value(d.doctype, d.name, "scrap", 0);
 						});
 					}
 					refresh_field("materiales");
@@ -277,8 +320,12 @@ cur_frm.cscript.item = {
 			
 			doc = {}
 			$.each(keys, function(index, value) {
-				doc[value] = frm.doc[value];
+				if (!helper.IsNullOrEmpty(frm.doc[value])) {
+					doc[value] = frm.doc[value];
+				}
 			});
+
+			console.log(doc);
 
 			frappe.call({
 				type: "POST",
@@ -304,7 +351,9 @@ cur_frm.cscript.item = {
 			
 			doc = {}
 			$.each(keys, function(index, value) {
-				doc[value] = frm.doc[value];
+				if (!helper.IsNullOrEmpty(frm.doc[value])) {
+					doc[value] = frm.doc[value];
+				}
 			});
 
 			frappe.call({
@@ -343,6 +392,9 @@ cur_frm.cscript.item = {
 		util.transform_zero_to_empty(frm,'alto');
 		util.transform_zero_to_empty(frm,'espesor');
 
+		util.transform_zero_to_empty(frm,'numero_de_capas');
+		util.transform_zero_to_empty(frm,'numero_envases_capa');
+
 	},
 
 	reset: function(frm) {
@@ -351,5 +403,9 @@ cur_frm.cscript.item = {
 		frm.doc.ancho = '';
 		frm.doc.alto = '';
 		frm.doc.espesor = '';
+
+		frm.doc.numero_de_capas = '';
+		frm.doc.numero_envases_capa = '';
+
 	}
 }

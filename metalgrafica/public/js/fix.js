@@ -1,3 +1,4 @@
+//Corige los atajos de teclado de la versión
 //FIX https://github.com/frappe/frappe/pull/3605/files
 frappe.ui.keys.get_key = function(e) {
 	var keycode = e.keyCode || e.which;

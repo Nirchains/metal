@@ -1,12 +1,12 @@
-/*
+
 frappe.listview_settings['Item']['onload'] =
     function(listview) {
 		frappe.route_options = {
-			"has_variants": "No"
+			"disabled": 0
 		};
 	}
 
-
+/*
 frappe.listview_settings['Item']['refresh'] =
 	function(me) {
 		// Filtros
