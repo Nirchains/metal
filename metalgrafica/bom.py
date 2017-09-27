@@ -124,7 +124,22 @@ def load_qty_from_template(item_group):
 		qty = frappe.get_value("Plantilla de grupo de productos", item_group, 'quantity')
 	
 	except Exception as e:
-		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		frappe.msgprint(_("No se ha podido obtener la cantidad"))
+		raise e
+	
+	return qty
+
+@frappe.whitelist()
+#Carga la lista de materiales desde la plantilla
+def load_qty_from_item(item):
+	
+	qty = 0
+
+	try:
+		qty = frappe.get_value("Item", item, 'quantity')
+	
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la cantidad"))
 		raise e
 	
 	return qty
@@ -179,6 +194,23 @@ def load_bom_operations_from_item(item):
 		raise e
 
 	return materiales
+
+@frappe.whitelist()
+def validate_uom_is_integer():
+	args = frappe.form_dict
+	uom = args.uom
+	qty = args.qty
+	child_dt = args.child_dt
+
+	integer_uom = frappe.db.get_value("UOM", uom, "must_be_whole_number")
+
+	if integer_uom:
+		if qty:
+			try:
+				int(qty)
+			except:
+				return True
+	return False
 
 #Funcion para concatenar la descripcion del producto
 def append_description_if_no_null(doc, arr, label, key=None, value=None):

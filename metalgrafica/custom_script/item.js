@@ -47,6 +47,31 @@ frappe.ui.form.on("Item", {
 		frm.refresh_fields();
 	},
 
+	validate: function(frm) {
+		$.each(frm.doc["materiales"] || [], function(i, item) {
+			
+				//validate_uom_is_integer(self, "stock_uom", "qty", "BOM Item")
+				frappe.call({
+					method: "metalgrafica.bom.validate_uom_is_integer",
+					args: {
+						"uom": item.stock_uom,
+						"qty": item.qty
+					},
+					callback: function(r) {
+						console.log(r.message);
+						if (r.message) {
+							msgprint("La cantidad de material '" + item.item_code + "' debe ser un número entero");
+							validated = false;
+						}
+						
+					}
+				});
+				//msgprint("La cantidad de material '" + item.item_code + "' debe ser un número entero");
+				//validated = false;
+			
+		});
+	},
+
 	item_group: function(frm) {
 		cur_frm.cscript.item.if_item_group(frm);
 		////TODO:meter parche de doc.__islocal
@@ -167,6 +192,15 @@ cur_frm.set_query("item_code", "materiales", function(doc, cdt, cdn) {
 	};
 });
 
+cur_frm.set_query("item_group", "materiales", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: {
+			is_group: 0
+		}
+	};
+});
+
 //Funciones
 cur_frm.cscript.item = {
 	if_item_group: function(frm) {
@@ -220,6 +254,9 @@ cur_frm.cscript.item = {
 				},
 				callback: function(r) {
 					frm.toggle_display("seccion_boton_cargar_materiales", r.message);
+					//TODO: Ponemos el campo cantidad oblitorio si tiene plantilla de materiales
+					//TODO: pedir las operaciones si tiene plantilla de materiales
+					
 				}
 			});
 

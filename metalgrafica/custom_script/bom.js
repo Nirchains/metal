@@ -3,6 +3,7 @@
 frappe.ui.form.on('BOM', {
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.load_bom_materials_from_item(frm);
+		cur_frm.cscript.load_qty_from_item(frm);
 	},
 
 	cargar_operaciones: function(frm) {
@@ -83,5 +84,21 @@ $.extend(cur_frm.cscript, {
 				}
 			});
 		}
+	},
+
+	load_qty_from_item: function(frm) {
+		if (frm.doc["item"]) {
+			frappe.call({
+				method: "metalgrafica.bom.load_qty_from_item",
+				args: {
+					"item": frm.doc["item"]
+				},
+				callback: function(r) {
+					frm.doc.quantity = r.message;
+					refresh_field("quantity");
+				}
+			});
+		}
 	}
+
 });

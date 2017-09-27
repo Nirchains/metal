@@ -71,7 +71,7 @@
    "read_only": 0, 
    "remember_last_selected_value": 0, 
    "report_hide": 0, 
-   "reqd": 1, 
+   "reqd": 0, 
    "search_index": 0, 
    "set_only_once": 0, 
    "unique": 0
@@ -118,7 +118,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-08-11 11:46:40.626711", 
+ "modified": "2017-09-26 11:40:08.372962", 
  "modified_by": "Administrator", 
  "module": "Metalgrafica", 
  "name": "Plantilla de grupo de productos", 
