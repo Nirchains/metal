@@ -91,7 +91,7 @@ frappe.ui.form.on("Item", {
 	},
 
 	cargar_materiales: function(frm) {
-		cur_frm.cscript.item.load_bom_from_template(frm);
+		cur_frm.cscript.item.load_bom_materials_from_template(frm);
 		cur_frm.cscript.item.load_qty_from_template(frm);
 	}
 })
