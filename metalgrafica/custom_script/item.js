@@ -226,7 +226,10 @@ cur_frm.cscript.item = {
 					"item_group": frm.doc.item_group
 				},
 				callback: function(r) {
-					frm.toggle_display("seccion_boton_cargar_materiales", r.message);				
+					frm.toggle_display("seccion_boton_cargar_materiales", r.message);			
+					frm.toggle_display("materiales_seccion", r.message);
+					frm.toggle_display("operaciones_seccion", r.message);
+					frm.toggle_display("salto_sec_nombre_desc_cliente", r.message);
 				}
 			});
 
