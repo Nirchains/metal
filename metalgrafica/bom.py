@@ -98,7 +98,7 @@ def item_name_generate():
 
 @frappe.whitelist()
 #Carga la lista de materiales desde la plantilla
-def load_bom_from_template(item_group):
+def load_bom_materials_from_template(item_group):
 	
 	materiales = []
 

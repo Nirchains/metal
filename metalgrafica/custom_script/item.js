@@ -42,15 +42,15 @@ frappe.ui.form.on("Item", {
 	},
 
 	refresh: function(frm) {
-		cur_frm.cscript.item.init(frm);
-		cur_frm.cscript.item.if_item_group(frm);
+		cur_frm.cscript.item.set_display_formato(frm);
+		cur_frm.cscript.item.check_properties(frm);
 		frm.refresh_fields();
 	},
 
 	validate: function(frm) {
+		//Validamos que en la tabla de materiales no se introduzcan números enteros para productos que lo requieran
 		$.each(frm.doc["materiales"] || [], function(i, item) {
 			
-				//validate_uom_is_integer(self, "stock_uom", "qty", "BOM Item")
 				frappe.call({
 					method: "metalgrafica.bom.validate_uom_is_integer",
 					args: {
@@ -65,26 +65,23 @@ frappe.ui.form.on("Item", {
 						}
 						
 					}
-				});
-				//msgprint("La cantidad de material '" + item.item_code + "' debe ser un número entero");
-				//validated = false;
-			
+				});		
 		});
 	},
 
 	item_group: function(frm) {
-		cur_frm.cscript.item.if_item_group(frm);
-		////TODO:meter parche de doc.__islocal
+		cur_frm.cscript.item.check_properties(frm);
 		cur_frm.cscript.item.reset(frm);
 		frm.refresh_fields();
+
 	},
 
 	formato: function(frm) {
-		cur_frm.cscript.item.init(frm);
+		cur_frm.cscript.item.set_display_formato(frm);
 	},
 
 	litografia: function(frm) {
-		cur_frm.cscript.item.if_item_group(frm);
+		cur_frm.cscript.item.check_properties(frm);
 		frm.refresh_fields();
 	},
 
@@ -113,6 +110,8 @@ frappe.ui.form.on('BOM Item Producto', {
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
 				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')) {
 					util.set_value_if_no_null(frm,'formato',response.formato);
+					cur_frm.cscript.item.set_formato(response, frm);
+					cur_frm.cscript.item.set_display_formato(frm);
 				}
 
 				//Para heredar el espesor de las hojas al crear las tiras
@@ -135,6 +134,7 @@ frappe.ui.form.on('BOM Item Producto', {
 					util.set_value_if_no_null(frm,'acabado',response.acabado);
 					util.set_value_if_no_null(frm,'litografia',response.litografia);
 					util.set_value_if_no_null(frm,'image',response.image);
+										
 				}
 
 			});
@@ -154,32 +154,6 @@ cur_frm.add_fetch("operation", "workstation", "workstation");
 cur_frm.cscript.image = function() {
 	refresh_field("image_view");
 }
-
-/*
-frappe.ui.form.on('BOM Operation Producto', {
-	operation: function (frm, cdt, cdn) {
-		var d = locals[cdt][cdn];
-
-		if(!d.operation) return;
-
-		frappe.call({
-			"method": "frappe.client.get",
-			args: {
-				doctype: "Operation",
-				name: d.operation
-			},
-			callback: function (data) {
-				if(data.message.description) {
-					frappe.model.set_value(d.doctype, d.name, "description", data.message.description);
-				}
-				if(data.message.workstation) {
-					frappe.model.set_value(d.doctype, d.name, "workstation", data.message.workstation);
-				}
-			}
-		});
-	}
-});
-*/
 
 
 //Para refrescar la los productos en la tabla hija de materiales, en función del grupo de producto
@@ -203,7 +177,7 @@ cur_frm.set_query("item_group", "materiales", function(doc, cdt, cdn) {
 
 //Funciones
 cur_frm.cscript.item = {
-	if_item_group: function(frm) {
+	check_properties: function(frm) {
 		//Visibilidad
 		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO");
 
@@ -225,7 +199,7 @@ cur_frm.cscript.item = {
 														|| frm.doc.item_group=="CUERPO");
 
 		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
-				
+						
 		util.toggle_display_and_required(frm, "color", frm.doc.item_group=="TAPON"
 														|| frm.doc.item_group=="RESPIRADOR"
 														|| frm.doc.item_group=="ASA");
@@ -233,18 +207,17 @@ cur_frm.cscript.item = {
 		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
 														|| frm.doc.item_group=="SEPARADOR");
 		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
-		
+				
 		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 														|| frm.doc.item_group=="SEPARADOR");
-		
+				
 		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 														|| frm.doc.item_group=="SEPARADOR");
-
+		
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
-		
 		if (frm.doc.item_group) {
 
 			frappe.call({
@@ -253,10 +226,7 @@ cur_frm.cscript.item = {
 					"item_group": frm.doc.item_group
 				},
 				callback: function(r) {
-					frm.toggle_display("seccion_boton_cargar_materiales", r.message);
-					//TODO: Ponemos el campo cantidad oblitorio si tiene plantilla de materiales
-					//TODO: pedir las operaciones si tiene plantilla de materiales
-					
+					frm.toggle_display("seccion_boton_cargar_materiales", r.message);				
 				}
 			});
 
@@ -281,7 +251,7 @@ cur_frm.cscript.item = {
 						frm.set_value('is_sales_item',0);
 						break;
 
-					case 'MATERIA PRIMA','HOJA':
+					case 'MATERIA PRIMA','HOJA','CONSUMIBLE':
 						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
@@ -296,23 +266,11 @@ cur_frm.cscript.item = {
 		}
 	},
 
-
-	set_formato: function(response,frm) {
-		util.set_value_if_no_null(frm,'diametro',response.diametro);
-		//util.set_value_if_no_null(frm,'largo',response.largo);
-		util.set_value_if_no_null(frm,'ancho',response.ancho);
-		util.set_value_if_no_null(frm,'alto',response.alto);
-
-		util.set_value_if_no_null(frm,'numero_de_capas',response.numero_de_capas);
-		util.set_value_if_no_null(frm,'numero_envases_capa',response.numero_envases_capa);
-
-		frm.refresh_fields();
-	},
-
-	load_bom_from_template: function(frm) {
+	load_bom_materials_from_template: function(frm) {
 		if (frm.doc["item_group"]) {
+			frappe.model.clear_table(frm.doc,"materiales");
 			frappe.call({
-				method: "metalgrafica.bom.load_bom_from_template",
+				method: "metalgrafica.bom.load_bom_materials_from_template",
 				args: {
 					"item_group": frm.doc["item_group"]
 				},
@@ -421,20 +379,32 @@ cur_frm.cscript.item = {
 		}
 	},
 
-	init: function(frm) {
+	set_formato: function(response,frm) {
+		util.set_value_if_no_null(frm,'diametro',response.diametro);
+		util.set_value_if_no_null(frm,'largo',response.largo);
+		util.set_value_if_no_null(frm,'ancho',response.ancho);
+		util.set_value_if_no_null(frm,'alto',response.alto);
 
-		util.transform_zero_to_empty(frm,'diametro');
-		util.transform_zero_to_empty(frm,'largo');
-		util.transform_zero_to_empty(frm,'ancho');
-		util.transform_zero_to_empty(frm,'alto');
-		util.transform_zero_to_empty(frm,'espesor');
+		util.set_value_if_no_null(frm,'numero_de_capas',response.numero_de_capas);
+		util.set_value_if_no_null(frm,'numero_envases_capa',response.numero_envases_capa);
 
-		util.transform_zero_to_empty(frm,'numero_de_capas');
-		util.transform_zero_to_empty(frm,'numero_envases_capa');
+		frm.refresh_fields();
+	},
 
+	set_display_formato: function(frm) {
+		frm.toggle_display("diametro", frm.doc.diametro != 0);
+		frm.toggle_display("espesor", frm.doc.espesor != 0);
+		frm.toggle_display("largo", frm.doc.largo != 0);
+		frm.toggle_display("ancho", frm.doc.ancho != 0);
+		frm.toggle_display("alto", frm.doc.alto != 0);
+
+		frm.toggle_display("numero_de_capas", frm.doc.numero_de_capas != 0);
+		frm.toggle_display("numero_envases_capa", frm.doc.numero_envases_capa != 0);
 	},
 
 	reset: function(frm) {
+		frm.doc.formato = '';
+		
 		frm.doc.diametro = '';
 		frm.doc.largo = '';
 		frm.doc.ancho = '';
