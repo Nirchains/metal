@@ -57,6 +57,10 @@ doctype_list_js = {
     "Customer": ["custom_script/customer_list.js"]
 }
 
+doctype_tree_js = {
+    
+}
+
 # Home Pages
 # ----------
 

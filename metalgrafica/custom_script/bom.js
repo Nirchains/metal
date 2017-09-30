@@ -96,6 +96,7 @@ $.extend(cur_frm.cscript, {
 				callback: function(r) {
 					frm.doc.quantity = r.message;
 					refresh_field("quantity");
+					cur_frm.refresh_fields();
 				}
 			});
 		}
