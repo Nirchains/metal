@@ -3,6 +3,9 @@
 frappe.ui.form.on('BOM', {
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.load_bom_materials_from_item(frm);
+	},
+
+	cargar_cantidad: function(frm) {
 		cur_frm.cscript.load_qty_from_item(frm);
 	},
 
@@ -96,7 +99,6 @@ $.extend(cur_frm.cscript, {
 				callback: function(r) {
 					frm.doc.quantity = r.message;
 					refresh_field("quantity");
-					cur_frm.refresh_fields();
 				}
 			});
 		}

@@ -2079,23 +2079,6 @@
   "_liked_by": null, 
   "_user_tags": null, 
   "default_value": null, 
-  "doc_type": "BOM", 
-  "docstatus": 0, 
-  "doctype": "Property Setter", 
-  "doctype_or_field": "DocType", 
-  "field_name": null, 
-  "modified": "2017-09-24 22:59:47.772751", 
-  "name": "BOM-read_only_onload", 
-  "property": "read_only_onload", 
-  "property_type": "Check", 
-  "value": null
- }, 
- {
-  "_assign": null, 
-  "_comments": null, 
-  "_liked_by": null, 
-  "_user_tags": null, 
-  "default_value": null, 
   "doc_type": "Item", 
   "docstatus": 0, 
   "doctype": "Property Setter", 
@@ -2123,5 +2106,22 @@
   "property": "width", 
   "property_type": null, 
   "value": "187"
+ }, 
+ {
+  "_assign": null, 
+  "_comments": null, 
+  "_liked_by": null, 
+  "_user_tags": null, 
+  "default_value": null, 
+  "doc_type": "BOM", 
+  "docstatus": 0, 
+  "doctype": "Property Setter", 
+  "doctype_or_field": "DocType", 
+  "field_name": null, 
+  "modified": "2017-09-30 15:51:02.748160", 
+  "name": "BOM-read_only_onload", 
+  "property": "read_only_onload", 
+  "property_type": "Check", 
+  "value": null
  }
 ]
