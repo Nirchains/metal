@@ -2106,5 +2106,22 @@
   "property": "read_only_onload", 
   "property_type": "Check", 
   "value": null
+ }, 
+ {
+  "_assign": null, 
+  "_comments": null, 
+  "_liked_by": null, 
+  "_user_tags": null, 
+  "default_value": null, 
+  "doc_type": "Item", 
+  "docstatus": 0, 
+  "doctype": "Property Setter", 
+  "doctype_or_field": "DocField", 
+  "field_name": "is_purchase_item", 
+  "modified": "2017-09-29 18:10:13.585935", 
+  "name": "Item-is_purchase_item-width", 
+  "property": "width", 
+  "property_type": null, 
+  "value": "187"
  }
 ]

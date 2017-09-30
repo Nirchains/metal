@@ -236,7 +236,7 @@ cur_frm.cscript.item = {
 
 			//Agregamos características propias al grupo de producto
 			util.get(frm, 'Item Group', frm.doc.item_group, undefined ,function(response,frm) {
-				
+				console.log(response.parent_item_group);
 				switch (response.parent_item_group) {
 
 					case 'Todos los Grupos de Artículos':
@@ -247,19 +247,21 @@ cur_frm.cscript.item = {
 						frm.set_value('is_sales_item',1);
 						break;
 
-					case 'SUB-ENSAMBLE','TIRA':
+					case 'SUB-ENSAMBLE':
+					case 'TIRA':
 						frm.set_value('default_material_request_type','Manufacture');
 						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						break;
 
-					case 'MATERIA PRIMA','HOJA','CONSUMIBLE':
+					case 'MATERIA PRIMA':
+					case 'HOJA':
+					case 'CONSUMIBLE':
 						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);	
-
 						break;
 
 					default:
