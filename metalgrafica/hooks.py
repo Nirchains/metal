@@ -58,7 +58,7 @@ doctype_list_js = {
 }
 
 doctype_tree_js = {
-    
+    "BOM": ["custom_script/bom_tree.js"]
 }
 
 # Home Pages

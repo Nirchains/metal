@@ -288,9 +288,9 @@ cur_frm.cscript.item = {
 							frappe.model.set_value(d.doctype, d.name, "item_group", item.item_group);
 							frappe.model.set_value(d.doctype, d.name, "qty", item.qty);
 							frappe.model.set_value(d.doctype, d.name, "scrap", 0);
+							refresh_field("materiales");
 						});
 					}
-					refresh_field("materiales");
 				}
 			});
 		}

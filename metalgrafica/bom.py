@@ -229,3 +229,19 @@ def append_item_code_if_no_null(doc, arr, label, key=None, value=None):
 
 	if value:
 		arr.append("{0}".format(value))
+
+@frappe.whitelist()
+def bom_get_children():
+	if frappe.form_dict.parent:
+		return frappe.db.sql("""select
+			bom_item.item_code,
+			bom_item.bom_no as value,
+			bom_item.qty_consumed_per_unit qty,
+			if(ifnull(bom_item.bom_no, "")!="", 1, 0) as expandable,
+			item.image,
+			item.description
+			from `tabBOM Item` bom_item, tabItem item
+			where bom_item.parent=%s
+			and bom_item.item_code = item.name
+			order by bom_item.idx
+			""", frappe.form_dict.parent, as_dict=True)

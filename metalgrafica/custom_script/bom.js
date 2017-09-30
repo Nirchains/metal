@@ -53,9 +53,10 @@ $.extend(cur_frm.cscript, {
 							frappe.model.set_value(d.doctype, d.name, "scrap", item.scrap);
 							frappe.model.set_value(d.doctype, d.name, "item_group", item.item_group);
 							frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
+							refresh_field("items");
 						});
 					}
-					refresh_field("items");
+					
 				}
 			});
 		}
@@ -79,9 +80,8 @@ $.extend(cur_frm.cscript, {
 							//frappe.model.set_value(e.doctype, e.name, "workstation", item.workstation);
 							//frappe.model.set_value(e.doctype, e.name, "description", item.description);
 							frappe.model.set_value(e.doctype, e.name, "image", item.image);
-						});
-						refresh_field("operations");
-						
+							refresh_field("operations");
+						});					
 					}
 					
 				}
