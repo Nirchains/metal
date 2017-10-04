@@ -184,6 +184,9 @@ cur_frm.cscript.item = {
 		frm.toggle_enable("acabado", ((frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
 			&& frm.doc.litografia!=true) || frm.doc.item_group=="CAJA");
 
+		frm.toggle_reqd("acabado", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+			&& frm.doc.litografia!=true);
+
 		util.toggle_enable_and_required(frm, "brand", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
 			&& frm.doc.litografia==true);
 
