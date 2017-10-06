@@ -239,7 +239,7 @@ cur_frm.cscript.item = {
 
 			//Agregamos características propias al grupo de producto
 			util.get(frm, 'Item Group', frm.doc.item_group, undefined ,function(response,frm) {
-				console.log(response.parent_item_group);
+				
 				switch (response.parent_item_group) {
 
 					case 'Todos los Grupos de Artículos':

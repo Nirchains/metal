@@ -1,4 +1,4 @@
-
+frappe.provide("erpnext.bom");
 
 frappe.ui.form.on('BOM', {
 	cargar_materiales: function(frm) {
@@ -34,7 +34,7 @@ frappe.ui.form.on("BOM Operation", "workstation", function(frm, cdt, cdn) {
 });
 
 //Funciones adicionales
-$.extend(cur_frm.cscript, {
+erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 	load_bom_materials_from_item: function(frm) {
 		if (frm.doc["item"]) {
 			frappe.model.clear_table(frm.doc,"items");
@@ -47,14 +47,8 @@ $.extend(cur_frm.cscript, {
 					if(!r.message) {
 						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
 					} else {
-						$.each(r.message, function(i, item) {
-							var d = frappe.model.add_child(frm.doc, "BOM Item", "items");
-							frappe.model.set_value(d.doctype, d.name, "qty", flt(item.qty));
-							frappe.model.set_value(d.doctype, d.name, "scrap", item.scrap);
-							frappe.model.set_value(d.doctype, d.name, "item_group", item.item_group);
-							frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
-							refresh_field("items");
-						});
+						i = 0;
+						frm.cscript.set_materiales(frm, r);
 					}
 					
 				}
@@ -89,6 +83,25 @@ $.extend(cur_frm.cscript, {
 		}
 	},
 
+	//Función recursiva para colocar la lista de materiales
+	set_materiales: function(frm, r) {
+	
+		var j = r.message.length;
+		var d;
+		setTimeout(function () {
+			d = frappe.model.add_child(frm.doc, "BOM Item", "items");
+			frappe.model.set_value(d.doctype, d.name, "item_code", r.message[i].item_code);
+			frappe.model.set_value(d.doctype, d.name, "qty", r.message[i].qty);
+			frappe.model.set_value(d.doctype, d.name, "scrap", r.message[i].scrap);
+			frappe.model.set_value(d.doctype, d.name, "item_group", r.message[i].item_group);
+			i++;
+			if (i < j) {
+				frm.cscript.set_materiales(frm, r);
+			}
+		}, 500);
+
+	},
+
 	load_qty_from_item: function(frm) {
 		if (frm.doc["item"]) {
 			frappe.call({
@@ -105,3 +118,5 @@ $.extend(cur_frm.cscript, {
 	}
 
 });
+
+$.extend(cur_frm.cscript, new erpnext.bom.BomExtendController({frm: cur_frm}));

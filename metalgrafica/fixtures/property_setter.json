@@ -2441,10 +2441,27 @@
   "doctype": "Property Setter", 
   "doctype_or_field": "DocType", 
   "field_name": null, 
-  "modified": "2017-10-04 00:06:52.808548", 
+  "modified": "2017-10-06 08:02:50.373088", 
   "name": "Item-read_only_onload", 
   "property": "read_only_onload", 
   "property_type": "Check", 
   "value": null
+ }, 
+ {
+  "_assign": null, 
+  "_comments": null, 
+  "_liked_by": null, 
+  "_user_tags": null, 
+  "default_value": null, 
+  "doc_type": "Item", 
+  "docstatus": 0, 
+  "doctype": "Property Setter", 
+  "doctype_or_field": "DocField", 
+  "field_name": "variant_of", 
+  "modified": "2017-10-06 08:02:50.448128", 
+  "name": "Item-variant_of-in_standard_filter", 
+  "property": "in_standard_filter", 
+  "property_type": "Check", 
+  "value": "0"
  }
 ]
