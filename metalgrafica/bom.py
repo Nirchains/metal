@@ -19,6 +19,7 @@ def item_description_generate():
 	append_description_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
 	append_description_if_no_null(doc, descripciones, "MARCA", "brand")
 
+	append_description_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 	append_description_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_description_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
 	append_description_if_no_null(doc, descripciones, "LARGO", "largo")
@@ -49,6 +50,7 @@ def item_code_generate():
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 
+	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
 	append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
@@ -79,6 +81,7 @@ def item_name_generate():
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 
+	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
 	append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
@@ -203,14 +206,15 @@ def validate_uom_is_integer():
 	child_dt = args.child_dt
 
 	integer_uom = frappe.db.get_value("UOM", uom, "must_be_whole_number")
+	return integer_uom
 
-	if integer_uom:
-		if qty:
-			try:
-				int(qty)
-			except:
-				return True
-	return False
+	#if integer_uom:
+	#	if qty:
+	#		try:
+	#			int(qty)
+	#		except:
+	#			return True
+	#return False
 
 #Funcion para concatenar la descripcion del producto
 def append_description_if_no_null(doc, arr, label, key=None, value=None):

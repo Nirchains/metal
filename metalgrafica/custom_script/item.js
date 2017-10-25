@@ -58,7 +58,6 @@ frappe.ui.form.on("Item", {
 						"qty": item.qty
 					},
 					callback: function(r) {
-						console.log(r.message);
 						if (r.message) {
 							msgprint("La cantidad de material '" + item.item_code + "' debe ser un número entero");
 							validated = false;
@@ -67,6 +66,10 @@ frappe.ui.form.on("Item", {
 					}
 				});		
 		});
+		if ((frm.doc.item_group == 'HOJA CUERPO' || frm.doc.item_group == 'HOJA TAPA' || frm.doc.item_group == 'HOJA FONDO')
+			&& frm.doc.litografia == true && helper.IsNullOrEmpty(frm.doc.image)) {
+			msgprint("Recuerde subir la imagen");
+		}
 	},
 
 	item_group: function(frm) {
@@ -108,7 +111,8 @@ frappe.ui.form.on('BOM Item Producto', {
 				
 				//Para heredar el formato y las dimensiones
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
-				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')) {
+				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')
+				 || ((frm.doc.item_group == 'HOJA TAPA' || frm.doc.item_group == 'HOJA CUERPO' || frm.doc.item_group == 'HOJA FONDO') && response.item_group == 'HOJA VIRGEN')) {
 					util.set_value_if_no_null(frm,'formato',response.formato);
 					cur_frm.cscript.item.set_formato(response, frm);
 					cur_frm.cscript.item.set_display_formato(frm);
@@ -198,8 +202,8 @@ cur_frm.cscript.item = {
 		util.toggle_display_and_required(frm, "posicion", frm.doc.item_group=="PRODUCTO");
 
 		util.toggle_enable_and_required(frm, "formato", frm.doc.item_group=="FONDO" 
-														|| frm.doc.item_group=="TAPA SIN TERMINAR"
-														|| frm.doc.item_group=="CUERPO");
+									|| frm.doc.item_group=="TAPA SIN TERMINAR"
+									|| frm.doc.item_group=="CUERPO");
 
 		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
 						
@@ -207,17 +211,21 @@ cur_frm.cscript.item = {
 														|| frm.doc.item_group=="RESPIRADOR"
 														|| frm.doc.item_group=="ASA");
 		
-		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-														|| frm.doc.item_group=="SEPARADOR");
-		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
+		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA VIRGEN"
+									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
+									|| frm.doc.item_group=="SEPARADOR");
+		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA VIRGEN"
+									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
 				
-		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
-														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-														|| frm.doc.item_group=="SEPARADOR");
+		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA VIRGEN"
+									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
+									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
+									|| frm.doc.item_group=="SEPARADOR");
 				
-		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
-														|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-														|| frm.doc.item_group=="SEPARADOR");
+		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA VIRGEN"
+									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
+									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
+									|| frm.doc.item_group=="SEPARADOR");
 		
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
@@ -248,6 +256,8 @@ cur_frm.cscript.item = {
 						frm.set_value('default_warehouse','Productos terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',1);
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);
 						break;
 
 					case 'SUB-ENSAMBLE':
@@ -258,8 +268,15 @@ cur_frm.cscript.item = {
 						frm.set_value('is_sales_item',0);
 						break;
 
-					case 'MATERIA PRIMA':
 					case 'HOJA':
+						frm.set_value('default_material_request_type','Manufacture');
+						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
+						frm.set_value('is_purchase_item',0);
+						frm.set_value('is_sales_item',0);
+						frm.set_value('is_sub_contracted_item', 1);
+						break;
+
+					case 'MATERIA PRIMA':
 					case 'CONSUMIBLE':
 						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Materias primas - MDS');
@@ -318,7 +335,7 @@ cur_frm.cscript.item = {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
+			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
 						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
 			doc = {}
@@ -348,7 +365,7 @@ cur_frm.cscript.item = {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
+			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'acabado', 'composicion', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
 						'color', 'color_codigo']
 						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
@@ -392,6 +409,7 @@ cur_frm.cscript.item = {
 		util.set_value_if_no_null(frm,'largo',response.largo);
 		util.set_value_if_no_null(frm,'ancho',response.ancho);
 		util.set_value_if_no_null(frm,'alto',response.alto);
+		util.set_value_if_no_null(frm,'espesor',response.espesor);
 
 		util.set_value_if_no_null(frm,'numero_de_capas',response.numero_de_capas);
 		util.set_value_if_no_null(frm,'numero_envases_capa',response.numero_envases_capa);
