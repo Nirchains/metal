@@ -220,12 +220,14 @@ cur_frm.cscript.item = {
 		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-									|| frm.doc.item_group=="SEPARADOR");
+									|| frm.doc.item_group=="SEPARADOR"
+									|| frm.doc.item_group=="PALET");
 				
 		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-									|| frm.doc.item_group=="SEPARADOR");
+									|| frm.doc.item_group=="SEPARADOR"
+									|| frm.doc.item_group=="PALET");
 		
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
@@ -271,7 +273,7 @@ cur_frm.cscript.item = {
 					case 'HOJA':
 						frm.set_value('default_material_request_type','Manufacture');
 						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
-						frm.set_value('is_purchase_item',0);
+						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('is_sub_contracted_item', 1);
 						break;
@@ -279,7 +281,12 @@ cur_frm.cscript.item = {
 					case 'MATERIA PRIMA':
 					case 'CONSUMIBLE':
 						frm.set_value('default_material_request_type','Purchase');
-						frm.set_value('default_warehouse','Materias primas - MDS');
+						if (frm.doc.item_group == 'HOJA VIRGEN') {
+							frm.set_value('default_warehouse','LITALSA - MDS');
+							frm.set_value('purchase_uom','Kilogramo')
+						} else {
+							frm.set_value('default_warehouse','Materias primas - MDS');
+						}
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);	
 						break;

@@ -49,6 +49,9 @@ doctype_js = {
     ],
     "Production Order": [
         "custom_script/production_order.js"
+    ],
+    "Purchase Receipt": [
+        "custom_script/purchase_receipt.js"
     ]
 }
 
