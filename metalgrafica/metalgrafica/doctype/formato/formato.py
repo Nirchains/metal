@@ -11,11 +11,16 @@ class Formato(Document):
 
 		#Añadimos al nombre el formato y la capacidad
 		formato = frappe.db.get_value('Formato denominaciones', self.formato,'abreviatura')
-		name = ("{0}").format(formato)
+		name = ""
+		if not self.es_producto_final:
+			name = ("{0}").format(formato)
 
 		#Añadimos la capacidad
 		if self.capacidad:
-			name = ("{0}-{1}").format(name, self.capacidad)
+			if not self.es_producto_final:
+				name = ("{0}-{1}").format(name, self.capacidad)
+			else:
+				name = ("{0}{1}").format(name, self.capacidad)
 
 		#Añadimos al nombre el Tipo de formato
 		if self.tipo_de_formato == "Cilíndrico":

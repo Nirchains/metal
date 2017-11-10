@@ -46,16 +46,21 @@ def item_code_generate():
 	doc["item_name"] = ""
 
 	append_item_code_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
-	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
-	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+	
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 
 	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
+
+	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
+	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
-	append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
-	append_item_code_if_no_null(doc, descripciones, "ANCHO", "ancho")
-	append_item_code_if_no_null(doc, descripciones, "ALTO", "alto")
+
+	if ("formato" in doc.keys() and not doc["formato"]) or not("formato" in doc.keys()):
+		append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
+		append_item_code_if_no_null(doc, descripciones, "ANCHO", "ancho")
+		append_item_code_if_no_null(doc, descripciones, "ALTO", "alto")
 	append_item_code_if_no_null(doc, descripciones, "ESPESOR", "espesor")
 	append_item_code_if_no_null(doc, descripciones, "COLOR", "color_codigo")
 	append_item_code_if_no_null(doc, descripciones, "POSICION", "posicion")
@@ -77,16 +82,21 @@ def item_name_generate():
 	doc["item_name"] = ""
 
 	append_item_code_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
-	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
-	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+	
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 
 	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
+
+	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
+	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "DIAMETRO", "diametro")
-	append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
-	append_item_code_if_no_null(doc, descripciones, "ANCHO", "ancho")
-	append_item_code_if_no_null(doc, descripciones, "ALTO", "alto")
+
+	if ("formato" in doc.keys() and not doc["formato"]) or not("formato" in doc.keys()):
+		append_item_code_if_no_null(doc, descripciones, "LARGO", "largo")
+		append_item_code_if_no_null(doc, descripciones, "ANCHO", "ancho")
+		append_item_code_if_no_null(doc, descripciones, "ALTO", "alto")
 	append_item_code_if_no_null(doc, descripciones, "ESPESOR", "espesor")
 	append_item_code_if_no_null(doc, descripciones, "COLOR", "color")
 	append_item_code_if_no_null(doc, descripciones, "POSICION", "posicion")
