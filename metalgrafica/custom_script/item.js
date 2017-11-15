@@ -1,3 +1,4 @@
+
 frappe.provide("erpnext.bom");
 
 cur_frm.add_fetch("formato", "diametro", "diametro");
@@ -124,6 +125,12 @@ frappe.ui.form.on('BOM Item Producto', {
 					util.set_value_if_no_null(frm,'espesor',response.espesor);
 				}
 
+				//Para heredar el color del asa
+				if (frm.doc.item_group == 'TAPA' && response.item_group == 'ASA') {
+					util.set_value_if_no_null(frm, 'color', response.color);
+					util.set_value_if_no_null(frm, 'color_codigo', response.color_codigo);
+				}
+
 				//Para heredar la composición, litografía, marca, acabado, etc
 				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA CUERPO')
 				 || (frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
@@ -138,7 +145,15 @@ frappe.ui.form.on('BOM Item Producto', {
 					util.set_value_if_no_null(frm,'acabado',response.acabado);
 					util.set_value_if_no_null(frm,'litografia',response.litografia);
 					util.set_value_if_no_null(frm,'image',response.image);
-										
+				}
+
+				if ((frm.doc.item_group == 'CUERPO' && response.item_group == 'HOJA CUERPO')) {
+					util.set_value_if_no_null(frm,'formato',response.formato_del_cuerpo);
+					frm.set_value('ancho',10);
+					util.get(frm, 'Formato', response.formato_del_cuerpo, undefined ,function(responsef,frm) {
+						cur_frm.cscript.item.set_formato(responsef, frm);
+						cur_frm.cscript.item.set_display_formato(frm);
+		 			});
 				}
 
 			});
@@ -206,29 +221,43 @@ cur_frm.cscript.item = {
 									|| frm.doc.item_group=="CUERPO");
 
 		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
-						
-		util.toggle_display_and_required(frm, "color", frm.doc.item_group=="TAPON"
+
+		//COLOR						
+		frm.toggle_display("color", frm.doc.item_group=="TAPON"
+														|| frm.doc.item_group=="RESPIRADOR"
+														|| frm.doc.item_group=="ASA"
+														|| frm.doc.item_group=="TAPA");
+
+		frm.toggle_reqd("color", frm.doc.item_group=="TAPON"
 														|| frm.doc.item_group=="RESPIRADOR"
 														|| frm.doc.item_group=="ASA");
-		
+
+		frm.toggle_enable("color", frm.doc.item_group=="TAPON"
+														|| frm.doc.item_group=="RESPIRADOR"
+														|| frm.doc.item_group=="ASA");
+		//ESPESOR
 		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
 									|| frm.doc.item_group=="SEPARADOR");
 		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
-				
+		
+		//LARGO
 		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 									|| frm.doc.item_group=="SEPARADOR"
 									|| frm.doc.item_group=="PALET");
-				
+		
+		//ANCHO
 		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA VIRGEN"
 									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
 									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
 									|| frm.doc.item_group=="SEPARADOR"
 									|| frm.doc.item_group=="PALET");
 		
+		util.toggle_enable_and_required(frm, "formato_del_cuerpo", frm.doc.item_group=="HOJA CUERPO");
+
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
 		if (frm.doc.item_group) {
@@ -338,11 +367,12 @@ cur_frm.cscript.item = {
 		}
 	},
 
+	//GENERACIÓN DE LA DESCRIPCIÓN DEL PRODUCTO
 	item_description_generate: function(frm) {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
+			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
 						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
 			doc = {}
@@ -352,7 +382,12 @@ cur_frm.cscript.item = {
 				}
 			});
 
-			console.log(doc);
+			//COMPROBAMOS SI TIENE RESPIRADOR
+			$.each(frm.doc.materiales || [], function(i, v) {
+				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
+					doc['respirador'] = 'SI';
+				}
+			})
 
 			frappe.call({
 				type: "POST",
@@ -368,11 +403,12 @@ cur_frm.cscript.item = {
 		}
 	},
 
+	//GENERACIÓN DEL CÓDIGO Y EL NOMBRE DEL PRODUCTO
 	item_name_generate: function(frm) {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['item_group', 'litografia', 'formato', 'formato_contenedor', 'brand', 'acabado', 'composicion', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
+			var keys = ['item_group', 'litografia', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'acabado', 'composicion', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
 						'color', 'color_codigo']
 						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
 			
@@ -382,6 +418,13 @@ cur_frm.cscript.item = {
 					doc[value] = frm.doc[value];
 				}
 			});
+
+			//COMPROBAMOS SI TIENE RESPIRADOR
+			$.each(frm.doc.materiales || [], function(i, v) {
+				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
+					doc['respirador'] = 'RES';
+				}
+			})
 
 			frappe.call({
 				type: "POST",
@@ -425,14 +468,36 @@ cur_frm.cscript.item = {
 	},
 
 	set_display_formato: function(frm) {
+		if (frm.doc.diametro == 0) {
+			frm.set_value("diametro", "");
+		}
+		if (frm.doc.espesor == 0) {
+			frm.set_value("espesor", "");
+		}
+		if (frm.doc.largo == 0) {
+			frm.set_value("largo", "");
+		}
+		if (frm.doc.ancho == 0) {
+			frm.set_value("ancho", "");
+		}
+		if (frm.doc.alto == 0) {
+			frm.set_value("alto", "");
+		}
+		if (frm.doc.numero_de_capas == 0) {
+			frm.set_value("numero_de_capas", "");
+		}
+		if (frm.doc.numero_envases_capa == 0) {
+			frm.set_value("numero_envases_capa", "");
+		}
+		/*
 		frm.toggle_display("diametro", frm.doc.diametro != 0);
 		frm.toggle_display("espesor", frm.doc.espesor != 0);
 		frm.toggle_display("largo", frm.doc.largo != 0);
 		frm.toggle_display("ancho", frm.doc.ancho != 0);
 		frm.toggle_display("alto", frm.doc.alto != 0);
-
 		frm.toggle_display("numero_de_capas", frm.doc.numero_de_capas != 0);
-		frm.toggle_display("numero_envases_capa", frm.doc.numero_envases_capa != 0);
+		frm.toggle_display("numero_envases_capa", frm.doc.numero_envases_capa != 0)
+		*/
 	},
 
 	reset: function(frm) {
