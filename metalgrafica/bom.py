@@ -48,14 +48,14 @@ def item_code_generate():
 	doc["item_name"] = ""
 
 	append_item_code_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
-	
-	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
-
-	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 
 	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO DEL CUERPO", "formato_del_cuerpo")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+	
+	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
+
+	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "COLOR", "color_codigo")
@@ -88,13 +88,13 @@ def item_name_generate():
 
 	append_item_code_if_no_null(doc, descripciones, "TIPO", None, frappe.db.get_value("Item Group", doc["item_group"], "abreviatura"))
 	
-	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
-
-	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
-
 	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO DEL CUERPO", "formato_del_cuerpo")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+
+	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
+
+	append_item_code_if_no_null(doc, descripciones, "COMPOSICION", "composicion")
 
 	append_item_code_if_no_null(doc, descripciones, "ACABADO", "acabado")
 	append_item_code_if_no_null(doc, descripciones, "COLOR", "color")
