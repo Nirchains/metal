@@ -71,3 +71,14 @@ h6.uppercase,
   top: 5%;
   left: 5%;
 }
+.navbar-brand {
+  height: inherit;
+}
+.li50 {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-column-gap: 40px;
+  -moz-column-gap: 40px;
+  column-gap: 40px;
+}
