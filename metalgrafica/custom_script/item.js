@@ -288,7 +288,6 @@ cur_frm.cscript.item = {
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',1);
 						frm.set_value('has_batch_no',1);
-						frm.set_value('create_new_batch',1);
 						break;
 
 					case 'SUB-ENSAMBLE':
@@ -297,6 +296,8 @@ cur_frm.cscript.item = {
 						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);
 						break;
 
 					case 'HOJA':
@@ -305,6 +306,8 @@ cur_frm.cscript.item = {
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('is_sub_contracted_item', 1);
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);
 						break;
 
 					case 'MATERIA PRIMA':
@@ -317,11 +320,15 @@ cur_frm.cscript.item = {
 							frm.set_value('default_warehouse','Materias primas - MDS');
 						}
 						frm.set_value('is_purchase_item',1);
-						frm.set_value('is_sales_item',0);	
+						frm.set_value('is_sales_item',0);
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);
 						break;
 
 					default:
-					
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);
+						break;
 				}
 			});
 		}

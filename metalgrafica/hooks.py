@@ -52,6 +52,9 @@ doctype_js = {
     ],
     "Purchase Receipt": [
         "custom_script/purchase_receipt.js"
+    ],
+    "Quotation": [
+        "custom_script/quotation.js"
     ]
 }
 
