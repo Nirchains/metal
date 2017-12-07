@@ -2785,7 +2785,7 @@
   "name": "Quotation-default_print_format", 
   "property": "default_print_format", 
   "property_type": "Data", 
-  "value": "Confirmaci\u00f3n de Pedido"
+  "value": "Confirmacion de Pedido"
  }, 
  {
   "_assign": null, 
