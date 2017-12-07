@@ -23,9 +23,11 @@ frappe.ui.form.on("Quotation", {
 	},
 
 	customer: function(frm) {
-		frappe.db.get_value("Customer",frm.doc.customer,"tc_name_quotation").then((r) => {
-			frm.set_value("tc_name",r.message.tc_name_quotation);
-		});
+		if (!helper.IsNullOrEmpty(frm.doc.customer)) {
+			frappe.db.get_value("Customer",frm.doc.customer,"tc_name_quotation").then((r) => {
+				frm.set_value("tc_name",r.message.tc_name_quotation);
+			});
+		}
 	}
 	
 

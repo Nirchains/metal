@@ -260,6 +260,8 @@ cur_frm.cscript.item = {
 
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
+		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA TAPA"]);
+
 		if (frm.doc.item_group) {
 
 			frappe.call({
@@ -380,7 +382,7 @@ cur_frm.cscript.item = {
 		if (frm.doc.item_group) {
 		
 			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
-						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
+						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
 			
 			doc = {}
 			$.each(keys, function(index, value) {
@@ -417,7 +419,7 @@ cur_frm.cscript.item = {
 		
 			var keys = ['item_group', 'litografia', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'acabado', 'composicion', 'fondo', 'tapa', 'acabado', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 
 						'color', 'color_codigo']
-						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa']
+						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
 			
 			doc = {}
 			$.each(keys, function(index, value) {

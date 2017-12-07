@@ -34,6 +34,8 @@ def item_description_generate():
 	append_description_if_no_null(doc, descripciones, "PALET", "palet")
 	append_description_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
 	append_description_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
+	append_description_if_no_null(doc, descripciones, "PLANO DE LITOGRAFIA", "plano_de_litografia")
+	
 		
 	doc["description"] = "{0}".format("<br>".join(descripciones))
 		
