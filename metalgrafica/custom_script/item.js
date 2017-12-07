@@ -36,6 +36,14 @@ frappe.ui.form.on("Item", {
 				}
 			}
 		};
+
+		frm.set_query("plano_de_litografia", function() {
+			return {
+				"filters": {
+					"formato": frm.doc.formato_del_cuerpo
+				}
+			};
+		});
 	},
 
 	onload_post_render: function(frm) {
@@ -67,8 +75,7 @@ frappe.ui.form.on("Item", {
 					}
 				});		
 		});
-		if ((frm.doc.item_group == 'HOJA CUERPO' || frm.doc.item_group == 'HOJA TAPA' || frm.doc.item_group == 'HOJA FONDO')
-			&& frm.doc.litografia == true && helper.IsNullOrEmpty(frm.doc.image)) {
+		if (helper.In(frm.doc.item_group,['HOJA CUERPO','HOJA TAPA','HOJA FONDO']) && frm.doc.litografia == true && helper.IsNullOrEmpty(frm.doc.image)) {
 			msgprint("Recuerde subir la imagen");
 		}
 	},
@@ -198,69 +205,47 @@ cur_frm.set_query("item_group", "materiales", function(doc, cdt, cdn) {
 cur_frm.cscript.item = {
 	check_properties: function(frm) {
 		//Visibilidad
-		frm.toggle_enable("litografia", frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO");
+		frm.toggle_enable("litografia", helper.In(frm.doc.item_group,["HOJA CUERPO","HOJA TAPA","HOJA FONDO"]));
 
-		frm.toggle_enable("acabado", ((frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-			&& frm.doc.litografia!=true) || frm.doc.item_group=="CAJA");
+		frm.toggle_enable("acabado", (helper.In(frm.doc.item_group,["HOJA CUERPO","HOJA TAPA","HOJA FONDO"]) && frm.doc.litografia!=true) || frm.doc.item_group=="CAJA");
 
-		frm.toggle_reqd("acabado", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-			&& frm.doc.litografia!=true);
+		frm.toggle_reqd("acabado", helper.In(frm.doc.item_group,["HOJA CUERPO","HOJA TAPA","HOJA FONDO"]) && frm.doc.litografia!=true);
 
-		util.toggle_enable_and_required(frm, "brand", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-			&& frm.doc.litografia==true);
+		util.toggle_enable_and_required(frm, "brand", helper.In(frm.doc.item_group,["HOJA CUERPO","HOJA TAPA",,"HOJA FONDO"]) && frm.doc.litografia==true);
 
-		util.toggle_enable_and_required(frm, "composicion", (frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-			&& frm.doc.litografia == true);
+		util.toggle_enable_and_required(frm, "composicion", helper.In(frm.doc.item_group,["HOJA CUERPO","HOJA TAPA","HOJA FONDO"]) && frm.doc.litografia == true);
 
 		util.toggle_display_and_required(frm, "panelado", frm.doc.item_group=="PRODUCTO");
 
 		util.toggle_display_and_required(frm, "posicion", frm.doc.item_group=="PRODUCTO");
 
-		util.toggle_enable_and_required(frm, "formato", frm.doc.item_group=="FONDO" 
-									|| frm.doc.item_group=="TAPA SIN TERMINAR"
-									|| frm.doc.item_group=="CUERPO");
+		util.toggle_enable_and_required(frm, "formato", helper.In(frm.doc.item_group,["FONDO","TAPA SIN TERMINAR","CUERPO"]));
 
 		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
 
 		//COLOR						
-		frm.toggle_display("color", frm.doc.item_group=="TAPON"
-														|| frm.doc.item_group=="RESPIRADOR"
-														|| frm.doc.item_group=="ASA"
-														|| frm.doc.item_group=="TAPA");
+		frm.toggle_display("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA","TAPA"]));
 
-		frm.toggle_reqd("color", frm.doc.item_group=="TAPON"
-														|| frm.doc.item_group=="RESPIRADOR"
-														|| frm.doc.item_group=="ASA");
+		frm.toggle_reqd("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA"]));
 
-		frm.toggle_enable("color", frm.doc.item_group=="TAPON"
-														|| frm.doc.item_group=="RESPIRADOR"
-														|| frm.doc.item_group=="ASA");
+		frm.toggle_enable("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA"]));
 		//ESPESOR
-		frm.toggle_enable("espesor", (frm.doc.item_group=="HOJA VIRGEN"
-									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO") 
-									|| frm.doc.item_group=="SEPARADOR");
-		frm.toggle_reqd("espesor", (frm.doc.item_group=="HOJA VIRGEN"
-									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO"));
+		frm.toggle_enable("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","SEPARADOR"]));
+
+
+		frm.toggle_reqd("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO"]));
 		
 		//LARGO
-		util.toggle_enable_and_required(frm, "largo", (frm.doc.item_group=="HOJA VIRGEN"
-									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
-									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-									|| frm.doc.item_group=="SEPARADOR"
-									|| frm.doc.item_group=="PALET");
+		util.toggle_enable_and_required(frm, "largo", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
 		
 		//ANCHO
-		util.toggle_enable_and_required(frm, "ancho", (frm.doc.item_group=="HOJA VIRGEN"
-									|| frm.doc.item_group=="HOJA CUERPO" || frm.doc.item_group=="HOJA TAPA" || frm.doc.item_group=="HOJA FONDO")
-									|| (frm.doc.item_group=="TIRA TAPA" || frm.doc.item_group=="TIRA FONDO")
-									|| frm.doc.item_group=="SEPARADOR"
-									|| frm.doc.item_group=="PALET");
-		
+		util.toggle_enable_and_required(frm, "ancho", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
+	
 		util.toggle_enable_and_required(frm, "formato_del_cuerpo", frm.doc.item_group=="HOJA CUERPO");
 
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
-		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA TAPA"]);
+		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA TAPA"]));
 
 		if (frm.doc.item_group) {
 
