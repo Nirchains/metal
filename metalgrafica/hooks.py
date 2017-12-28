@@ -55,6 +55,9 @@ doctype_js = {
     ],
     "Quotation": [
         "custom_script/quotation.js"
+    ],
+    "Sales Order": [
+        "custom_script/sales_order.js"
     ]
 }
 

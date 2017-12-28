@@ -82,6 +82,7 @@ frappe.ui.form.on("Item", {
 
 	item_group: function(frm) {
 		cur_frm.cscript.item.check_properties(frm);
+		cur_frm.cscript.item.init(frm);
 		cur_frm.cscript.item.reset(frm);
 		frm.refresh_fields();
 
@@ -248,7 +249,6 @@ cur_frm.cscript.item = {
 		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA TAPA"]));
 
 		if (frm.doc.item_group) {
-
 			frappe.call({
 				method: "metalgrafica.bom.item_has_template",
 				args: {
@@ -261,7 +261,11 @@ cur_frm.cscript.item = {
 					frm.toggle_display("salto_sec_nombre_desc_cliente", r.message);
 				}
 			});
+		}
+	},
 
+	init: function(frm) {
+		if (frm.doc.item_group) {
 
 			//Agregamos características propias al grupo de producto
 			util.get(frm, 'Item Group', frm.doc.item_group, undefined ,function(response,frm) {
@@ -288,7 +292,7 @@ cur_frm.cscript.item = {
 						break;
 
 					case 'HOJA':
-						frm.set_value('default_material_request_type','Manufacture');
+						frm.set_value('default_material_request_type','Purchase');
 						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
