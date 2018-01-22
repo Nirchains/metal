@@ -58,6 +58,9 @@ doctype_js = {
     ],
     "Sales Order": [
         "custom_script/sales_order.js"
+    ],
+    "Production Planning Tool": [
+        "custom_script/production_planning_tool.js"
     ]
 }
 
@@ -68,6 +71,10 @@ doctype_list_js = {
 
 doctype_tree_js = {
     "BOM": ["custom_script/bom_tree.js"]
+}
+
+doctype_calendar_js = {
+    "Timesheet": ["custom_script/timesheet_calendar.js"]
 }
 
 # Home Pages

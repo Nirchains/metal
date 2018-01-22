@@ -14,6 +14,20 @@ frappe.ui.form.on("Production Order", {
 		frm.refresh_fields();
 	},
 
+	refresh: function (frm) {
+		if(!frm.doc.__islocal) {
+			frm.add_custom_button(__("Transferir material"),
+				function() {
+					frappe.route_options = {
+						"production_order": frm.doc.name,
+						"purpose": "Material Transfer for Manufacture"
+					};
+					frappe.set_route("List", "Stock Entry");
+				}
+			);
+		}
+	},
+
 	operario: function(frm) {
 		
 	}
