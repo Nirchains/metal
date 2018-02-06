@@ -122,7 +122,7 @@ frappe.ui.form.on('BOM Item Producto', {
 				//Para heredar el formato y las dimensiones
 				if ((frm.doc.item_group == 'PRODUCTO' && response.item_group == 'CUERPO')
 				 || (frm.doc.item_group == 'TAPA' && response.item_group == 'TAPA SIN TERMINAR')
-				 || ((frm.doc.item_group == 'HOJA TAPA' || frm.doc.item_group == 'HOJA CUERPO' || frm.doc.item_group == 'HOJA FONDO') && response.item_group == 'HOJA VIRGEN')) {
+				 || ((frm.doc.item_group == 'HOJA TAPA' || frm.doc.item_group == 'HOJA CUERPO' || frm.doc.item_group == 'HOJA FONDO' || frm.doc.item_group == 'HOJA COMPUESTA') && response.item_group == 'HOJA VIRGEN')) {
 					util.set_value_if_no_null(frm,'formato',response.formato);
 					cur_frm.cscript.item.set_formato(response, frm);
 					cur_frm.cscript.item.set_display_formato(frm);
@@ -232,16 +232,16 @@ cur_frm.cscript.item = {
 
 		frm.toggle_enable("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA"]));
 		//ESPESOR
-		frm.toggle_enable("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","SEPARADOR"]));
+		frm.toggle_enable("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","HOJA COMPUESTA","SEPARADOR"]));
 
 
 		frm.toggle_reqd("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO"]));
 		
 		//LARGO
-		util.toggle_enable_and_required(frm, "largo", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
+		util.toggle_enable_and_required(frm, "largo", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO", "HOJA COMPUESTA","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
 		
 		//ANCHO
-		util.toggle_enable_and_required(frm, "ancho", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
+		util.toggle_enable_and_required(frm, "ancho", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO", "HOJA COMPUESTA","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
 	
 		util.toggle_enable_and_required(frm, "formato_del_cuerpo", frm.doc.item_group=="HOJA CUERPO");
 
@@ -275,11 +275,23 @@ cur_frm.cscript.item = {
 
 					case 'Todos los Grupos de Artículos':
 						//Si seleccionamos el tipo "PRODUCTO" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
-						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Productos terminados - MDS');
-						frm.set_value('is_purchase_item',0);
-						frm.set_value('is_sales_item',1);
-						frm.set_value('has_batch_no',1);
+						if (frm.doc.item_group == 'CONJUNTO') {
+							frm.set_value('is_stock_item',0);
+							frm.set_value('default_material_request_type','Purchase');
+							frm.set_value('default_warehouse','Materias primas - MDS');
+							frm.set_value('is_purchase_item',1);
+							frm.set_value('is_sales_item',0);
+							frm.set_value('has_batch_no',1);
+							frm.set_value('create_new_batch',0);
+						} else { //Productos
+							frm.set_value('default_material_request_type','Manufacture');
+							frm.set_value('default_warehouse','Productos terminados - MDS');
+							frm.set_value('is_purchase_item',0);
+							frm.set_value('is_sales_item',1);
+							frm.set_value('has_batch_no',1);
+							frm.set_value('create_new_batch',1);
+						}
+						
 						break;
 
 					case 'SUB-ENSAMBLE':
