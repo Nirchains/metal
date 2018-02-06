@@ -100,6 +100,7 @@ frappe.ui.form.on("Item", {
 	generar_descripcion: function(frm) {
 		cur_frm.cscript.item.item_description_generate(frm);
 		cur_frm.cscript.item.item_name_generate(frm);
+		cur_frm.cscript.item.item_observations_generate(frm);
 	},
 
 	cargar_materiales: function(frm) {
@@ -298,7 +299,7 @@ cur_frm.cscript.item = {
 						frm.set_value('is_sales_item',0);
 						frm.set_value('is_sub_contracted_item', 1);
 						frm.set_value('has_batch_no',1);
-						frm.set_value('create_new_batch',1);
+						frm.set_value('create_new_batch',0);
 						break;
 
 					case 'MATERIA PRIMA':
@@ -313,12 +314,12 @@ cur_frm.cscript.item = {
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('has_batch_no',1);
-						frm.set_value('create_new_batch',1);
+						frm.set_value('create_new_batch',0);
 						break;
 
 					default:
 						frm.set_value('has_batch_no',1);
-						frm.set_value('create_new_batch',1);
+						frm.set_value('create_new_batch',0);
 						break;
 				}
 			});
@@ -396,6 +397,40 @@ cur_frm.cscript.item = {
 				},
 				callback: function(r) {
 					frm.set_value('description', r.message);
+				}
+			});
+		}
+	},
+
+	item_observations_generate: function(frm) {
+
+		if (frm.doc.item_group) {
+		
+			var keys = ['posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
+			
+			doc = {}
+			$.each(keys, function(index, value) {
+				if (!helper.IsNullOrEmpty(frm.doc[value])) {
+					doc[value] = frm.doc[value];
+				}
+			});
+
+			//COMPROBAMOS SI TIENE RESPIRADOR
+			$.each(frm.doc.materiales || [], function(i, v) {
+				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
+					doc['respirador'] = 'SI';
+				}
+			})
+
+			frappe.call({
+				type: "POST",
+				method: "metalgrafica.bom.item_observations_generate",
+				freeze: true,
+				args: {
+					"doc": doc
+				},
+				callback: function(r) {
+					frm.set_value('observaciones', r.message);
 				}
 			});
 		}

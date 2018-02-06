@@ -42,6 +42,26 @@ def item_description_generate():
 	return doc["description"]
 
 @frappe.whitelist()
+#Genera la descripcion del producto
+def item_observations_generate():
+	args = frappe.form_dict
+	doc = literal_eval(args.doc)
+	descripciones = []
+	doc["observaciones"] = ""
+	append_description_if_no_null(doc, descripciones, "RESPIRADOR", "respirador")
+	append_description_if_no_null(doc, descripciones, "POSICION", "posicion")
+	append_description_if_no_null(doc, descripciones, "PANELADO", "panelado")
+	append_description_if_no_null(doc, descripciones, "PALET", "palet")
+	append_description_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
+	append_description_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
+	append_description_if_no_null(doc, descripciones, "PLANO DE LITOGRAFIA", "plano_de_litografia")
+	
+		
+	doc["observaciones"] = "{0}".format("<br>".join(descripciones))
+		
+	return doc["observaciones"]
+
+@frappe.whitelist()
 #Genera el codigo del producto
 def item_code_generate():
 	args = frappe.form_dict

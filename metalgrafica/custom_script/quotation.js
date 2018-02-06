@@ -37,6 +37,3 @@ frappe.ui.form.on("Quotation", {
 //Child tables add_fetch
 cur_frm.add_fetch("item_code", "nombre_para_cliente", "nombre_para_cliente");
 cur_frm.add_fetch("item_code", "observaciones", "observaciones");
-
-
-
