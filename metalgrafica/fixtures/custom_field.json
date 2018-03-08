@@ -2490,7 +2490,7 @@
   "in_list_view": 0, 
   "in_standard_filter": 0, 
   "insert_after": "plazo_de_entrega", 
-  "label": "M\u00e9todo de pago", 
+  "label": "Forma de pago", 
   "modified": "2017-12-02 11:19:51.099011", 
   "name": "Quotation-metodo_de_pago", 
   "no_copy": 0, 

@@ -134,8 +134,8 @@ doctype_calendar_js = {
 # }
 
 doc_events = {
-    "Item": {
-        
+    "Product Bundle": {
+        "validate": "metalgrafica.util.product_bundle_validate"
     }
 }
 

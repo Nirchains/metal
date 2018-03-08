@@ -418,7 +418,7 @@ cur_frm.cscript.item = {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
+			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia']
 			
 			doc = {}
 			$.each(keys, function(index, value) {
@@ -433,6 +433,10 @@ cur_frm.cscript.item = {
 					doc['respirador'] = 'SI';
 				}
 			})
+			
+			if (!helper.IsNullOrEmpty(frm.doc['numero_de_capas']) && !helper.IsNullOrEmpty(frm.doc['numero_envases_capa'])) {
+				doc['unidades_palet'] = frm.doc['numero_de_capas'] * frm.doc['numero_envases_capa'];
+			}
 
 			frappe.call({
 				type: "POST",

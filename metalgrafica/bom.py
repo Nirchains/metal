@@ -52,8 +52,7 @@ def item_observations_generate():
 	append_description_if_no_null(doc, descripciones, "POSICION", "posicion")
 	append_description_if_no_null(doc, descripciones, "PANELADO", "panelado")
 	append_description_if_no_null(doc, descripciones, "PALET", "palet")
-	append_description_if_no_null(doc, descripciones, "NUMERO DE CAPAS", "numero_de_capas")
-	append_description_if_no_null(doc, descripciones, "NUMERO DE ENVASES POR CAPA", "numero_envases_capa")
+	append_description_if_no_null(doc, descripciones, "UNIDADES PALET", "unidades_palet")
 	append_description_if_no_null(doc, descripciones, "PLANO DE LITOGRAFIA", "plano_de_litografia")
 	
 		

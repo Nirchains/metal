@@ -13,6 +13,9 @@ def get_help_messages():
 
 	return messages
 
+def product_bundle_validate():
+	pass
+
 @frappe.whitelist()
 def get_timesheet_events(start, end, filters=None):
 	"""Returns events for Gantt / Calendar view rendering.
