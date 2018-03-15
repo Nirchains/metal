@@ -165,6 +165,30 @@ frappe.ui.form.on('BOM Item Producto', {
 		 			});
 				}
 
+				if (frm.doc.item_group == 'CORTE HOJA COMPUESTA' && response.item_group == 'HOJA COMPUESTA') {
+					if (!helper.IsNullOrEmpty(response.item_code)) {
+						frm.set_value("item_name",  response.item_name.replace("HOJA-CO", "CORTE-HC"));
+						frm.set_value("item_code", response.item_code.replace("HOJA-CO", "CORTE-HC"));
+
+						frappe.model.clear_table(frm.doc,"productos_de_la_combinacion");
+						frappe.call({
+							method: "metalgrafica.bom.load_productos_de_la_combinacion",
+							args: {
+								"item_code": response.item_code
+							},
+							callback: function(r) {
+								if(!r.message) {
+									//frappe.throw(__("No se encuentra la lista de combinaciones que forman el producto"))
+								} else {
+									i = 0;
+									frm.cscript.item.set_productos_de_la_combinacion(frm, r);
+								}
+								
+							}
+						});
+					}
+				}
+
 			});
 		}
 	}
@@ -247,7 +271,11 @@ cur_frm.cscript.item = {
 
 		frm.toggle_display("formato_contenedor", frm.doc.item_group=="CAJA");
 
-		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA TAPA"]));
+		frm.toggle_enable("plano_de_litografia", helper.In(frm.doc.item_group, ["HOJA CUERPO", "HOJA COMPUESTA", "HOJA TAPA"]));
+
+		frm.toggle_display("salto_productos_combinacion", helper.In(frm.doc.item_group, ["HOJA COMPUESTA", "CORTE HOJA COMPUESTA"]));
+
+		frm.toggle_display("generar_descripcion",frm.doc.item_group!="CORTE HOJA COMPUESTA");
 
 		if (frm.doc.item_group) {
 			frappe.call({
@@ -275,29 +303,27 @@ cur_frm.cscript.item = {
 
 					case 'Todos los Grupos de Artículos':
 						//Si seleccionamos el tipo "PRODUCTO" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
-						if (frm.doc.item_group == 'CONJUNTO') {
-							frm.set_value('is_stock_item',0);
-							frm.set_value('default_material_request_type','Purchase');
-							frm.set_value('default_warehouse','Materias primas - MDS');
-							frm.set_value('is_purchase_item',1);
-							frm.set_value('is_sales_item',0);
-							frm.set_value('has_batch_no',1);
-							frm.set_value('create_new_batch',0);
-						} else { //Productos
-							frm.set_value('default_material_request_type','Manufacture');
-							frm.set_value('default_warehouse','Productos terminados - MDS');
-							frm.set_value('is_purchase_item',0);
-							frm.set_value('is_sales_item',1);
-							frm.set_value('has_batch_no',1);
-							frm.set_value('create_new_batch',1);
-						}
-						
+						frm.set_value('default_material_request_type','Manufacture');
+						frm.set_value('default_warehouse','Materias primas - MDS');
+						frm.set_value('is_purchase_item',0);
+						frm.set_value('is_sales_item',1);
+						frm.set_value('has_batch_no',1);
+						frm.set_value('create_new_batch',1);					
+						break;
+
+					case 'OPERACION':
+						frm.set_value('default_material_request_type','Manufacture');
+						frm.set_value('default_warehouse','Ficticio - MDS');
+						frm.set_value('is_purchase_item',0);
+						frm.set_value('is_sales_item',0);
+						frm.set_value('has_batch_no',0);
+						frm.set_value('create_new_batch',0);
 						break;
 
 					case 'SUB-ENSAMBLE':
 					case 'TIRA':
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
+						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('has_batch_no',1);
@@ -306,7 +332,7 @@ cur_frm.cscript.item = {
 
 					case 'HOJA':
 						frm.set_value('default_material_request_type','Purchase');
-						frm.set_value('default_warehouse','Productos semi-terminados - MDS');
+						frm.set_value('default_warehouse','Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('is_sub_contracted_item', 1);
@@ -332,6 +358,7 @@ cur_frm.cscript.item = {
 					default:
 						frm.set_value('has_batch_no',1);
 						frm.set_value('create_new_batch',0);
+						frm.set_value('default_warehouse','Materias primas - MDS');
 						break;
 				}
 			});
@@ -501,6 +528,17 @@ cur_frm.cscript.item = {
 				}
 			});
 		}
+	},
+
+	set_productos_de_la_combinacion: function(frm, r) {
+		$.each(r.message, function(i, item) {
+			var d = frappe.model.add_child(frm.doc, "Productos de la combinacion", "productos_de_la_combinacion");
+			frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
+			frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);
+			frappe.model.set_value(d.doctype, d.name, "stock_qty", item.stock_qty);
+			frappe.model.set_value(d.doctype, d.name, "stock_uom", item.stock_uom);
+			refresh_field("productos_de_la_combinacion");
+		});
 	},
 
 	set_formato: function(response,frm) {

@@ -3,6 +3,7 @@ frappe.provide("erpnext.bom");
 frappe.ui.form.on('BOM', {
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.load_bom_materials_from_item(frm);
+		cur_frm.cscript.load_bom_scraps_from_item(frm);
 	},
 
 	cargar_cantidad: function(frm) {
@@ -78,6 +79,33 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 						});					
 					}
 					
+				}
+			});
+		}
+	},
+
+	load_bom_scraps_from_item: function(frm) {
+		if (frm.doc["item"]) {
+			frappe.model.clear_table(frm.doc,"scrap_items");
+			frappe.call({
+				method: "metalgrafica.bom.load_bom_scraps_from_item",
+				args: {
+					"item": frm.doc["item"]
+				},
+				callback: function(r) {
+					if(!r.message) {
+						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de operaciones"))
+					} else {
+						console.log(r.message);
+						$.each(r.message, function(i, item) {
+							var d = frappe.model.add_child(frm.doc, "BOM Scrap Item", "scrap_items");
+							frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
+							frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);
+							frappe.model.set_value(d.doctype, d.name, "stock_qty", item.stock_qty);
+							frappe.model.set_value(d.doctype, d.name, "stock_uom", item.stock_uom);
+							refresh_field("scrap_items");
+						});			
+					}					
 				}
 			});
 		}

@@ -156,8 +156,28 @@ def load_bom_materials_from_template(item_group):
 	
 	return materiales
 
+
 @frappe.whitelist()
 #Carga la lista de materiales desde la plantilla
+def load_productos_de_la_combinacion(item_code):
+	
+	materiales = []
+
+	try:
+		materiales = frappe.get_list("Productos de la combinacion", 
+								filters={'parent': item_code,
+										'parenttype': 'Item',
+										'parentfield': 'productos_de_la_combinacion' },
+								fields="*")
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		raise e
+
+	return materiales
+
+
+@frappe.whitelist()
+#Carga las cantidades desde la plantilla
 def load_qty_from_template(item_group):
 	
 	qty = 0
@@ -172,7 +192,7 @@ def load_qty_from_template(item_group):
 	return qty
 
 @frappe.whitelist()
-#Carga la lista de materiales desde la plantilla
+#Carga la cantidad
 def load_qty_from_item(item):
 	
 	qty = 0
@@ -188,7 +208,7 @@ def load_qty_from_item(item):
 
 
 @frappe.whitelist()
-#Carga la lista de materiales desde la plantilla
+#Devuelve si el producto tiene plantilla
 def item_has_template(item_group):
 	if frappe.db.exists("Plantilla de grupo de productos", item_group):
 		return True
@@ -215,6 +235,24 @@ def load_bom_materials_from_item(item):
 								fields="*")
 	except Exception as e:
 		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		raise e
+
+	return materiales
+
+@frappe.whitelist()
+#Carga la lista de mermas desde el producto
+def load_bom_scraps_from_item(item):
+	
+	materiales = []
+
+	try:
+		materiales = frappe.get_list("Productos de la combinacion", 
+								filters={'parent': item,
+										'parenttype': 'Item',
+										'parentfield': 'productos_de_la_combinacion' },
+								fields="*")
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la lista de mermas"))
 		raise e
 
 	return materiales
