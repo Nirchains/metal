@@ -61,6 +61,9 @@ doctype_js = {
     ],
     "Production Planning Tool": [
         "custom_script/production_planning_tool.js"
+    ],
+    "Timesheet": [
+        "custom_script/timesheet.js"
     ]
 }
 

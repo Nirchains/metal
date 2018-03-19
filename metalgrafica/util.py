@@ -43,6 +43,16 @@ def get_timesheet_events(start, end, filters=None):
 		}, as_dict=True, update={"allDay": 0})
 
 
+def get_stock_entry_materials(production_order):
+
+	return frappe.db.sql("""select * 
+		from `tabStock Entry`
+		where  `tabStock Entry`.production_order = %s
+		""", production_order, as_dict=True)
+
+
+
+
 
 @frappe.whitelist()
 def get_prueba_filas():
