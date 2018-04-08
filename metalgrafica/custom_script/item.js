@@ -44,6 +44,11 @@ frappe.ui.form.on("Item", {
 				}
 			};
 		});
+		
+		//Ponemos el foco en el grupo de productos
+		if(frm.doc.__islocal) {
+			$('input[data-fieldname="item_group"]').focus();
+		}
 	},
 
 	onload_post_render: function(frm) {
@@ -165,11 +170,15 @@ frappe.ui.form.on('BOM Item Producto', {
 		 			});
 				}
 
+				//Hojas compuestas
 				if (frm.doc.item_group == 'CORTE HOJA COMPUESTA' && response.item_group == 'HOJA COMPUESTA') {
 					if (!helper.IsNullOrEmpty(response.item_code)) {
+
+						//Generamos el código de producto
 						frm.set_value("item_name",  response.item_name.replace("HOJA-CO", "CORTE-HC"));
 						frm.set_value("item_code", response.item_code.replace("HOJA-CO", "CORTE-HC"));
 
+						//Obtenemos la lista de productos de la combinación
 						frappe.model.clear_table(frm.doc,"productos_de_la_combinacion");
 						frappe.call({
 							method: "metalgrafica.bom.load_productos_de_la_combinacion",
@@ -183,7 +192,23 @@ frappe.ui.form.on('BOM Item Producto', {
 									i = 0;
 									frm.cscript.item.set_productos_de_la_combinacion(frm, r);
 								}
-								
+							}
+						});
+
+						//Obtenemos la lista de operaciones
+						frappe.model.clear_table(frm.doc,"operaciones");
+						frappe.call({
+							method: "metalgrafica.bom.load_operaciones_de_la_combinacion",
+							args: {
+								"item_code": response.item_code
+							},
+							callback: function(r) {
+								if(!r.message) {
+									//frappe.throw(__("No se encuentra la lista de combinaciones que forman el producto"))
+								} else {
+									i = 0;
+									frm.cscript.item.set_operaciones_de_la_combinacion(frm, r);
+								}
 							}
 						});
 					}
@@ -423,7 +448,7 @@ cur_frm.cscript.item = {
 			//COMPROBAMOS SI TIENE RESPIRADOR
 			$.each(frm.doc.materiales || [], function(i, v) {
 				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
-					doc['respirador'] = 'SI';
+					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
 				}
 			})
 
@@ -435,7 +460,24 @@ cur_frm.cscript.item = {
 					"doc": doc
 				},
 				callback: function(r) {
-					frm.set_value('description', r.message);
+					var composicion = "";
+					var descripcion = r.message;
+
+					//Completamos con los productos de la combinación
+					if (frm.doc.item_group == "HOJA COMPUESTA") {
+						$.each(frm.doc.productos_de_la_combinacion || [], function(i, v) {
+							composicion = composicion + "- " + v.item_name + "<br>";
+						});
+					}
+
+
+
+					if (composicion != "") {
+						descripcion = descripcion + "<br><b>PRODUCTOS DE LA COMBINACION:</b><br>";
+						descripcion = descripcion + composicion;
+					}
+
+					frm.set_value('description', descripcion);
 				}
 			});
 		}
@@ -457,7 +499,7 @@ cur_frm.cscript.item = {
 			//COMPROBAMOS SI TIENE RESPIRADOR
 			$.each(frm.doc.materiales || [], function(i, v) {
 				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
-					doc['respirador'] = 'SI';
+					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
 				}
 			})
 			
@@ -538,6 +580,16 @@ cur_frm.cscript.item = {
 			frappe.model.set_value(d.doctype, d.name, "stock_qty", item.stock_qty);
 			frappe.model.set_value(d.doctype, d.name, "stock_uom", item.stock_uom);
 			refresh_field("productos_de_la_combinacion");
+		});
+	},
+
+	set_operaciones_de_la_combinacion: function(frm, r) {
+		$.each(r.message, function(i, item) {
+			var d = frappe.model.add_child(frm.doc, "BOM Operation Producto", "operaciones");
+			frappe.model.set_value(d.doctype, d.name, "operation", item.operation);
+			frappe.model.set_value(d.doctype, d.name, "workstation", item.workstation);
+			frappe.model.set_value(d.doctype, d.name, "description", item.description);
+			refresh_field("operaciones");
 		});
 	},
 

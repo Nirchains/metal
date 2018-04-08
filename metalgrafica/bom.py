@@ -158,7 +158,7 @@ def load_bom_materials_from_template(item_group):
 
 
 @frappe.whitelist()
-#Carga la lista de materiales desde la plantilla
+#Carga la lista de productos desde la hoja compuesta
 def load_productos_de_la_combinacion(item_code):
 	
 	materiales = []
@@ -170,10 +170,28 @@ def load_productos_de_la_combinacion(item_code):
 										'parentfield': 'productos_de_la_combinacion' },
 								fields="*")
 	except Exception as e:
-		frappe.msgprint(_("No se ha podido obtener la lista de materiales"))
+		frappe.msgprint(_("No se ha podido obtener la lista de productos"))
 		raise e
 
 	return materiales
+
+@frappe.whitelist()
+#Carga la lista de operaciones de la hoja compuesta
+def load_operaciones_de_la_combinacion(item_code):
+	
+	operaciones = []
+
+	try:
+		operaciones = frappe.get_list("BOM Operation Producto", 
+								filters={'parent': item_code,
+										'parenttype': 'Item',
+										'parentfield': 'operaciones' },
+								fields="*")
+	except Exception as e:
+		frappe.msgprint(_("No se ha podido obtener la lista de operaciones"))
+		raise e
+
+	return operaciones
 
 
 @frappe.whitelist()
