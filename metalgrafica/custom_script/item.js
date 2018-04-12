@@ -450,7 +450,7 @@ cur_frm.cscript.item = {
 				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
 					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
 				}
-			})
+			});
 
 			frappe.call({
 				type: "POST",
