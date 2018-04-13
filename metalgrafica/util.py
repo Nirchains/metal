@@ -2,7 +2,6 @@ import frappe
 
 from frappe import _
 import json
-import barcode
 from erpnext.controllers.queries import get_match_cond
 from ast import literal_eval
 from frappe.utils import (cstr, flt, cint, getdate, now_datetime, formatdate,
@@ -61,20 +60,6 @@ def get_prueba_filas():
 	filas.extend([{"id": 100, "name": "asdf"}, {"id": 101, "name": "asdff"}])
 	return filas
 
-
-@frappe.whitelist(allow_guest=True)
-def barcode_gen(b_type,b_string):
-    from barcode.writer import ImageWriter
-    ean = barcode.get(b_type, b_string)
-    filename = ean.save(b_string)
-    filedata = ""
-    with open(filename, "rb") as fileobj:
-        filedata = fileobj.read()
-    frappe.local.response.filename = filename
-    frappe.local.response.filecontent = filedata
-    frappe.local.response.type = "download"
-    cleanup(filename)
-    return ean
 
 def cleanup(fname):
     if os.path.exists(fname):
