@@ -145,23 +145,24 @@ doc_events = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"metalgrafica.tasks.all"
 # 	],
 # 	"daily": [
 # 		"metalgrafica.tasks.daily"
 # 	],
-# 	"hourly": [
+	"hourly": [
+        "metalgrafica.util.clean_batch"
 # 		"metalgrafica.tasks.hourly"
-# 	],
+ 	]
 # 	"weekly": [
 # 		"metalgrafica.tasks.weekly"
 # 	]
 # 	"monthly": [
 # 		"metalgrafica.tasks.monthly"
 # 	]
-# }
+}
 
 # Testing
 # -------

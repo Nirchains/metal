@@ -50,8 +50,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 					} else {
 						i = 0;
 						frm.cscript.set_materiales(frm, r);
-					}
-					
+					}					
 				}
 			});
 		}
@@ -77,8 +76,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 							frappe.model.set_value(e.doctype, e.name, "image", item.image);
 							refresh_field("operations");
 						});					
-					}
-					
+					}					
 				}
 			});
 		}
@@ -94,22 +92,23 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 				},
 				callback: function(r) {
 					if(!r.message) {
-						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de operaciones"))
+						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
 					} else {
-						console.log(r.message);
 						$.each(r.message, function(i, item) {
-							var d = frappe.model.add_child(frm.doc, "BOM Scrap Item", "scrap_items");
-							frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
-							frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);
-							frappe.model.set_value(d.doctype, d.name, "stock_qty", item.stock_qty);
-							frappe.model.set_value(d.doctype, d.name, "stock_uom", item.stock_uom);
-							refresh_field("scrap_items");
-						});			
-					}					
+							d = frm.add_child("scrap_items");
+	                		d.item_code = item.item_code;
+	                		d.item_name = item.item_name;
+			    			d.stock_uom = item.stock_uom;
+	                		d.stock_qty = item.stock_qty;
+	                		frm.refresh_field("scrap_items");
+						});	
+						
+					}				
 				}
 			});
 		}
 	},
+
 
 	//Función recursiva para colocar la lista de materiales
 	set_materiales: function(frm, r) {
@@ -119,9 +118,9 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 		setTimeout(function () {
 			d = frappe.model.add_child(frm.doc, "BOM Item", "items");
 			frappe.model.set_value(d.doctype, d.name, "item_code", r.message[i].item_code);
-			frappe.model.set_value(d.doctype, d.name, "qty", r.message[i].qty);
 			frappe.model.set_value(d.doctype, d.name, "scrap", r.message[i].scrap);
 			frappe.model.set_value(d.doctype, d.name, "item_group", r.message[i].item_group);
+			frappe.model.set_value(d.doctype, d.name, "qty", r.message[i].qty);
 			i++;
 			if (i < j) {
 				frm.cscript.set_materiales(frm, r);

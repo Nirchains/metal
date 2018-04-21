@@ -51,8 +51,26 @@ def get_stock_entry_materials(production_order):
 		""", production_order, as_dict=True)
 
 
+@frappe.whitelist()
+def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques):
+	filas = []
+	inicio = int(inicio_de_secuencia)
+	for x in xrange(int(numero_bloques)):
+		doc = frappe.get_doc({"doctype": "Batch", "batch_id":  str(inicio),"item": producto, "automatic": 1 })
+		doc.insert()
+		filas.extend([{"id": inicio }])
+		inicio += 1
+	return filas
 
+def clean_batch():
+	'''Limpia los lotes que no estan asociados en ninguna recepcion de compra'''
+	frappe.db.sql("""delete from tabBatch where automatic = 1 and 
+		name not in (select batch_no from `tabPurchase Receipt Item`)""")
 
+@frappe.whitelist()
+def get_next_batch():
+	'''Devuelve el siguiente numero de lote disponible'''
+	return frappe.db.sql("""select max(name)+1 from tabBatch where automatic = 1""")
 
 @frappe.whitelist()
 def get_prueba_filas():

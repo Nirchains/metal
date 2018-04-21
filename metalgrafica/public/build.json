@@ -5,11 +5,6 @@
     "css/custom.css": [
         "public/css/custom.css"
     ],
-    "js/lib/FileSaver.js": [
-        "public/js/lib/Blob.js",
-        "public/js/lib/canvas-toBlob.js",
-        "public/js/lib/FileSaver.js"
-    ],
     "js/custom.js": [
         "public/js/fix.js",
         "public/js/extra.js",

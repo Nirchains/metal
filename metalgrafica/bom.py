@@ -73,6 +73,8 @@ def item_code_generate():
 	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO DEL CUERPO", "formato_del_cuerpo")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+
+	append_item_code_if_no_null(doc, descripciones, "NOMBRE PERSONALIZADO", "nombre_personalizado")
 	
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 
@@ -112,6 +114,8 @@ def item_name_generate():
 	append_item_code_if_no_null(doc, descripciones, "FORMATO", "formato")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO DEL CUERPO", "formato_del_cuerpo")
 	append_item_code_if_no_null(doc, descripciones, "FORMATO CONTENEDOR", "formato_contenedor")
+
+	append_item_code_if_no_null(doc, descripciones, "NOMBRE PERSONALIZADO", "nombre_personalizado")
 
 	append_item_code_if_no_null(doc, descripciones, "MARCA", "brand")
 

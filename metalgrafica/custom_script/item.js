@@ -196,6 +196,7 @@ frappe.ui.form.on('BOM Item Producto', {
 						});
 
 						//Obtenemos la lista de operaciones
+						/*
 						frappe.model.clear_table(frm.doc,"operaciones");
 						frappe.call({
 							method: "metalgrafica.bom.load_operaciones_de_la_combinacion",
@@ -211,6 +212,7 @@ frappe.ui.form.on('BOM Item Producto', {
 								}
 							}
 						});
+						*/
 					}
 				}
 
@@ -227,6 +229,9 @@ cur_frm.add_fetch("item_code", "stock_uom", "uom");
 
 cur_frm.add_fetch("operation", "description", "description");
 cur_frm.add_fetch("operation", "workstation", "workstation");
+
+cur_frm.add_fetch("item_code", "brand", "brand");
+cur_frm.add_fetch("item_code", "composicion", "composicion");
 
 cur_frm.cscript.image = function() {
 	refresh_field("image_view");
@@ -502,6 +507,22 @@ cur_frm.cscript.item = {
 					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
 				}
 			})
+
+			if (frm.doc.item_group == "HOJA COMPUESTA") {
+				var nombre_personalizado = "";
+				$.each(frm.doc.productos_de_la_combinacion, function(index, value) {
+					if (!helper.IsNullOrEmpty(value["stock_qty"])) {
+						nombre_personalizado = nombre_personalizado + "/" + value["stock_qty"];
+					}
+					if (!helper.IsNullOrEmpty(value["brand"])) {
+						nombre_personalizado = nombre_personalizado + "-" + value["brand"];
+					}
+					if (!helper.IsNullOrEmpty(value["composicion"])) {
+						nombre_personalizado = nombre_personalizado + "-" + value["composicion"];
+					}
+				});	
+				doc['nombre_personalizado'] = nombre_personalizado;			
+			}
 			
 			if (!helper.IsNullOrEmpty(frm.doc['numero_de_capas']) && !helper.IsNullOrEmpty(frm.doc['numero_envases_capa'])) {
 				doc['unidades_palet'] = frm.doc['numero_de_capas'] * frm.doc['numero_envases_capa'];
@@ -543,6 +564,22 @@ cur_frm.cscript.item = {
 					doc['respirador'] = 'RES';
 				}
 			})
+
+			if (frm.doc.item_group == "HOJA COMPUESTA") {
+				var nombre_personalizado = "";
+				$.each(frm.doc.productos_de_la_combinacion, function(index, value) {
+					if (!helper.IsNullOrEmpty(value["stock_qty"])) {
+						nombre_personalizado = nombre_personalizado + "/" + value["stock_qty"];
+					}
+					if (!helper.IsNullOrEmpty(value["brand"])) {
+						nombre_personalizado = nombre_personalizado + "-" + value["brand"];
+					}
+					if (!helper.IsNullOrEmpty(value["composicion"])) {
+						nombre_personalizado = nombre_personalizado + "-" + value["composicion"];
+					}
+				});	
+				doc['nombre_personalizado'] = nombre_personalizado;			
+			}
 
 			frappe.call({
 				type: "POST",
