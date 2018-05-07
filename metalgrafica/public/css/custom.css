@@ -82,3 +82,9 @@ h6.uppercase,
   -moz-column-gap: 40px;
   column-gap: 40px;
 }
+
+/*Calendario*/
+.fc-day-grid-event .fc-content {
+  white-space: inherit !important;
+  overflow: inherit !important;
+}

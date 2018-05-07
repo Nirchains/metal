@@ -69,7 +69,8 @@ doctype_js = {
 
 doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
-    "Customer": ["custom_script/customer_list.js"]
+    "Customer": ["custom_script/customer_list.js"],
+    "Production Order": ["custom_script/production_order_list.js"]
 }
 
 doctype_tree_js = {
@@ -77,7 +78,8 @@ doctype_tree_js = {
 }
 
 doctype_calendar_js = {
-    "Timesheet": ["custom_script/timesheet_calendar.js"]
+    "Timesheet": ["custom_script/timesheet_calendar.js"],
+    "Production Order": ["custom_script/production_order_calendar.js"]
 }
 
 # Home Pages

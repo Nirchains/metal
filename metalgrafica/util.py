@@ -42,6 +42,34 @@ def get_timesheet_events(start, end, filters=None):
 			"end": end
 		}, as_dict=True, update={"allDay": 0})
 
+@frappe.whitelist()
+def get_production_order_events(start, end, filters=None):
+	"""Returns events for Gantt / Calendar view rendering.
+
+	:param start: Start date-time.
+	:param end: End date-time.
+	:param filters: Filters (JSON).
+	"""
+	from frappe.desk.calendar import get_event_conditions
+	conditions = get_event_conditions("Production Order", filters)
+	
+	data = frappe.db.sql("""select `tabProduction Order`.name as name, 
+		concat("<b>", `tabProduction Order`.name, "</b><br>", `tabProduction Order`.production_item) as title, 
+		`tabProduction Order`.planned_start_date as planned_start_date,
+		`tabProduction Order`.planned_end_date as planned_end_date, `tabProduction Order`.status,
+		`tabProduction Order Operation`.operation as tooltipMessage
+		from `tabProduction Order`
+		left join `tabProduction Order Operation` on `tabProduction Order`.name = `tabProduction Order Operation`.parent and `tabProduction Order Operation`.parenttype="Production Order"
+		where ((ifnull(`tabProduction Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
+				and (`tabProduction Order`.planned_start_date <= %(end)s) \
+			and ((ifnull(`tabProduction Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
+				and ifnull(`tabProduction Order`.planned_end_date, '2199-12-31 00:00:00') >= %(start)s)) {conditions}
+		""".format(conditions=conditions.encode('utf-8')), {
+			"start": start,
+			"end": end
+		}, as_dict=True, update={"allDay": 0})
+	return data
+
 
 def get_stock_entry_materials(production_order):
 
@@ -70,7 +98,7 @@ def clean_batch():
 @frappe.whitelist()
 def get_next_batch():
 	'''Devuelve el siguiente numero de lote disponible'''
-	return frappe.db.sql("""select max(name)+1 from tabBatch where automatic = 1""")
+	return frappe.db.sql("""select IFNULL(max(name)+1, 1) valor from tabBatch where automatic = 1""")
 
 @frappe.whitelist()
 def get_prueba_filas():

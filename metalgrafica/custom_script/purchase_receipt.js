@@ -8,7 +8,7 @@ frappe.ui.form.on("Purchase Receipt", {
 			method: "metalgrafica.util.get_next_batch",
 			callback: function(r) {
 				if(r.message) {
-					console.log(r.message[0][0]);
+					console.log("Inicio de secuencia: " + r.message);
 					frm.set_value("inicio_de_secuencia", r.message[0][0]);
 				}					
 			}
