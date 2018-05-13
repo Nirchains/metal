@@ -18,7 +18,11 @@ frappe.views.calendar["Production Order"] = {
 		} else if(data.status==="In Process") {
 			return "warning";
 		} else {
-			return "danger";
+			if (data.impreso > 0) {
+				return "blue";
+			} else {
+				return "danger";
+			}
 		}
 	},
 	filters: [

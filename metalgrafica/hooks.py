@@ -21,6 +21,7 @@ app_include_css = [
 ]
 app_include_js = [
 	"/assets/js/custom.js",
+    "/assets/js/core.js",
 	"/assets/js/templates.min.js"
 ]
 
@@ -70,7 +71,8 @@ doctype_js = {
 doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
     "Customer": ["custom_script/customer_list.js"],
-    "Production Order": ["custom_script/production_order_list.js"]
+    "Production Order": ["custom_script/production_order_list.js"],
+    "BOM": ["custom_script/bom_list.js"]
 }
 
 doctype_tree_js = {
@@ -151,13 +153,13 @@ scheduler_events = {
 # 	"all": [
 # 		"metalgrafica.tasks.all"
 # 	],
-# 	"daily": [
-# 		"metalgrafica.tasks.daily"
-# 	],
-	"hourly": [
+ 	"daily": [
         "metalgrafica.util.clean_batch"
+# 		"metalgrafica.tasks.daily"
+ 	],
+#	"hourly": [
 # 		"metalgrafica.tasks.hourly"
- 	]
+# 	]
 # 	"weekly": [
 # 		"metalgrafica.tasks.weekly"
 # 	]

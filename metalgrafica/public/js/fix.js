@@ -10,3 +10,11 @@ function format_currency(v, currency, decimals) {
 	else
 		return format_number(v, format, decimals);
 }
+
+function show_tooltips() {
+	$('input').hover(
+	  	function(){
+	    	$(this).attr('title', $(this).val());
+	  	}
+	);
+}

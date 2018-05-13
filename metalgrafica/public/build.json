@@ -8,8 +8,13 @@
     "js/custom.js": [
         "public/js/fix.js",
         "public/js/extra.js",
-        "public/js/custom.js",
-        "public/js/calendar.js"
+        "public/js/custom.js"
+    ],
+    "js/core.js": [
+        "public/js/core/calendar.js",
+        "public/js/core/page.js",
+        "public/js/core/grid.js",
+        "public/js/core/grid_row.js"
     ],
     "js/templates.min.js": [
 		"public/js/list/list_item_main.html",

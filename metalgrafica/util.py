@@ -52,12 +52,15 @@ def get_production_order_events(start, end, filters=None):
 	"""
 	from frappe.desk.calendar import get_event_conditions
 	conditions = get_event_conditions("Production Order", filters)
-	
+
+	#(select count(name) from `tabStock Entry` where `tabStock Entry`.production_order = `tabProduction Order`.name) as stock_entries
+
 	data = frappe.db.sql("""select `tabProduction Order`.name as name, 
 		concat("<b>", `tabProduction Order`.name, "</b><br>", `tabProduction Order`.production_item) as title, 
 		`tabProduction Order`.planned_start_date as planned_start_date,
 		`tabProduction Order`.planned_end_date as planned_end_date, `tabProduction Order`.status,
-		`tabProduction Order Operation`.operation as tooltipMessage
+		concat(`tabProduction Order Operation`.operation, "<br>Fecha prevista de entrega: ", COALESCE(`tabProduction Order`.expected_delivery_date, '')) as tooltipMessage,
+		`tabProduction Order`.impreso
 		from `tabProduction Order`
 		left join `tabProduction Order Operation` on `tabProduction Order`.name = `tabProduction Order Operation`.parent and `tabProduction Order Operation`.parenttype="Production Order"
 		where ((ifnull(`tabProduction Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \

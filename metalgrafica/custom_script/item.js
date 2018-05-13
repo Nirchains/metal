@@ -49,6 +49,8 @@ frappe.ui.form.on("Item", {
 		if(frm.doc.__islocal) {
 			$('input[data-fieldname="item_group"]').focus();
 		}
+
+		show_tooltips();
 	},
 
 	onload_post_render: function(frm) {
