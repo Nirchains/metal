@@ -28,6 +28,16 @@ frappe.ui.form.on("Quotation", {
 				frm.set_value("tc_name",r.message.tc_name_quotation);
 			});
 		}
+	},
+	company: function(frm) {
+		if(frm.doc.company) {
+			frappe.db.get_value('Company', frm.doc.company, 'default_letter_head_quotation').then((r) => {
+				if(r.message.default_letter_head_quotation) {
+					frm.set_value("letter_head", r.message.default_letter_head_quotation);
+				} 
+			});
+		}
+		frm.trigger("toggle_display_account_head");
 	}
 	
 
