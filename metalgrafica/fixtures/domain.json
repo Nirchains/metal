@@ -1,0 +1,58 @@
+[
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Distribution", 
+  "modified": "2017-10-03 19:04:53.063725", 
+  "name": "Distribution"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Manufacturing", 
+  "modified": "2017-10-03 19:04:53.064607", 
+  "name": "Manufacturing"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Retail", 
+  "modified": "2017-10-03 19:04:53.065393", 
+  "name": "Retail"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Services", 
+  "modified": "2017-10-03 19:04:53.066286", 
+  "name": "Services"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Education", 
+  "modified": "2017-10-03 19:04:53.067079", 
+  "name": "Education"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Healthcare", 
+  "modified": "2017-12-01 20:01:30.919870", 
+  "name": "Healthcare"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Hospitality", 
+  "modified": "2017-12-01 20:01:46.573079", 
+  "name": "Hospitality"
+ }, 
+ {
+  "docstatus": 0, 
+  "doctype": "Domain", 
+  "domain": "Oculto", 
+  "modified": "2018-05-25 20:16:30.876283", 
+  "name": "Oculto"
+ }
+]
