@@ -165,7 +165,7 @@ def get_data():
 			]
 		},
 		{
-			"label": _("Tablas maestras de clientes y proveedores"),
+			"label": _("Tablas maestras de clientes, proveedores, y empleados"),
 			"items": [
 				{
 					"type": "doctype",
@@ -176,6 +176,11 @@ def get_data():
 					"type": "doctype",
 					"name": "Supplier",
 					"description": _("Supplier database."),
+				},
+				{
+					"type": "doctype",
+					"name": "Employee",
+					"description": _("Employee records."),
 				},
 				{
 					"type": "doctype",

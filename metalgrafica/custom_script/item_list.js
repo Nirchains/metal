@@ -10,7 +10,7 @@ frappe.listview_settings['Item']['onload'] =
 frappe.listview_settings['Item']['refresh'] =
 	function(me) {
 		// Filtros
-		me.page.add_sidebar_label(__('---------------------'));
+		me.page.add_sidebar_label(__('----------'));
 		me.page.add_sidebar_label(__('Filtros:'));
         me.page.add_sidebar_item(__('Productos en escasez'), function() {
 			var publish_filter = me.filter_list.get_filter('total_projected_qty');
@@ -20,3 +20,4 @@ frappe.listview_settings['Item']['refresh'] =
 		});
         
 	}
+frappe.help.youtube_id["Item"] = "";
