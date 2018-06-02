@@ -1,0 +1,23 @@
+{
+ "content": null, 
+ "creation": "2018-05-30 20:59:53.734583", 
+ "docstatus": 0, 
+ "doctype": "Page", 
+ "idx": 0, 
+ "modified": "2018-05-30 21:00:04.987157", 
+ "modified_by": "Administrator", 
+ "module": "Metalgrafica", 
+ "name": "analisis-de-existenc", 
+ "owner": "Administrator", 
+ "page_name": "analisis-de-existencias", 
+ "roles": [
+  {
+   "role": "Stock User"
+  }
+ ], 
+ "script": null, 
+ "standard": "Yes", 
+ "style": null, 
+ "system_page": 0, 
+ "title": "Analisis de existencias"
+}

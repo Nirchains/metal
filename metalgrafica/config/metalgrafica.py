@@ -80,9 +80,14 @@ def get_data():
 				},
 				{
 					"type": "page",
-					"name": "stock-analytics",
+					"name": "analisis-de-existenc",
 					"label": _("Stock Analytics"),
 					"icon": "fa fa-bar-chart"
+				},
+				{
+					"type": "page",
+					"name": "stock-balance-1",
+					"label": _("Stock Summary")
 				}
 
 			]

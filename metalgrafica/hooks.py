@@ -65,6 +65,9 @@ doctype_js = {
     ],
     "Timesheet": [
         "custom_script/timesheet.js"
+    ],
+    "Stock Entry": [
+        "custom_script/stock_entry.js"
     ]
 }
 
@@ -83,6 +86,8 @@ doctype_calendar_js = {
     "Timesheet": ["custom_script/timesheet_calendar.js"],
     "Production Order": ["custom_script/production_order_calendar.js"]
 }
+
+dump_report_map = "metalgrafica.report_data_map.data_map"
 
 # Home Pages
 # ----------
