@@ -4,15 +4,19 @@ cur_frm.refresh_fields();
 
 frappe.ui.form.on("Purchase Receipt", {
 	onload: function(frm) {
-		frappe.call({
-			method: "metalgrafica.util.get_next_batch",
-			callback: function(r) {
-				if(r.message) {
-					console.log("Inicio de secuencia: " + r.message);
-					frm.set_value("inicio_de_secuencia", r.message[0][0]);
-				}					
-			}
-		});
+		if(frm.doc.__islocal) {
+			frappe.call({
+				method: "metalgrafica.util.get_next_batch",
+				callback: function(r) {
+					if(r.message) {
+						console.log("Inicio de secuencia: " + r.message);
+						frm.set_value("inicio_de_secuencia", r.message[0][0]);
+					}					
+				}
+			});
+		} else {
+			frm.toggle_display("bloques_section", false);
+		}
 	},
 	generar_bloques: function(frm) {
 		//Generamos los bloques
