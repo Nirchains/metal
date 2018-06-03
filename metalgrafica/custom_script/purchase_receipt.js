@@ -4,12 +4,11 @@ cur_frm.refresh_fields();
 
 frappe.ui.form.on("Purchase Receipt", {
 	onload: function(frm) {
-		if(frm.doc.__islocal) {
+		if(frm.doc.docstatus < 1) {
 			frappe.call({
 				method: "metalgrafica.util.get_next_batch",
 				callback: function(r) {
 					if(r.message) {
-						console.log("Inicio de secuencia: " + r.message);
 						frm.set_value("inicio_de_secuencia", r.message[0][0]);
 					}					
 				}

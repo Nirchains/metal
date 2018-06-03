@@ -19,12 +19,12 @@ erpnext.stock.ItemDashboard = Class.extend({
 		// move
 		this.content.on('click', '.btn-move', function() {
 			erpnext.stock.move_item($(this).attr('data-item'), $(this).attr('data-warehouse'),
-				null, $(this).attr('data-actual_qty'), null, function() { me.refresh(); });
+				null, $(this).attr('data-actual_qty'), null, $(this).attr('data-uom'), function() { me.refresh(); });
 		});
 
 		this.content.on('click', '.btn-add', function() {
 			erpnext.stock.move_item($(this).attr('data-item'), null, $(this).attr('data-warehouse'),
-				$(this).attr('data-actual_qty'), $(this).attr('data-rate'),
+				$(this).attr('data-actual_qty'), $(this).attr('data-rate'), $(this).attr('data-uom'),
 				function() { me.refresh(); });
 		});
 
@@ -110,7 +110,7 @@ erpnext.stock.ItemDashboard = Class.extend({
 	}
 })
 
-erpnext.stock.move_item = function(item, source, target, actual_qty, rate, callback) {
+erpnext.stock.move_item = function(item, source, target, actual_qty, rate, uom, callback) {
 	var dialog = new frappe.ui.Dialog({
 		title: target ? __('Add Item') : __('Move Item'),
 		fields: [
@@ -123,8 +123,21 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, callb
 			{fieldname: 'qty', label: __('Quantity'), reqd: 1,
 				fieldtype: 'Float', description: __('Available {0}', [actual_qty]) },
 			{fieldname: 'rate', label: __('Rate'), fieldtype: 'Currency', hidden: 1 },
+			{fieldname: 'uom', label: __('UOM'),
+				fieldtype: 'Link', options: 'UOM', reqd: 1},
+			{fieldname: 'batch_no', label: __('Batch'),
+				fieldtype: 'Link', options: 'Batch'},
 		],
 	})
+
+	dialog.get_field('batch_no').get_query = function(doc) {
+			return {
+				filters: [
+					['Batch', 'item', '=', item]
+				]
+			}
+		};
+
 	dialog.show();
 	dialog.get_field('item_code').set_input(item);
 
@@ -147,6 +160,13 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, callb
 		dialog.get_field('target').refresh();
 	}
 
+	if(uom) {
+		dialog.get_field('uom').set_value(uom);
+		dialog.get_field('uom').df.hidden = 0;
+		dialog.get_field('uom').refresh();
+	}
+
+	
 	dialog.set_primary_action(__('Submit'), function() {
 		var values = dialog.get_values();
 		if(!values) {
@@ -172,13 +192,14 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, callb
 		});
 	});
 
-	$('<p style="margin-left: 10px;"><a class="link-open text-muted small">'
+	$('<p style="margin-left: 10px;"><a class="btn btn-warning link-open">'
 		+ __("Add more items or open full form") + '</a></p>')
 		.appendTo(dialog.body)
 		.find('.link-open')
 		.on('click', function() {
 			frappe.model.with_doctype('Stock Entry', function() {
 				var doc = frappe.model.get_new_doc('Stock Entry');
+				doc.purpose = 'Material Receipt';
 				doc.from_warehouse = dialog.get_value('source');
 				doc.to_warehouse = dialog.get_value('target');
 				var row = frappe.model.add_child(doc, 'items');
@@ -186,6 +207,7 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, callb
 				row.f_warehouse = dialog.get_value('target');
 				row.t_warehouse = dialog.get_value('target');
 				row.qty = dialog.get_value('qty');
+				row.uom = dialog.get_value('uom');
 				row.conversion_factor = 1;
 				row.transfer_qty = dialog.get_value('qty');
 				row.basic_rate = dialog.get_value('rate');

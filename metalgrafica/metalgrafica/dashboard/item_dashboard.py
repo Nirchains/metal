@@ -39,7 +39,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 	return frappe.db.sql('''
 	select
 		i.item_code, b.warehouse, i.default_warehouse, b.projected_qty, b.reserved_qty,
-		b.reserved_qty_for_production, b.actual_qty, b.valuation_rate, i.item_name
+		b.reserved_qty_for_production, b.actual_qty, b.valuation_rate, i.item_name, i.stock_uom as uom
 	from
 		tabItem i left join tabBin b		
 		on b.item_code = i.name
