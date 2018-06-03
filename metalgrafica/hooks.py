@@ -32,7 +32,7 @@ app_include_js = [
 get_help_messages = "metalgrafica.util.get_help_messages"
 
 #fixtures = ['Custom Field', 'Property Setter', "Print Format","Custom Script"]
-fixtures=['Custom Field', 'Property Setter','Print Format','Custom Script', 'Domain', 'Module Def','Page']
+fixtures=['Custom Field', 'Property Setter','Print Format','Custom Script', 'Domain', 'Module Def']
 
 
 doctype_js = {
