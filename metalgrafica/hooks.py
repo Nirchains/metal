@@ -75,7 +75,8 @@ doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
     "Customer": ["custom_script/customer_list.js"],
     "Production Order": ["custom_script/production_order_list.js"],
-    "BOM": ["custom_script/bom_list.js"]
+    "BOM": ["custom_script/bom_list.js"],
+    "Quotation": ["custom_script/quotation_list.js"]
 }
 
 doctype_tree_js = {

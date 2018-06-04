@@ -20,4 +20,4 @@ frappe.listview_settings['Item']['refresh'] =
 		});
         
 	}
-frappe.help.youtube_id["Item"] = "";
+frappe.help.youtube_id["Item"] = "KgME2lrwR0Q";

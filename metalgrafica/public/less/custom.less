@@ -39,7 +39,8 @@ h6.uppercase, .h6.uppercase {
 }
 
 .app-icon {
-	border: 2px solid rgba(255,255,255, 0.5);
+	border: 10px solid rgba(255,255,255, 0.5);
+	border-radius: 45px;
 	&:hover {
     	box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.7);
     	.transition(all 0.2s ease 0s);
@@ -101,4 +102,15 @@ h6.uppercase, .h6.uppercase {
 .fc-day-grid-event .fc-content {
     white-space: inherit !important;
     overflow: inherit !important;
+}
+div[data-link*="modules/"] .app-icon {
+  border-radius: 0;
+}
+
+.list-link a[disabled="disabled"] {
+    color: rgb(117, 116, 255);
+}
+
+#page-stock-balance-1 .dashboard-list-item {
+    padding: 5px 15px;
 }
