@@ -20,7 +20,7 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Production Planning Tool",
+					"name": "Planificar Produccion",
 					"description": _("Generate Material Requests (MRP) and Production Orders."),
 				},
 				{
