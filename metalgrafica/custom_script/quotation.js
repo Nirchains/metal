@@ -31,6 +31,7 @@ frappe.ui.form.on("Quotation", {
 	},
 	company: function(frm) {
 		if(frm.doc.company) {
+			//Colocamos el membrete del parámetro guardado en la configuración
 			frappe.db.get_value('Company', frm.doc.company, 'default_letter_head_quotation').then((r) => {
 				if(r.message.default_letter_head_quotation) {
 					frm.set_value("letter_head", r.message.default_letter_head_quotation);
