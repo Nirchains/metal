@@ -11,6 +11,7 @@
         "public/js/custom.js"
     ],
     "js/core.js": [
+        "public/js/core/upload.js",
         "public/js/core/calendar.js",
         "public/js/core/page.js",
         "public/js/core/grid.js",

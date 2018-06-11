@@ -13,3 +13,7 @@ frappe.ui.form.ControlButton = frappe.ui.form.ControlButton.extend({
 		this.toggle_label(false);
 	}
 });
+
+frappe.form.link_formatters['Item'] = function(value, doc) {
+	return value;
+}
