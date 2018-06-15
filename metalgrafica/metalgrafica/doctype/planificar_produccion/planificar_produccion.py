@@ -188,10 +188,9 @@ class PlanificarProduccion(Document):
 			pi.bom_no					= item_details and item_details.bom_no or ''
 			pi.planned_qty				= flt(p['pending_qty'])
 			pi.pending_qty				= flt(p['pending_qty'])
-			#pi.planned_start_date		= (p.delivery_date or datetime.datetime.now()) #- datetime.timedelta(days=antelacion_de_produccion)
-
 
 			if self.get_items_from == "Sales Order":
+				pi.planned_start_date		= (p.delivery_date or datetime.datetime.now()) - datetime.timedelta(days=antelacion_de_produccion)
 				pi.sales_order		= p['parent']
 			elif self.get_items_from == "Material Request":
 				pi.material_request		= p['parent']
