@@ -113,3 +113,17 @@ def get_prueba_filas():
 def cleanup(fname):
     if os.path.exists(fname):
         os.remove(fname)
+
+@frappe.whitelist()
+def cancel_documents(names, doctype):
+	""" create email flag queue to mark email either as read or unread """
+	def cancel_doc(name):
+		doc = frappe.get_doc(doctype, name)
+		doc.cancel()
+
+	if not all([names, doctype]):
+		return
+
+	for name in json.loads(names or []):
+		cancel_doc(name)
+				

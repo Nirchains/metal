@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
+import datetime
 from frappe.utils import cstr, flt, cint, nowdate, add_days, comma_and
 
 from frappe import msgprint, _
@@ -130,7 +131,7 @@ class PlanificarProduccion(Document):
 			item_condition = ' and so_item.item_code = "{0}"'.format(frappe.db.escape(self.fg_item))
 
 		items = frappe.db.sql("""select distinct parent, item_code, warehouse,
-			(qty - delivered_qty)*conversion_factor as pending_qty
+			(qty - delivered_qty)*conversion_factor as pending_qty, delivery_date
 			from `tabSales Order Item` so_item
 			where parent in (%s) and docstatus = 1 and qty > delivered_qty
 			and exists (select name from `tabBOM` bom where bom.item=so_item.item_code
@@ -142,7 +143,7 @@ class PlanificarProduccion(Document):
 
 		packed_items = frappe.db.sql("""select distinct pi.parent, pi.item_code, pi.warehouse as warehouse,
 			(((so_item.qty - so_item.delivered_qty) * pi.qty) / so_item.qty)
-				as pending_qty
+				as pending_qty, delivery_date
 			from `tabSales Order Item` so_item, `tabPacked Item` pi
 			where so_item.parent = pi.parent and so_item.docstatus = 1
 			and pi.parent_item = so_item.item_code
@@ -150,7 +151,7 @@ class PlanificarProduccion(Document):
 			and exists (select name from `tabBOM` bom where bom.item=pi.item_code
 					and bom.is_active = 1) %s""" % \
 			(", ".join(["%s"] * len(so_list)), item_condition), tuple(so_list), as_dict=1)
-
+		
 		self.add_items(items + packed_items)
 
 	def get_mr_items(self):
@@ -164,7 +165,7 @@ class PlanificarProduccion(Document):
 			item_condition = ' and mr_item.item_code = "' + frappe.db.escape(self.fg_item, percent=False) + '"'
 
 		items = frappe.db.sql("""select distinct parent, name, item_code, warehouse,
-			(qty - ordered_qty) as pending_qty
+			(qty - ordered_qty) as pending_qty, planned_start_date as delivery_date
 			from `tabMaterial Request Item` mr_item
 			where parent in (%s) and docstatus = 1 and qty > ordered_qty
 			and exists (select name from `tabBOM` bom where bom.item=mr_item.item_code
@@ -176,6 +177,7 @@ class PlanificarProduccion(Document):
 
 	def add_items(self, items):
 		self.clear_table("items")
+		antelacion_de_produccion = cint(frappe.db.get_single_value("Manufacturing Settings", "antelacion_de_produccion")) or 7
 		for p in items:
 			item_details = get_item_details(p['item_code'])
 			pi = self.append('items', {})
@@ -186,6 +188,8 @@ class PlanificarProduccion(Document):
 			pi.bom_no					= item_details and item_details.bom_no or ''
 			pi.planned_qty				= flt(p['pending_qty'])
 			pi.pending_qty				= flt(p['pending_qty'])
+			#pi.planned_start_date		= (p.delivery_date or datetime.datetime.now()) #- datetime.timedelta(days=antelacion_de_produccion)
+
 
 			if self.get_items_from == "Sales Order":
 				pi.sales_order		= p['parent']
@@ -245,7 +249,8 @@ class PlanificarProduccion(Document):
 				"wip_warehouse"			: "",
 				"fg_warehouse"			: d.warehouse,
 				"status"				: "Draft",
-				"project"				: frappe.db.get_value("Sales Order", d.sales_order, "project")
+				"project"				: frappe.db.get_value("Sales Order", d.sales_order, "project"),
+				"planned_start_date"	: d.planned_start_date
 			}
 
 			""" Club similar BOM and item for processing in case of Sales Orders """
@@ -291,9 +296,9 @@ class PlanificarProduccion(Document):
 		bom_dict = {}
 		for d in self.get("items"):
 			if self.get_items_from == "Material Request":
-				bom_dict.setdefault(d.bom_no, []).append([d.material_request_item, flt(d.planned_qty)])
+				bom_dict.setdefault(d.bom_no, []).append([d.material_request_item, flt(d.planned_qty), d.planned_start_date])
 			else:
-				bom_dict.setdefault(d.bom_no, []).append([d.sales_order, flt(d.planned_qty)])
+				bom_dict.setdefault(d.bom_no, []).append([d.sales_order, flt(d.planned_qty), d.planned_start_date])
 		return bom_dict
 
 	def download_raw_materials(self):
@@ -318,7 +323,7 @@ class PlanificarProduccion(Document):
 				# Did not use qty_consumed_per_unit in the query, as it leads to rounding loss
 				for d in frappe.db.sql("""select fb.item_code,
 					ifnull(sum(fb.stock_qty/ifnull(bom.quantity, 1)), 0) as qty,
-					fb.description, fb.stock_uom, item.min_order_qty
+					fb.description, fb.stock_uom, item.min_order_qty, item.default_warehouse
 					from `tabBOM Explosion Item` fb, `tabBOM` bom, `tabItem` item
 					where bom.name = fb.parent and item.name = fb.item_code
 					and (item.is_sub_contracted_item = 0 or ifnull(item.default_bom, "")="")
@@ -335,7 +340,7 @@ class PlanificarProduccion(Document):
 			for item, item_details in bom_wise_item_details.items():
 				for so_qty in so_wise_qty:
 					item_list.append([item, flt(item_details.qty) * so_qty[1], item_details.description,
-						item_details.stock_uom, item_details.min_order_qty, so_qty[0]])
+						item_details.stock_uom, item_details.min_order_qty, so_qty[0], item_details.default_warehouse])
 
 		self.make_items_dict(item_list)
 
@@ -349,7 +354,8 @@ class PlanificarProduccion(Document):
 				item.default_bom as default_bom,
 				bom_item.description as description,
 				bom_item.stock_uom as stock_uom,
-				item.min_order_qty as min_order_qty
+				item.min_order_qty as min_order_qty,
+				item.default_warehouse
 			FROM
 				`tabBOM Item` bom_item,
 				`tabBOM` bom,
@@ -377,7 +383,7 @@ class PlanificarProduccion(Document):
 					or (d.default_material_request_type == "Manufacture")):
 
 					my_qty = 0
-					projected_qty = self.get_item_projected_qty(d.item_code)
+					projected_qty = self.get_item_projected_qty(d.item_code, d.default_warehouse)
 					if self.create_material_requests_for_all_required_qty:
 						my_qty = d.qty
 					else:
@@ -398,7 +404,7 @@ class PlanificarProduccion(Document):
 			self.item_dict = {}
 
 		for i in item_list:
-			self.item_dict.setdefault(i[0], []).append([flt(i[1]), i[2], i[3], i[4], i[5]])
+			self.item_dict.setdefault(i[0], []).append([flt(i[1]), i[2], i[3], i[4], i[5], i[6]])
 
 	def get_csv(self):
 		item_list = [['Item Code', 'Description', 'Stock UOM', 'Required Qty', 'Warehouse',
@@ -482,10 +488,10 @@ class PlanificarProduccion(Document):
 
 		return items_to_be_requested
 
-	def get_item_projected_qty(self,item):
+	def get_item_projected_qty(self,item,default_warehouse):
 		conditions = ""
-		if self.purchase_request_for_warehouse:
-			conditions = " and warehouse='{0}'".format(frappe.db.escape(self.purchase_request_for_warehouse))
+		#if self.purchase_request_for_warehouse:
+		conditions = " and warehouse='{0}'".format(frappe.db.escape(default_warehouse or self.purchase_request_for_warehouse))
 
 		item_projected_qty = frappe.db.sql("""
 			select ifnull(sum(projected_qty),0) as qty
@@ -497,9 +503,16 @@ class PlanificarProduccion(Document):
 
 	def get_projected_qty(self):
 		items = self.item_dict.keys()
+		warehouses = []
+		for item in self.item_dict:
+			warehouses.append(self.item_dict[item][0][5])
+
+		conditions = ""
+		for cond in items:
+			conditions = conditions + (" or (item_code='{0}' and warehouse='{1}')".format(cond, self.item_dict[cond][0][5] or self.purchase_request_for_warehouse))
+						
 		item_projected_qty = frappe.db.sql("""select item_code, sum(projected_qty)
-			from `tabBin` where item_code in (%s) and warehouse=%s group by item_code""" %
-			(", ".join(["%s"]*len(items)), '%s'), tuple(items + [self.purchase_request_for_warehouse]))
+			from `tabBin` where (0 = 1 {0}) group by item_code""".format(conditions))
 
 		return dict(item_projected_qty)
 
@@ -532,10 +545,11 @@ class PlanificarProduccion(Document):
 						"brand": item_wrapper.brand,
 						"qty": requested_qty,
 						"schedule_date": add_days(nowdate(), cint(item_wrapper.lead_time_days)),
-						"warehouse": self.purchase_request_for_warehouse,
+						"warehouse": item_wrapper.default_warehouse or self.purchase_request_for_warehouse,
 						"sales_order": sales_order if sales_order!="No Sales Order" else None,
 						"project": frappe.db.get_value("Sales Order", sales_order, "project") \
-							if sales_order!="No Sales Order" else None
+							if sales_order!="No Sales Order" else None,
+						"planned_start_date": datetime.datetime.now() #TODO
 					})
 
 				material_request.flags.ignore_permissions = 1

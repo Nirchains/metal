@@ -20,3 +20,6 @@ frappe.ui.form.on('Sales Order', {
 	}
 	
 });
+
+//Child tables add_fetch
+cur_frm.add_fetch("item_code", "observaciones", "observaciones");
