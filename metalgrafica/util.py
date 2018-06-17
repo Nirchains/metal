@@ -85,13 +85,34 @@ def get_stock_entry_materials(production_order):
 @frappe.whitelist()
 def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques):
 	filas = []
-	inicio = int(inicio_de_secuencia)
-	for x in xrange(int(numero_bloques)):
-		doc = frappe.get_doc({"doctype": "Batch", "batch_id":  str(inicio),"item": producto, "automatic": 1 })
-		doc.insert()
-		filas.extend([{"id": inicio }])
-		inicio += 1
-	return filas
+	cadena = False
+	try:
+		inicio = int(inicio_de_secuencia)
+	except ValueError:
+		inicio = inicio_de_secuencia
+		cadena = True
+	finally:
+		contador = 1
+
+		for x in xrange(int(numero_bloques)):
+			if cadena:
+				lote = ("{0}/{1}").format(inicio, x + 1)
+				automatic = 0
+			else:
+				lote = ("{0}").format(int(inicio) + int(x))
+				automatic = 1
+
+			if frappe.db.exists("Batch", {"batch_id": lote}):
+				doc = frappe.get_doc("Batch", {"batch_id": lote})
+				if doc.reference_doctype and doc.reference_name:
+					frappe.msgprint(("El lote {0} ya se est&aacute; utilizando. Aseg&uacute;rese de que es el lote correcto.").format(lote))
+			else:
+				doc = frappe.get_doc({"doctype": "Batch", "batch_id":  lote, "item": producto, "automatic": automatic })
+				doc.insert()
+				
+			filas.extend([{"id": lote }])
+
+		return filas
 
 def clean_batch():
 	'''Limpia los lotes que no estan asociados en ninguna recepcion de compra'''

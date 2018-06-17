@@ -5,6 +5,9 @@
     "css/custom.css": [
         "public/css/custom.css"
     ],
+    "css/print.css": [
+        "public/css/print.css"
+    ],
     "js/custom.js": [
         "public/js/fix.js",
         "public/js/extra.js",

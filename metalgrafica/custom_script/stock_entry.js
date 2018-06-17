@@ -4,7 +4,7 @@
 
 frappe.ui.form.on('Stock Entry', {
 	onload: function(frm) {
-		if(frm.doc.docstatus < 1) {
+		if(frm.doc.docstatus < 1 && helper.IsNullOrEmpty(frm.doc.production_order)) {
 			frappe.call({
 				method: "metalgrafica.util.get_next_batch",
 				callback: function(r) {
@@ -13,6 +13,8 @@ frappe.ui.form.on('Stock Entry', {
 					}					
 				}
 			});
+		} else if(frm.doc.docstatus < 1 && !helper.IsNullOrEmpty(frm.doc.production_order)) {
+			frm.set_value("inicio_de_secuencia", frm.doc.production_order);
 		} else {
 			frm.toggle_display("bloques_section", false);
 		}
@@ -20,7 +22,7 @@ frappe.ui.form.on('Stock Entry', {
 	generar_bloques: function(frm) {
 		//Generamos los bloques
 		if (!helper.ArrayIsNullOrEmpty(frm.doc.items)) {
-			item = frm.doc.items[0];
+			item = frm.doc.items[frm.doc.items.length-1];
 
 			if (helper.IsNullOrEmpty(frm.doc.inicio_de_secuencia)) {
 				cur_frm.cscript.purchase_receipt.duplicar_productos(frm, item, frm.doc.numero_bloques, null);		
@@ -50,9 +52,15 @@ cur_frm.cscript.purchase_receipt = {
 	duplicar_productos: function (frm, item, numero_bloques, lotes) {
 		//Duplicamos los productos
 		var d;
-		frappe.model.clear_table(frm.doc,"items");
+		//frappe.model.clear_table(frm.doc,"items");
 		for (var i = 0; i < frm.doc.numero_bloques; i++) {
-			d = frm.add_child("items");
+
+			//El primer elemento ni lo borramos ni lo duplicamos
+			if (i > 0) {
+				d = frm.add_child("items");
+			} else {
+				d = frm.doc.items[frm.doc.items.length-1];
+			}
 
 			for (var property_name in item) {
 
@@ -63,8 +71,9 @@ cur_frm.cscript.purchase_receipt = {
 			}
 
 			if (!helper.ArrayIsNullOrEmpty(lotes)) {
-				console.log(lotes[i].id.toString());
-				d["batch_no"] = lotes[i].id.toString();
+				if (lotes.length>i) {
+					d["batch_no"] = lotes[i].id.toString();
+				}
 			}
 
 			frm.refresh_field("items");
@@ -82,6 +91,7 @@ cur_frm.cscript.purchase_receipt = {
 					"numero_bloques": numero_bloques
 				},
 				callback: function(r) {
+					console.log(r);
 					if(!r.message) {
 						msgprint("No se han creado lotes");
 					} else {
