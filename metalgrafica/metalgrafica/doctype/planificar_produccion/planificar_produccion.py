@@ -87,7 +87,7 @@ class PlanificarProduccion(Document):
 			item_filter += " and mr_item.item_code = %(item)s"
 
 		pending_mr = frappe.db.sql("""
-			select distinct mr.name, mr.transaction_date, group_concat(mr_item.item_code SEPARATOR ', ') AS PRODUCTOS
+			select distinct mr.name, mr.transaction_date, group_concat(mr_item.item_code SEPARATOR '<br> ') AS items
 			from `tabMaterial Request` mr, `tabMaterial Request Item` mr_item
 			where mr_item.parent = mr.name
 				and mr.material_request_type = "Manufacture"
