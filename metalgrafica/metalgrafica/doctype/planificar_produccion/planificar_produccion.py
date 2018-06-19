@@ -508,10 +508,14 @@ class PlanificarProduccion(Document):
 
 		conditions = ""
 		for cond in items:
-			conditions = conditions + (" or (item_code='{0}' and warehouse='{1}')".format(cond, self.item_dict[cond][0][5] or self.purchase_request_for_warehouse))
+			conditions = conditions + """ or (item_code="%s" and warehouse="%s")""" % (cond, self.item_dict[cond][0][5] or self.purchase_request_for_warehouse)
+
+		sqlquery = """select item_code, sum(projected_qty)
+			from `tabBin` where (0 = 1 {0}) group by item_code""".format(conditions)
+
+		frappe.throw(sqlquery)
 						
-		item_projected_qty = frappe.db.sql("""select item_code, sum(projected_qty)
-			from `tabBin` where (0 = 1 {0}) group by item_code""".format(conditions))
+		item_projected_qty = frappe.db.sql(sqlquery)
 
 		return dict(item_projected_qty)
 
