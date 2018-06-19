@@ -36,7 +36,7 @@ class PlanificarProduccion(Document):
 			item_filter += " and so_item.item_code = %(item)s"
 
 		open_so = frappe.db.sql("""
-			select distinct so.name, so.transaction_date, so.customer, so.base_grand_total, group_concat(so_item.item_code SEPARATOR ', ') AS productos
+			select distinct so.name, so.transaction_date, so.customer, so.base_grand_total, group_concat(so_item.item_code SEPARATOR '<br> ') AS items
 			from `tabSales Order` so, `tabSales Order Item` so_item
 			where so_item.parent = so.name
 				and so.docstatus = 1 and so.status not in ("Stopped", "Closed")
@@ -71,6 +71,7 @@ class PlanificarProduccion(Document):
 				pp_so.sales_order_date = cstr(r['transaction_date'])
 				pp_so.customer = cstr(r['customer'])
 				pp_so.grand_total = flt(r['base_grand_total'])
+				pp_so.items = r['items']
 
 	def get_pending_material_requests(self):
 		""" Pull Material Requests that are pending based on criteria selected"""
