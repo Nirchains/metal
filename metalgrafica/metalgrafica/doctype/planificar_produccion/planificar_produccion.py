@@ -47,7 +47,7 @@ class PlanificarProduccion(Document):
 					or exists (select name from `tabPacked Item` pi
 						where pi.parent = so.name and pi.parent_item = so_item.item_code
 							and exists (select name from `tabBOM` bom where bom.item=pi.item_code
-								and bom.is_active = 1))) GROUP BY NAME
+								and bom.is_active = 1))) GROUP BY so.name
 			""".format(so_filter, item_filter), {
 				"from_date": self.from_date,
 				"to_date": self.to_date,
@@ -87,14 +87,14 @@ class PlanificarProduccion(Document):
 			item_filter += " and mr_item.item_code = %(item)s"
 
 		pending_mr = frappe.db.sql("""
-			select distinct mr.name, mr.transaction_date
+			select distinct mr.name, mr.transaction_date, group_concat(mr_item.item_code SEPARATOR ', ') AS PRODUCTOS
 			from `tabMaterial Request` mr, `tabMaterial Request Item` mr_item
 			where mr_item.parent = mr.name
 				and mr.material_request_type = "Manufacture"
 				and mr.docstatus = 1
 				and mr_item.qty > ifnull(mr_item.ordered_qty,0) {0} {1}
 				and (exists (select name from `tabBOM` bom where bom.item=mr_item.item_code
-					and bom.is_active = 1))
+					and bom.is_active = 1)) group by mr.name
 			""".format(mr_filter, item_filter), {
 				"from_date": self.from_date,
 				"to_date": self.to_date,
@@ -114,6 +114,7 @@ class PlanificarProduccion(Document):
 				mr = self.append('material_requests', {})
 				mr.material_request = r['name']
 				mr.material_request_date = cstr(r['transaction_date'])
+				mr.items = r['items']
 
 	def get_items(self):
 		if self.get_items_from == "Sales Order":
