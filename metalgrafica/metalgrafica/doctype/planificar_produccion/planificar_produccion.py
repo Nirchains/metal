@@ -36,7 +36,7 @@ class PlanificarProduccion(Document):
 			item_filter += " and so_item.item_code = %(item)s"
 
 		open_so = frappe.db.sql("""
-			select distinct so.name, so.transaction_date, so.customer, so.base_grand_total
+			select distinct so.name, so.transaction_date, so.customer, so.base_grand_total, group_concat(so_item.item_code SEPARATOR ', ') AS productos
 			from `tabSales Order` so, `tabSales Order Item` so_item
 			where so_item.parent = so.name
 				and so.docstatus = 1 and so.status not in ("Stopped", "Closed")
@@ -47,7 +47,7 @@ class PlanificarProduccion(Document):
 					or exists (select name from `tabPacked Item` pi
 						where pi.parent = so.name and pi.parent_item = so_item.item_code
 							and exists (select name from `tabBOM` bom where bom.item=pi.item_code
-								and bom.is_active = 1)))
+								and bom.is_active = 1))) GROUP BY NAME
 			""".format(so_filter, item_filter), {
 				"from_date": self.from_date,
 				"to_date": self.to_date,
@@ -513,8 +513,6 @@ class PlanificarProduccion(Document):
 		sqlquery = """select item_code, sum(projected_qty)
 			from `tabBin` where (0 = 1 {0}) group by item_code""".format(conditions)
 
-		frappe.throw(sqlquery)
-						
 		item_projected_qty = frappe.db.sql(sqlquery)
 
 		return dict(item_projected_qty)
