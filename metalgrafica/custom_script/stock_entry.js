@@ -35,6 +35,8 @@ frappe.ui.form.on('Stock Entry', {
 		}
 	},
 	refresh: function(frm) {
+		cur_frm.cscript.purchase_receipt.check_properties(frm);
+
 		if(!frm.doc.__islocal) {
 			if (frm.doc.production_order) {
 				frm.add_custom_button(__("Ver orden de producción"),
@@ -44,11 +46,18 @@ frappe.ui.form.on('Stock Entry', {
 				);
 			}		
 		}
+	},
+	purpose: function(frm) {
+		cur_frm.cscript.purchase_receipt.check_properties(frm);
 	}
 });
 
 
 cur_frm.cscript.purchase_receipt = {
+	check_properties: function (frm) {
+		frm.toggle_display('bloques_section', frm.doc.purpose=='Material Receipt');
+	},
+
 	duplicar_productos: function (frm, item, numero_bloques, lotes) {
 		//Duplicamos los productos
 		var d;

@@ -59,7 +59,8 @@ def get_production_order_events(start, end, filters=None):
 		concat("<b>", `tabProduction Order`.name, "</b><br>", `tabProduction Order`.production_item) as title, 
 		`tabProduction Order`.planned_start_date as planned_start_date,
 		`tabProduction Order`.planned_end_date as planned_end_date, `tabProduction Order`.status,
-		concat(`tabProduction Order Operation`.operation, "<br>Fecha prevista de entrega: ", COALESCE(`tabProduction Order`.expected_delivery_date, '')) as tooltipMessage,
+		concat('<b>',`tabProduction Order`.name,'</b><br>',`tabProduction Order Operation`.operation, "<br>Fecha prevista de entrega: ", 
+		COALESCE(`tabProduction Order`.expected_delivery_date, '')) as tooltipMessage,
 		`tabProduction Order`.impreso
 		from `tabProduction Order`
 		left join `tabProduction Order Operation` on `tabProduction Order`.name = `tabProduction Order Operation`.parent and `tabProduction Order Operation`.parenttype="Production Order"

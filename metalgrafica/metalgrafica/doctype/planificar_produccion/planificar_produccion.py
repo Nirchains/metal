@@ -32,6 +32,9 @@ class PlanificarProduccion(Document):
 		if self.project:
 			so_filter += " and so.project = %(project)s"
 
+		if self.sales_order:
+			so_filter += " and so.name = %(sales_order)s"
+
 		if self.fg_item:
 			item_filter += " and so_item.item_code = %(item)s"
 
@@ -53,6 +56,7 @@ class PlanificarProduccion(Document):
 				"to_date": self.to_date,
 				"customer": self.customer,
 				"project": self.project,
+				"sales_order": self.sales_order,
 				"item": self.fg_item,
 				"company": self.company
 			}, as_dict=1)
@@ -279,6 +283,7 @@ class PlanificarProduccion(Document):
 		pro.set_production_order_operations()
 		if warehouse:
 			pro.wip_warehouse = warehouse.get('wip_warehouse')
+			pro.scrap_warehouse = warehouse.get('scrap_warehouse')
 		if not pro.fg_warehouse:
 			pro.fg_warehouse = warehouse.get('fg_warehouse')
 
