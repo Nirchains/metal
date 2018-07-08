@@ -105,3 +105,25 @@ div[data-link*="modules/"] .app-icon {
 #page-stock-balance-1 .dashboard-list-item {
   padding: 5px 15px;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ffa00a;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 750px;
+    margin: 30px auto;
+  }
+}
