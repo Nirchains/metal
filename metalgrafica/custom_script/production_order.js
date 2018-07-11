@@ -15,7 +15,9 @@ frappe.ui.form.on("Production Order", {
 		frm.get_field('nombre_operario').toggle_label(false);
 		frm.refresh_fields();
 
-		frm.trigger('bom_no');
+		if(frm.doc.__islocal) {
+			frm.trigger('bom_no');
+		}
 
 	},
 
