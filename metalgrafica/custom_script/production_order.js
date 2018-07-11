@@ -14,6 +14,9 @@ frappe.ui.form.on("Production Order", {
 		//Eliminamos el 'label' del campo Nombre del operario
 		frm.get_field('nombre_operario').toggle_label(false);
 		frm.refresh_fields();
+
+		frm.trigger('bom_no');
+
 	},
 
 	refresh: function (frm) {
