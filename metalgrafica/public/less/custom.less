@@ -129,6 +129,10 @@ div[data-link*="modules/"] .app-icon {
     background: #f1f1f1; 
 }
 
+::-webkit-scrollbar-button {
+      background-color: #7c2929;
+}
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #ffa00a; 
@@ -145,3 +149,19 @@ div[data-link*="modules/"] .app-icon {
     	margin: 30px auto;
 	}
 }
+
+.awesomplete > ul > li:hover {
+	background-color: #DEDEDE;
+	a {
+		color: #333333;
+	}
+}
+
+.awesomplete > ul > li[aria-selected="true"], .awesomplete > ul > li:hover[aria-selected="true"] {
+	background-color: #5e64ff;
+	color: #FFFFFF;
+	a {
+		color: #FFFFFF;
+	}
+}
+

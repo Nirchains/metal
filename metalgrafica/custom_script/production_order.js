@@ -33,14 +33,23 @@ frappe.ui.form.on("Production Order", {
 				}
 			);
 		}
-	},
 
-	operario: function(frm) {
-		
+		cur_frm.cscript.production_order.check_properties(frm);
+		frm.refresh_fields();
+	},
+	production_item: function(frm) {
+		cur_frm.cscript.production_order.check_properties(frm);
+		frm.refresh_fields();
 	}
-	
 
 });
+
+cur_frm.cscript.production_order = {
+	check_properties: function(frm) {
+		//Visibilidad
+		frm.toggle_display("fecha_fabricacion", frm.doc.production_item.startsWith("LATA-"));
+	}
+}
 
 
 erpnext.production_order["set_custom_buttons"] = function(frm) {
