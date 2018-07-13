@@ -97,7 +97,8 @@ def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques):
 
 		for x in xrange(int(numero_bloques)):
 			if cadena:
-				lote = ("{0}/{1}").format(inicio, x + 1)
+				#lote = ("{0}/{1}").format(inicio, x + 1)
+				lote = ("{0}").format(inicio)
 				automatic = 0
 			else:
 				lote = ("{0}").format(int(inicio) + int(x))
