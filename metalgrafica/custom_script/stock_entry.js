@@ -10,10 +10,19 @@ frappe.ui.form.on('Stock Entry', {
 				frappe.throw(__("Please enter Item Code to get Batch Number"));
 			} else {
 				if (in_list(["Material Transfer for Manufacture", "Manufacture", "Repack", "Subcontract"], doc.purpose)) {
+					var mapids = frm.doc.items.map(function(d) {
+									if (!helper.IsNullOrEmpty(d.batch_no)) {
+										return "'" + d.batch_no + "'";
+									} else {
+										return null;	
+									}
+								}
+							);
+					console.log(mapids);
 					var filters = {
 						'item_code': item.item_code,
 						'posting_date': frm.doc.posting_date || frappe.datetime.nowdate(),
-						'batch_id': ["not in",frm.doc.items.map(d => d.batch_no)]
+						'batch_id': ["not in", mapids]
 					}
 				} else {
 					var filters = {
@@ -44,6 +53,12 @@ frappe.ui.form.on('Stock Entry', {
 		} else {
 			frm.toggle_display("bloques_section", false);
 		}
+
+		if(frm.doc.__islocal) {
+			if (frm.doc.purpose == "Manufacture") {
+				frm.set_value("numero_bloques", "");
+			}
+		}
 	},
 	generar_bloques: function(frm) {
 		//Generamos los bloques
@@ -53,7 +68,13 @@ frappe.ui.form.on('Stock Entry', {
 			if (helper.IsNullOrEmpty(frm.doc.inicio_de_secuencia)) {
 				cur_frm.cscript.purchase_receipt.duplicar_productos(frm, item, frm.doc.numero_bloques, null);		
 			} else {
-				cur_frm.cscript.purchase_receipt.crear_lotes(frm, item, frm.doc.inicio_de_secuencia, frm.doc.numero_bloques, item.item_code);
+				//En caso de productos manufacturados, siempre se generará un solo bloque de salida
+				if (frm.doc.purpose == "Manufacture") {
+					numero_bloques = 1;
+				} else {
+					numero_bloques = frm.doc.numero_bloques;
+				}
+				cur_frm.cscript.purchase_receipt.crear_lotes(frm, item, frm.doc.inicio_de_secuencia, numero_bloques, item.item_code);
 			}
 
 		} else {
@@ -96,13 +117,14 @@ frappe.ui.form.on('Stock Entry Detail', {
 cur_frm.cscript.purchase_receipt = {
 	check_properties: function (frm) {
 		frm.toggle_display('bloques_section', helper.In(frm.doc.purpose, ['Material Receipt', 'Manufacture']));
+		frm.toggle_reqd("numero_bloques", helper.In(frm.doc.purpose, ['Material Receipt', 'Manufacture']));
 	},
 
 	duplicar_productos: function (frm, item, numero_bloques, lotes) {
 		//Duplicamos los productos
 		var d;
 		//frappe.model.clear_table(frm.doc,"items");
-		for (var i = 0; i < frm.doc.numero_bloques; i++) {
+		for (var i = 0; i < numero_bloques; i++) {
 
 			//El primer elemento ni lo borramos ni lo duplicamos
 			if (i > 0) {

@@ -117,9 +117,6 @@ div[data-link*="modules/"] .app-icon {
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
-::-webkit-scrollbar-button {
-  background-color: #7c2929;
-}
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #ffa00a;
@@ -134,12 +131,6 @@ div[data-link*="modules/"] .app-icon {
     margin: 30px auto;
   }
 }
-.awesomplete > ul > li:hover {
-  background-color: #DEDEDE;
-}
-.awesomplete > ul > li:hover a {
-  color: #333333;
-}
 .awesomplete > ul > li[aria-selected="true"],
 .awesomplete > ul > li:hover[aria-selected="true"] {
   background-color: #5e64ff;
@@ -147,5 +138,9 @@ div[data-link*="modules/"] .app-icon {
 }
 .awesomplete > ul > li[aria-selected="true"] a,
 .awesomplete > ul > li:hover[aria-selected="true"] a {
+  color: #FFFFFF;
+}
+.awesomplete > ul > li[aria-selected="true"] a .text-primary,
+.awesomplete > ul > li:hover[aria-selected="true"] a .text-primary {
   color: #FFFFFF;
 }
