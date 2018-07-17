@@ -23,3 +23,4 @@ DocType: Customer,Spain,España
 apps/erpnext/erpnext/public/js/templates/address_list.html +5,Billing,Facturación
 apps/frappe/frappe/public/js/frappe/ui/filters/edit_filter.html +24,Remove,Quitar
 DocType: Item,Move,Mover
+DocType: Sales Order,"Create for full quantity, ignoring quantity already on order","Crear para la cantidad completa, haciendo caso omiso de la cantidad que ya están en orden"
