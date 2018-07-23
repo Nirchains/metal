@@ -32,6 +32,34 @@ frappe.ui.form.on("Production Order", {
 					frappe.set_route("List", "Stock Entry");
 				}
 			);
+			/*
+			frm.add_custom_button(__("Imprimir etiquetas"),
+				function() {
+
+					frappe.call({
+						method:"metalgrafica.util.print_doctype",
+						args: {
+						    "doctype": "Production Order",
+						    "doc": frm.doc.name,
+						    "print_format": "Orden de Produccion Etiquetas"
+						},
+						callback: function(r) {
+						    var new_window = window.open();
+						    new_window.document.write(r.message);
+						}
+				    });
+				}
+			);*/
+
+			frm.add_custom_button(__("Imprimir parte de trabajo"),
+				function() {
+					erpnext.production_order.print_production_order(frm);
+				}, __("Print"));
+
+			frm.add_custom_button(__("Imprimir etiquetas"),
+				function() {
+					erpnext.production_order.print_tags(frm);
+				}, __("Print"));
 		}
 
 		cur_frm.cscript.production_order.check_properties(frm);
@@ -100,6 +128,45 @@ erpnext.production_order["set_custom_buttons"] = function(frm) {
 		}
 	}
 
+}
+
+erpnext.production_order["print_tags"] = function(frm) {
+	var format;
+	if (frm.doc.production_item.startsWith("LATA-")) {
+	 	format = "Orden de Produccion Palets";
+	} else {
+		format = "Orden de Produccion Etiquetas";
+	}
+	var with_letterhead = false;
+	var lang_code = "ES";
+	var printit = true;
+	var w = window.open(frappe.urllib.get_full_url("/printview?"
+		+ "doctype=" + encodeURIComponent(frm.doc.doctype)
+		+ "&name=" + encodeURIComponent(frm.doc.name)
+		+ (printit ? "&trigger_print=1" : "")
+		+ "&format=" + format
+		+ "&no_letterhead=" + (with_letterhead ? "0" : "1")
+		+ (lang_code ? ("&_lang=" + lang_code) : "")));
+	if (!w) {
+		frappe.msgprint(__("Please enable pop-ups")); return;
+	}
+}
+
+erpnext.production_order["print_production_order"] = function(frm) {
+	var format = "Orden de produccion";
+	var with_letterhead = false;
+	var lang_code = "ES";
+	var printit = true;
+	var w = window.open(frappe.urllib.get_full_url("/printview?"
+		+ "doctype=" + encodeURIComponent(frm.doc.doctype)
+		+ "&name=" + encodeURIComponent(frm.doc.name)
+		+ (printit ? "&trigger_print=1" : "")
+		+ "&format=" + format
+		+ "&no_letterhead=" + (with_letterhead ? "0" : "1")
+		+ (lang_code ? ("&_lang=" + lang_code) : "")));
+	if (!w) {
+		frappe.msgprint(__("Please enable pop-ups")); return;
+	}
 }
 
 

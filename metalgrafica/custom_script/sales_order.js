@@ -5,6 +5,21 @@ cur_frm.add_fetch("customer", "days_of_payment", "dias_de_pago");
 cur_frm.add_fetch("customer", "portes", "portes");
 
 frappe.ui.form.on('Sales Order', {
+	/*TODO
+	setup_queries: function() {
+		var me = this;
+
+		me.frm.set_query('customer_address_reference', function (doc) {
+			return {
+				query: 'frappe.contacts.doctype.address.address.address_query',
+				filters: {
+					link_doctype: "customer",
+					link_name: me.frm.doc.cliente_de_referencia
+				}
+			};
+		});
+	},*/
+
 	refresh: function(frm) {
 		frm.toggle_reqd("cliente_de_referencia", helper.In(frm.doc.customer,["AUXIMARA,S.A."]));
 		frm.toggle_reqd("source", helper.In(frm.doc.customer,["AUXIMARA,S.A."]));
@@ -22,11 +37,26 @@ frappe.ui.form.on('Sales Order', {
 				}
 			);
 		}
+
 	},
 
-	letter_head: function(frm) {
+	cliente_de_referencia: function(frm) {
 		
+	},
+
+	customer_address_reference: function(frm) {
+		frappe.call({
+			method: "frappe.contacts.doctype.address.address.get_address_display",
+			args: {"address_dict": frm.doc["customer_address_reference"] },
+			callback: function(r) {
+				if(r.message) {
+					frm.set_value("address_display_reference", r.message)
+				}
+				//erpnext.utils.set_taxes(frm, address_field, display_field, is_your_company_address);
+			}
+		});
 	}
+
 	
 });
 

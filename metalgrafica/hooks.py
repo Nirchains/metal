@@ -68,6 +68,9 @@ doctype_js = {
     ],
     "Stock Entry": [
         "custom_script/stock_entry.js"
+    ],
+    "Delivery Note": [
+        "custom_script/delivery_note.js"
     ]
 }
 

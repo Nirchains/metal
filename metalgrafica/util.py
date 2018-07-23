@@ -124,7 +124,11 @@ def clean_batch():
 @frappe.whitelist()
 def get_next_batch():
 	'''Devuelve el siguiente numero de lote disponible'''
-	return frappe.db.sql("""select IFNULL(max(name)+1, 1) valor from tabBatch where automatic = 1""")
+	batch_no = frappe.db.sql("""select IFNULL(max(name)+1, 1) valor from tabBatch where automatic = 1""")[0][0]
+	exist = frappe.db.sql("""select count(name) from tabBatch where name=%s""", batch_no)[0][0]
+	if exist > 0:
+		batch_no = str(int(batch_no) + 1)
+	return batch_no
 
 @frappe.whitelist()
 def get_prueba_filas():
@@ -150,3 +154,7 @@ def cancel_documents(names, doctype):
 	for name in json.loads(names or []):
 		cancel_doc(name)
 				
+
+@frappe.whitelist()
+def print_doctype(doctype, doc, print_format):
+    return frappe.get_print(doctype, doc, print_format = print_format)

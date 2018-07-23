@@ -44,14 +44,12 @@ frappe.ui.form.on('Stock Entry', {
 				method: "metalgrafica.util.get_next_batch",
 				callback: function(r) {
 					if(r.message) {
-						frm.set_value("inicio_de_secuencia", r.message[0][0]);
+						frm.set_value("inicio_de_secuencia", r.message);
 					}					
 				}
 			});
 		} else if(frm.doc.docstatus < 1 && !helper.IsNullOrEmpty(frm.doc.production_order)) {
 			frm.set_value("inicio_de_secuencia", frm.doc.production_order);
-		} else {
-			frm.toggle_display("bloques_section", false);
 		}
 
 		if(frm.doc.__islocal) {
@@ -116,8 +114,12 @@ frappe.ui.form.on('Stock Entry Detail', {
 
 cur_frm.cscript.purchase_receipt = {
 	check_properties: function (frm) {
-		frm.toggle_display('bloques_section', helper.In(frm.doc.purpose, ['Material Receipt', 'Manufacture']));
-		frm.toggle_reqd("numero_bloques", helper.In(frm.doc.purpose, ['Material Receipt', 'Manufacture']));
+		var bloques_section_visible = false;
+		if ((frm.doc.purpose == 'Material Receipt' && frm.doc.docstatus < 1) || !helper.IsNullOrEmpty(frm.doc.production_order)) {
+			bloques_section_visible = true;
+		}
+		frm.toggle_display('bloques_section', bloques_section_visible);
+		frm.toggle_reqd("numero_bloques", bloques_section_visible);
 	},
 
 	duplicar_productos: function (frm, item, numero_bloques, lotes) {
@@ -200,9 +202,9 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 
 	var args = {
 		'item_code'			: item.item_code,
-		'production_order'	: frm.fields_dict.production_order.value,
+		'production_order'	: frm.fields_dict.production_order.value || 0,
 		'fg_completed_qty'	: frm.fields_dict.fg_completed_qty.value,
-		's_warehouse'		: item.s_warehouse,
+		's_warehouse'		: item.s_warehouse || "",
 		't_warehouse'		: item.t_warehouse || ""
 	};
 
@@ -215,14 +217,16 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 			if(r.message) {
 				required_qty = r.message;
 			}
-			frappe.require("assets/metalgrafica/js/core/serial_no_batch_selector.js", function() {
-				new erpnext.SerialNoBatchSelector({
-					frm: frm,
-					item: item,
-					warehouse_details: get_warehouse_type_and_name(item),
-					required_qty: required_qty
-				}, show_dialog);
-			});
+			if (required_qty > 0) {
+				frappe.require("assets/metalgrafica/js/core/serial_no_batch_selector.js", function() {
+					new erpnext.SerialNoBatchSelector({
+						frm: frm,
+						item: item,
+						warehouse_details: get_warehouse_type_and_name(item),
+						required_qty: required_qty
+					}, show_dialog);
+				});
+			}
 		}
 	});
 

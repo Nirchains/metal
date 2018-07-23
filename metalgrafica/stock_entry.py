@@ -16,13 +16,15 @@ import json
 @frappe.whitelist()
 def get_item_qty_required(item_code, production_order, fg_completed_qty, s_warehouse, t_warehouse):
 	pro_doc = frappe._dict()
-	if production_order:
-		pro_doc = frappe.get_doc('Production Order', production_order)
 	qty_required = 0
-	item_dict = get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse)
-	for d in item_dict:
-		if item_dict[d].get('item_code') == item_code:
-			qty_required = flt(item_dict[d].get('qty'))
+	if int(production_order) != 0:
+		pro_doc = frappe.get_doc('Production Order', production_order)
+		item_dict = get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse)
+		for d in item_dict:
+			if item_dict[d].get('item_code') == item_code:
+				qty_required = flt(item_dict[d].get('qty'))
+	else:
+		frappe.msgprint("La generaci&oacute;n de lotes no est&aacute; disponible para esta operaci&oacute;n")
 	return qty_required
 
 def get_pro_order_required_items(production_order, s_warehouse, t_warehouse):
