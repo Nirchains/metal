@@ -203,10 +203,12 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 	var args = {
 		'item_code'			: item.item_code,
 		'production_order'	: frm.fields_dict.production_order.value || 0,
-		'fg_completed_qty'	: frm.fields_dict.fg_completed_qty.value,
+		'fg_completed_qty'	: frm.fields_dict.fg_completed_qty.value || 0,
 		's_warehouse'		: item.s_warehouse || "",
 		't_warehouse'		: item.t_warehouse || ""
 	};
+
+	console.log(args);
 
 	var required_qty = 0;
 

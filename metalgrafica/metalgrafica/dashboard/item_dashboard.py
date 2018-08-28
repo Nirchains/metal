@@ -9,7 +9,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 	conditions = []
 	values = []
 	if item_code:
-		conditions.append('i.item_code=%s')
+		conditions.append('i.name=%s')
 		values.append(item_code)
 	if warehouse:
 		conditions.append('b.warehouse=%s')
@@ -38,7 +38,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 
 	return frappe.db.sql('''
 	select
-		i.item_code, b.warehouse, i.default_warehouse, b.projected_qty, b.reserved_qty,
+		i.name, i.item_code, b.warehouse, i.default_warehouse, b.projected_qty, b.reserved_qty,
 		b.reserved_qty_for_production, b.actual_qty, b.valuation_rate, i.item_name, i.stock_uom as uom
 	from
 		tabItem i left join tabBin b		
