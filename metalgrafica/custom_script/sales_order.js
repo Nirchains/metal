@@ -5,20 +5,9 @@ cur_frm.add_fetch("customer", "days_of_payment", "dias_de_pago");
 cur_frm.add_fetch("customer", "portes", "portes");
 
 frappe.ui.form.on('Sales Order', {
-	/*TODO
-	setup_queries: function() {
-		var me = this;
-
-		me.frm.set_query('customer_address_reference', function (doc) {
-			return {
-				query: 'frappe.contacts.doctype.address.address.address_query',
-				filters: {
-					link_doctype: "customer",
-					link_name: me.frm.doc.cliente_de_referencia
-				}
-			};
-		});
-	},*/
+	onload: function(frm) {
+		cur_frm.cscript.sales_order.setup_queries(frm);
+	},
 
 	refresh: function(frm) {
 		frm.toggle_reqd("cliente_de_referencia", helper.In(frm.doc.customer,["AUXIMARA,S.A."]));
@@ -45,16 +34,18 @@ frappe.ui.form.on('Sales Order', {
 	},
 
 	customer_address_reference: function(frm) {
-		frappe.call({
-			method: "frappe.contacts.doctype.address.address.get_address_display",
-			args: {"address_dict": frm.doc["customer_address_reference"] },
-			callback: function(r) {
-				if(r.message) {
-					frm.set_value("address_display_reference", r.message)
+		if (frm.doc["customer_address_reference"]) {
+			frappe.call({
+				method: "frappe.contacts.doctype.address.address.get_address_display",
+				args: {"address_dict": frm.doc["customer_address_reference"] },
+				callback: function(r) {
+					if(r.message) {
+						frm.set_value("address_display_reference", r.message)
+					}
+					//erpnext.utils.set_taxes(frm, address_field, display_field, is_your_company_address);
 				}
-				//erpnext.utils.set_taxes(frm, address_field, display_field, is_your_company_address);
-			}
-		});
+			});
+		}
 	}
 
 	
@@ -64,6 +55,18 @@ frappe.ui.form.on('Sales Order', {
 cur_frm.add_fetch("item_code", "observaciones", "observaciones");
 
 cur_frm.cscript.sales_order = {
+	setup_queries: function(frm) {
+		frm.set_query('customer_address_reference', function () {
+			return {
+				query: 'frappe.contacts.doctype.address.address.address_query',
+				filters: {
+					link_doctype: "customer",
+					link_name: frm.doc.cliente_de_referencia
+				}
+			};
+		});
+	},
+
 	create_material_request: function(frm) {
 		var default_bom = "";
 
@@ -86,9 +89,6 @@ cur_frm.cscript.sales_order = {
 				}
 			}
 		});
-
-
-		
 	},
 
 	create_material_request_dialog: function(frm, default_bom, default_qty, default_warehouse) {
