@@ -17,7 +17,7 @@ import json
 def get_item_qty_required(item_code, production_order, fg_completed_qty, s_warehouse, t_warehouse):
 	pro_doc = frappe._dict()
 	qty_required = 0
-	if int(production_order) != 0:
+	if str(production_order) != '':
 		pro_doc = frappe.get_doc('Production Order', production_order)
 		item_dict = get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse)
 		for d in item_dict:
