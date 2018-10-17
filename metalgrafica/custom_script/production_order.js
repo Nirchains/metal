@@ -76,6 +76,21 @@ cur_frm.cscript.production_order = {
 	check_properties: function(frm) {
 		//Visibilidad
 		frm.toggle_display("fecha_fabricacion", frm.doc.production_item.startsWith("LATA-"));
+	},
+	complete_production_order: function(frm, status) {
+		frappe.call({
+			method: "erpnext.manufacturing.doctype.production_order.production_order.stop_unstop",
+			args: {
+				production_order: frm.doc.name,
+				status: status
+			},
+			callback: function(r) {
+				if(r.message) {
+					frm.set_value("status", r.message);
+					frm.reload_doc();
+				}
+			}
+		})
 	}
 }
 
@@ -86,6 +101,9 @@ erpnext.production_order["set_custom_buttons"] = function(frm) {
 		if (doc.status != 'Stopped' && doc.status != 'Completed') {
 			frm.add_custom_button(__('Stop'), function() {
 				erpnext.production_order.stop_production_order(frm, "Stopped");
+			}, __("Status"));
+			frm.add_custom_button(__('Marcar como completada'), function() {
+				erpnext.production_order.stop_production_order(frm, "Completed");
 			}, __("Status"));
 		} else if (doc.status == 'Stopped') {
 			frm.add_custom_button(__('Re-open'), function() {
