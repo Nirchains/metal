@@ -88,6 +88,12 @@ def get_data():
 					"type": "page",
 					"name": "stock-balance-1",
 					"label": _("Stock Summary")
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Stock Ledger",
+					"doctype": "Stock Ledger Entry",
 				}
 
 			]

@@ -18,7 +18,7 @@ frappe.ui.form.on('Stock Entry', {
 									}
 								}
 							);
-					console.log(mapids);
+					//console.log(mapids);
 					var filters = {
 						'item_code': item.item_code,
 						'posting_date': frm.doc.posting_date || frappe.datetime.nowdate(),
@@ -31,6 +31,7 @@ frappe.ui.form.on('Stock Entry', {
 				}
 
 				if(item.s_warehouse) filters["warehouse"] = item.s_warehouse;
+				console.log(filters);
 				return {
 					query : "erpnext.controllers.queries.get_batch_no",
 					filters: filters
@@ -208,7 +209,7 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 		't_warehouse'		: item.t_warehouse || ""
 	};
 
-	console.log(args);
+	//console.log(args);
 
 	var required_qty = 0;
 

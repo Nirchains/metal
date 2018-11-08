@@ -19,6 +19,10 @@ frappe.ui.form.on('Timesheet', {
 				}
 			});
 		}
+		if (frm.doc.__islocal) {
+			calculate_employees_times(frm);
+			calculate_activities_times(frm);
+		}
 	}
 });
 
@@ -36,6 +40,24 @@ frappe.ui.form.on('Timesheet Detail', {
 	}
 });
 
+frappe.ui.form.on('Operarios', {
+	operarios_remove: function (frm, cdt, cnd) {
+		calculate_employees_times(frm);
+	},
+	time_in_mins: function (frm, cdt, cdn) {
+		calculate_employees_times(frm);
+	}
+});
+
+frappe.ui.form.on('Timesheet Extra', {
+	timesheet_extra_remove: function (frm, cdt, cnd) {
+		calculate_activities_times(frm);
+	},
+	time_in_mins: function (frm, cdt, cdn) {
+		calculate_activities_times(frm);
+	}
+});
+
 cur_frm.set_query("employee", "operarios", function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
 	return {
@@ -44,3 +66,27 @@ cur_frm.set_query("employee", "operarios", function(doc, cdt, cdn) {
 		]
 	};
 });
+
+var calculate_employees_times = function(frm) {
+	var tl = frm.doc.operarios || [];
+	var total = 0;
+	for(var i=0; i<tl.length; i++) {
+		if (tl[i].time_in_mins) {
+			total += tl[i].time_in_mins;
+		}
+	}
+
+	frm.set_value("employee_time", total);
+}
+
+var calculate_activities_times = function(frm) {
+	var tl = frm.doc.timesheet_extra || [];
+	var total = 0;
+	for(var i=0; i<tl.length; i++) {
+		if (tl[i].time_in_mins) {
+			total += tl[i].time_in_mins;
+		}
+	}
+
+	frm.set_value("activities_time", total);
+}

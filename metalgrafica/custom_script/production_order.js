@@ -75,23 +75,9 @@ frappe.ui.form.on("Production Order", {
 cur_frm.cscript.production_order = {
 	check_properties: function(frm) {
 		//Visibilidad
-		frm.toggle_display("fecha_fabricacion", frm.doc.production_item.startsWith("LATA-"));
+		frm.toggle_display("fecha_fabricacion", (frm.doc.production_item||'').startsWith("LATA-"));
 	},
-	complete_production_order: function(frm, status) {
-		frappe.call({
-			method: "erpnext.manufacturing.doctype.production_order.production_order.stop_unstop",
-			args: {
-				production_order: frm.doc.name,
-				status: status
-			},
-			callback: function(r) {
-				if(r.message) {
-					frm.set_value("status", r.message);
-					frm.reload_doc();
-				}
-			}
-		})
-	}
+	
 }
 
 

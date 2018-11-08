@@ -17,3 +17,4 @@ frappe.ui.form.ControlButton = frappe.ui.form.ControlButton.extend({
 frappe.form.link_formatters['Item'] = function(value, doc) {
 	return value;
 }
+
