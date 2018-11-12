@@ -261,7 +261,11 @@ erpnext.SerialNoBatchSelector = Class.extend({
 						'qty': batch.selected_qty,
 						'batch_no': batch_no,
 						'actual_qty': this.item.actual_qty,
-						'discount_percentage': this.item.discount_percentage
+						'discount_percentage': this.item.discount_percentage,
+						'uom': this.item.uom,
+						'conversion_factor': this.item.conversion_factor,
+						'transfer_qty': batch.selected_qty,
+						't_warehouse': this.item.t_warehouse
 					});
 				} else {
 					row = this.frm.doc.items.find(i => i.batch_no === batch_no);
@@ -337,39 +341,50 @@ erpnext.SerialNoBatchSelector = Class.extend({
 						},
 						onchange: function(e) {
 							let val = this.get_value();
-							if(val.length === 0) {
-								this.grid_row.on_grid_fields_dict
-									.available_qty.set_value(0);
-								return;
-							}
-							let selected_batches = this.grid.grid_rows.map((row) => {
-								//if(row === this.grid_row) {
-								//	return "";
-								//}
-								//console.log(row.on_grid_fields_dict.batch_no);
-								//console.log(row);
-								//return row.on_grid_fields_dict.batch_no.get_value();
-							});
-							if(selected_batches.includes(val)) {
-								this.set_value("");
-								frappe.throw(__(`Batch ${val} already selected.`));
-								return;
-							}
-							if(me.warehouse_details.name) {
-								frappe.call({
-									method: 'erpnext.stock.doctype.batch.batch.get_batch_qty',
-									args: {
-										batch_no: this.doc.batch_no,
-										warehouse: me.warehouse_details.name,
-										item_code: me.item_code
-									},
-									callback: (r) => {
-										this.grid_row.on_grid_fields_dict
-											.available_qty.set_value(r.message || 0);
-										this.grid_row.on_grid_fields_dict
-											.selected_qty.set_value(r.message || 0);
+							if (!helper.IsNullOrEmpty(this.grid_row) && !helper.IsNullOrEmpty(this.grid_row.on_grid_fields_dict)) {
+								if(val.length === 0) {
+									this.grid_row.on_grid_fields_dict
+										.available_qty.set_value(0);
+									return;
+								}
+
+								if (!helper.IsNullOrEmpty(this.grid)) {
+									let selected_batches = this.grid.grid_rows.map((row) => {
+										if(row === this.grid_row) {
+											return "";
+										}
+										//console.log(row.on_grid_fields_dict.batch_no);
+										//console.log(row);
+										if (!helper.IsNullOrEmpty(row.on_grid_fields_dict) && !helper.IsNullOrEmpty(row.on_grid_fields_dict.batch_no)) {
+											return row.on_grid_fields_dict.batch_no.get_value();
+										}
+									});
+
+									if(selected_batches.includes(val)) {
+										this.set_value("");
+										frappe.throw(__(`Batch ${val} already selected.`));
+										return;
 									}
-								});
+								}
+							}				
+							
+							if(me.warehouse_details.name) {
+								if (this.grid_row && this.grid_row.on_grid_fields_dict) {
+									frappe.call({
+										method: 'erpnext.stock.doctype.batch.batch.get_batch_qty',
+										args: {
+											batch_no: this.doc.batch_no,
+											warehouse: me.warehouse_details.name,
+											item_code: me.item_code
+										},
+										callback: (r) => {
+											this.grid_row.on_grid_fields_dict
+												.available_qty.set_value(r.message || 0);
+											this.grid_row.on_grid_fields_dict
+												.selected_qty.set_value(r.message || 0);
+										}
+									});
+								}
 
 							} else {
 								this.set_value("");
