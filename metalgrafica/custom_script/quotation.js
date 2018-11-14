@@ -14,8 +14,13 @@ frappe.ui.form.on("Quotation", {
 		
 	},
 
-	refresh: function(frm) {
-		
+	refresh: function (frm) {
+		if(!frm.doc.__islocal) {
+			frm.add_custom_button(__("Imprimir confirmación"),
+				function() {
+					cur_frm.cscript.quotation.print(frm);
+				});
+		}
 	},
 
 	validate: function(frm) {
@@ -48,3 +53,22 @@ frappe.ui.form.on("Quotation", {
 //Child tables add_fetch
 cur_frm.add_fetch("item_code", "nombre_para_cliente", "nombre_para_cliente");
 cur_frm.add_fetch("item_code", "observaciones", "observaciones");
+
+cur_frm.cscript.quotation = {
+	print: function(frm) {
+		var format = "Confirmacion de pedido";
+		var with_letterhead = true;
+		var lang_code = "ES";
+		var printit = true;
+		var w = window.open(frappe.urllib.get_full_url("/api/method/frappe.utils.print_format.download_pdf?"
+			+ "doctype=" + encodeURIComponent(frm.doc.doctype)
+			+ "&name=" + encodeURIComponent(frm.doc.name)
+			+ (printit ? "&trigger_print=1" : "")
+			+ "&format=" + format
+			+ "&no_letterhead=" + (with_letterhead ? "0" : "1")
+			+ (lang_code ? ("&_lang=" + lang_code) : "")));
+		if (!w) {
+			frappe.msgprint(__("Please enable pop-ups")); return;
+		}
+	}
+}
