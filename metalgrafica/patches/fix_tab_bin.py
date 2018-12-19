@@ -15,7 +15,7 @@ def execute():
 		try:
 			frappe.db.sql("delete from tabBin where item_code=%s and warehouse=%s", (d.item_code, d.warehouse))
 		
-			repost_stock(d.item_code, d.warehouse, allow_zero_rate=True, only_actual=False, only_bin=True)
+			repost_stock(d.item_code, d.warehouse, allow_zero_rate=True, only_actual=False, only_bin=False)
 			
 			frappe.db.commit()
 			print("completado")
