@@ -201,6 +201,11 @@ def get_data():
 				},
 				{
 					"type": "doctype",
+					"name": "Transportista",
+					"description": _("Transportistas."),
+				},
+				{
+					"type": "doctype",
 					"label": _("Customer Group"),
 					"name": "Customer Group",
 					"icon": "fa fa-sitemap",
