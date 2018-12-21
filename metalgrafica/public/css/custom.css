@@ -145,3 +145,6 @@ div[data-link*="modules/"] .app-icon {
 .awesomplete > ul > li:hover[aria-selected="true"] a .text-primary {
   color: #FFFFFF;
 }
+.case-label {
+  text-shadow: none;
+}

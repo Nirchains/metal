@@ -31,7 +31,7 @@ frappe.ui.form.on('Stock Entry', {
 				}
 
 				if(item.s_warehouse) filters["warehouse"] = item.s_warehouse;
-				console.log(filters);
+				//console.log(filters);
 				return {
 					query : "erpnext.controllers.queries.get_batch_no",
 					filters: filters
@@ -56,6 +56,14 @@ frappe.ui.form.on('Stock Entry', {
 		if(frm.doc.__islocal) {
 			if (frm.doc.purpose == "Manufacture") {
 				frm.set_value("numero_bloques", "");
+			}
+			if (!helper.IsNullOrEmpty(frm.doc.production_order)) {
+				frappe.db.get_value("Production Order",frm.doc.production_order,"planned_start_date").then((r) => {
+					var planned_start_date = r.message.planned_start_date;
+					frm.set_value("posting_date",planned_start_date);
+					var planned_start_time = moment(planned_start_date).format("hh:mm:ss");
+					frm.set_value("posting_time", planned_start_time);
+				});
 			}
 		}
 	},

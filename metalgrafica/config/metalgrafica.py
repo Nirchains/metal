@@ -94,6 +94,12 @@ def get_data():
 					"is_query_report": True,
 					"name": "Stock Ledger",
 					"doctype": "Stock Ledger Entry",
+				},
+				{
+					"type": "report",
+					"is_query_report": True,
+					"name": "Batch-Wise Balance History",
+					"doctype": "Batch"
 				}
 
 			]

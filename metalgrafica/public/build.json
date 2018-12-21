@@ -11,7 +11,10 @@
     "js/custom.js": [
         "public/js/fix.js",
         "public/js/extra.js",
-        "public/js/custom.js"
+        "public/js/custom.js",
+        "public/js/util.js",
+        "public/js/helper.js",
+        "public/js/print.js"
     ],
     "js/core.js": [
         "public/js/core/upload.js",
@@ -20,7 +23,8 @@
         "public/js/core/grid.js",
         "public/js/core/grid_row.js",
         "public/js/core/conf.js",
-        "public/js/core/keyboard.js"
+        "public/js/core/keyboard.js",
+        "public/js/core/filters.js"
     ],
     "js/templates.min.js": [
 		"public/js/list/list_item_main.html",
