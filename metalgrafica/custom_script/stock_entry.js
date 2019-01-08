@@ -63,6 +63,7 @@ frappe.ui.form.on('Stock Entry', {
 					frm.set_value("posting_date",planned_start_date);
 					var planned_start_time = moment(planned_start_date).format("hh:mm:ss");
 					frm.set_value("posting_time", planned_start_time);
+					frm.set_value("set_posting_time", 1);
 				});
 			}
 		}
