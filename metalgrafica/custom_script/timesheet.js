@@ -19,7 +19,7 @@ frappe.ui.form.on('Timesheet', {
 				}
 			});
 		}
-		if (!frm.doc.__islocal) {
+		if (!frm.doc.__islocal && frm.doc.status!='Submitted') {
 			calculate_employees_times(frm);
 			calculate_activities_times(frm);
 		}
