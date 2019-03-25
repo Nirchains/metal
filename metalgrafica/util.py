@@ -158,3 +158,32 @@ def cancel_documents(names, doctype):
 @frappe.whitelist()
 def print_doctype(doctype, doc, print_format):
     return frappe.get_print(doctype, doc, print_format = print_format)
+
+@frappe.whitelist()
+def update_production_order(frm, time_sheet):
+	if frm.production_order:
+		pro = frappe.get_doc('Production Order', frm.production_order)
+
+		for timesheet in frm.time_logs:
+			for data in pro.operations:
+				if data.name == timesheet.operation_id:
+					summary = get_actual_timesheet_summary(frm, timesheet.operation_id)
+					data.time_sheet = time_sheet
+					data.completed_qty = summary.completed_qty
+					data.actual_operation_time = summary.mins
+					data.actual_start_time = summary.from_time
+					data.actual_end_time = summary.to_time
+
+		pro.flags.ignore_validate_update_after_submit = True
+		pro.update_operation_status()
+		pro.calculate_operating_cost()
+		pro.set_actual_dates()
+		pro.save()
+
+def get_actual_timesheet_summary(frm, operation_id):
+	"""Returns 'Actual Operating Time'. """
+	return frappe.db.sql("""select
+		sum(tsd.hours*60) as mins, sum(tsd.completed_qty) as completed_qty, min(tsd.from_time) as from_time,
+		max(tsd.to_time) as to_time from `tabTimesheet Detail` as tsd, `tabTimesheet` as ts where
+		ts.production_order = %s and tsd.operation_id = %s and ts.docstatus=1 and ts.name = tsd.parent""",
+		(frm.production_order, operation_id), as_dict=1)[0]

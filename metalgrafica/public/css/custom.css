@@ -91,6 +91,9 @@ h6.uppercase,
 .grid-row .octicon {
   color: #8D99A6;
 }
+.grid-row .btn-danger .octicon {
+  color: #ffffff;
+}
 .grid-heading-row .open {
   display: none;
 }

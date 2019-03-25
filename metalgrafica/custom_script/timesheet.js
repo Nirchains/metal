@@ -7,6 +7,23 @@ frappe.ui.form.on('Timesheet', {
 						frappe.set_route("Form", "Production Order", frm.doc.production_order);
 					}
 				);
+
+				frm.add_custom_button(__("Actualizar orden de producción"),
+					function() {
+						frappe.call({
+							method:"metalgrafica.util.update_production_order",
+							args: {
+							    "frm": frm.doc,
+							    "doc": frm.doc.name,
+							    "print_format": "Orden de Produccion Etiquetas"
+							},
+							callback: function(r) {
+							    var new_window = window.open();
+							    new_window.document.write(r.message);
+							}
+					    });
+					}
+				);
 			}		
 		}
 	},

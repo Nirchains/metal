@@ -2,19 +2,6 @@ cur_frm.add_fetch("production_item", "item_group", "item_group");
 
 frappe.ui.form.on("Production Order", {
 	onload: function(frm) {
-		//Filtramos los productos de tipo "TAPA"
-		frm.fields_dict['operario'].get_query = function(doc) {
-			return {
-				filters: [
-					['Employee', 'status', '=','Active']
-				]
-			}
-		},
-
-		//Eliminamos el 'label' del campo Nombre del operario
-		frm.get_field('nombre_operario').toggle_label(false);
-		frm.refresh_fields();
-
 		if(frm.doc.__islocal) {
 			frm.trigger('bom_no');
 		}
@@ -75,6 +62,7 @@ frappe.ui.form.on("Production Order", {
 cur_frm.cscript.production_order = {
 	check_properties: function(frm) {
 		//Visibilidad
+		//Si son latas, se mostrara la fecha de fabricacion
 		frm.toggle_display("fecha_fabricacion", (frm.doc.production_item||'').startsWith("LATA-"));
 	},
 	
