@@ -54,9 +54,9 @@ frappe.ui.form.on('Stock Entry', {
 		}
 
 		if(frm.doc.__islocal) {
-			if (frm.doc.purpose == "Manufacture") {
+			/*if (frm.doc.purpose == "Manufacture") {
 				frm.set_value("numero_bloques", "");
-			}
+			}*/
 			if (!helper.IsNullOrEmpty(frm.doc.production_order)) {
 				frappe.db.get_value("Production Order",frm.doc.production_order,"planned_start_date").then((r) => {
 					var planned_start_date = r.message.planned_start_date;
