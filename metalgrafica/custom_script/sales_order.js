@@ -118,12 +118,12 @@ cur_frm.cscript.sales_order = {
 		});
 		d.get_input("fetch").on("click", function() {
 			var values = d.get_values();
-			console.log(values);			
+			//console.log(values);			
 			frappe.call({
 				method: "metalgrafica.metalgrafica.doctype.planificar_produccion.planificar_pedido.raise_material_requests",
 				args: values,
 				callback: function(r) {
-					console.log(r.message);
+					//console.log(r.message);
 					/*
 					if(!r.message) {
 						frappe.throw(__("BOM does not contain any stock item"))
