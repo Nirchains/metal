@@ -470,6 +470,50 @@ frappe.ui.form.Grid = Class.extend({
 		}
 	},
 
+	add_new_row_duplicate(idx, callback, show, copy_doc) {
+		if(this.is_editable()) {
+			if(this.frm) {
+				var d = frappe.model.add_child(this.frm.doc, this.df.options, this.df.fieldname, idx);
+				if(copy_doc) {
+					d = this.duplicate_row(d, copy_doc);
+				}
+				d.__unedited = true;
+				this.frm.script_manager.trigger(this.df.fieldname + "_add", d.doctype, d.name);
+				this.refresh();
+			} else {
+				this.df.data.push({name: "batch " + (this.df.data.length+1), idx: this.df.data.length+1});
+				this.refresh();
+			}
+
+			if(show) {
+				if(idx) {
+					// always open inserted rows
+					this.wrapper.find("[data-idx='"+idx+"']").data("grid_row")
+						.toggle_view(true, callback);
+				} else {
+					if(!this.allow_on_grid_editing()) {
+						// open last row only if on-grid-editing is disabled
+						this.wrapper.find(".grid-row:last").data("grid_row")
+							.toggle_view(true, callback);
+					}
+				}
+			}
+
+			return d;
+		}
+	},
+
+	duplicate_row(d, copy_doc) {
+		$.each(copy_doc, function(key, value) {
+			if(!["creation", "modified", "modified_by", "idx", "owner",
+				"parent", "doctype", "name", "parentield"].includes(key)) {
+				d[key] = value;
+			}
+		});
+
+		return d;
+	},
+
 	set_focus_on_row: function(idx) {
 		var me = this;
 		if(!idx) {

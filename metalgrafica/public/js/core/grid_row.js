@@ -104,6 +104,14 @@ frappe.ui.form.GridRow = Class.extend({
 		this.toggle_view(false);
 		this.grid.add_new_row(idx, null, show);
 	},
+	//PFG
+	insert_duplicate: function(show, below, duplicate) {
+		var idx = this.doc.idx;
+		var copy_doc = duplicate ? this.doc : null;
+		if(below) idx ++;
+		this.toggle_view(false);
+		this.grid.add_new_row_duplicate(idx, null, show, copy_doc);
+	},
 	refresh: function() {
 		if(this.frm && this.doc) {
 			this.doc = locals[this.doc.doctype][this.doc.name];

@@ -22,6 +22,7 @@
         "public/js/core/page.js",
         "public/js/core/grid.js",
         "public/js/core/grid_row.js",
+        "public/js/core/grid_row_form.js",
         "public/js/core/conf.js",
         "public/js/core/keyboard.js",
         "public/js/core/filters.js"
