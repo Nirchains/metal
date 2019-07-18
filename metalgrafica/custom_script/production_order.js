@@ -124,7 +124,7 @@ erpnext.production_order["set_custom_buttons"] = function(frm) {
 
 erpnext.production_order["print_tags"] = function(frm) {
 	var format;
-	if (frm.doc.production_item.startsWith("LATA-")) {
+	if (frm.doc.production_item.startsWith("LATA")) {
 	 	format = "Orden de Produccion Palets";
 	} else {
 		format = "Orden de Produccion Etiquetas";
