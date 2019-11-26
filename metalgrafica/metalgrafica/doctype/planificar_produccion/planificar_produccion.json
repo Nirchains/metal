@@ -738,7 +738,7 @@
    "bold": 0, 
    "collapsible": 0, 
    "columns": 0, 
-   "default": "Materias primas - MDS", 
+   "default": "", 
    "fieldname": "purchase_request_for_warehouse", 
    "fieldtype": "Link", 
    "hidden": 0, 
