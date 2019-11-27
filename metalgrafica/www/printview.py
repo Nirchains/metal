@@ -41,7 +41,8 @@ def get_context(context):
 			no_letterhead=frappe.form_dict.no_letterhead),
 		"css": get_print_style(frappe.form_dict.style, print_format),
 		"comment": frappe.session.user,
-		"title": doc.get(meta.title_field) if meta.title_field else doc.name
+		"title": doc.get(meta.title_field) if meta.title_field else doc.name,
+		"has_rtl": True if frappe.local.lang in ["ar", "he", "fa"] else False
 	}
 
 def get_print_format_doc(print_format_name, meta):
@@ -337,6 +338,9 @@ def has_value(df, doc):
 		return False
 
 	elif isinstance(value, string_types) and not strip_html(value).strip():
+		if df.fieldtype in ["Text", "Text Editor"]:
+			return True
+
 		return False
 
 	elif isinstance(value, list) and not len(value):
@@ -418,9 +422,12 @@ def get_visible_columns(data, table_meta, df):
 
 	return columns
 
-def column_has_value(data, fieldname):
+def column_has_value(data, fieldname, col_df):
 	"""Check if at least one cell in column has non-zero and non-blank value"""
 	has_value = False
+
+	if col_df.fieldtype in ['Float', 'Currency'] and not col_df.print_hide_if_no_value:
+		return True
 
 	for row in data:
 		value = row.get(fieldname)
