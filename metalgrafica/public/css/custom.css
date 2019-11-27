@@ -1,3 +1,6 @@
+#page-desktop {
+  background-color: #625C5A !important;
+}
 .grid-static-col.bold {
   background-color: transparent !important;
 }
@@ -6,9 +9,9 @@
   text-align: right;
 }
 textarea.form-control {
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
 }
 /*Deshabilitamos los mensajes de ayuda*/
 .help-message-wrapper {
@@ -30,21 +33,32 @@ textarea.form-control {
   padding-bottom: 3px;
   padding-top: 3px;
 }
-/*Estilos Home*/
-h6.uppercase,
+.page-title .title-text {
+  color: #66A3C0;
+}
+h6.uppercase {
+  color: #66A3C0;
+  font-size: 17px;
+}
 .h6.uppercase {
-  font-size: 14px;
+  color: #66A3C0;
+  font-size: 17px;
 }
 .app-icon {
-  border: 5px solid rgba(255, 255, 255, 0.5);
   border-radius: 45px;
+  border: 10px solid rgba(255, 255, 255, 0.5);
 }
 .app-icon:hover {
-  border: 5px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0px 2px rgba(0, 0, 0, 0.3);
-  -webkit-transition: all 0.2s ease 0s;
   -o-transition: all 0.2s ease 0s;
+  -webkit-transition: all 0.2s ease 0s;
+  box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.7);
   transition: all 0.2s ease 0s;
+}
+div[data-link*="modules/"] .app-icon {
+  border-radius: 0;
+}
+.list-link a[disabled="disabled"] {
+  color: #7574ff;
 }
 .case-wrapper[data-name="Explore"] {
   display: none !important;
@@ -70,12 +84,12 @@ h6.uppercase,
   padding-bottom: 200px;
 }
 .grid-row-open .form-in-grid {
+  height: 90%;
+  left: 5%;
   overflow-y: scroll;
   position: fixed;
-  width: 90%;
-  height: 90%;
   top: 5%;
-  left: 5%;
+  width: 90%;
 }
 .navbar-brand {
   height: inherit;
@@ -104,18 +118,12 @@ h6.uppercase,
   white-space: inherit !important;
   overflow: inherit !important;
 }
-div[data-link*="modules/"] .app-icon {
-  border-radius: 0;
-}
-.list-link a[disabled="disabled"] {
-  color: #7574ff;
-}
 #page-stock-balance-1 .dashboard-list-item {
   padding: 5px 15px;
 }
 /* width */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
@@ -128,6 +136,23 @@ div[data-link*="modules/"] .app-icon {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+#navbar-breadcrumbs > li:last-child a {
+  max-width: 350px;
+  font-size: 29px;
+  font-weight: normal;
+  color: #66A3C0;
+}
+#navbar-breadcrumbs > li:last-child a:before {
+  font-size: 40px;
+  font-weight: normal;
+  color: #66A3C0;
+}
+.form-dashboard-section h6 {
+  font-weight: bold;
+}
+.like-disabled-input.for-description {
+  font-size: inherit;
 }
 @media (min-width: 768px) {
   .modal-dialog {

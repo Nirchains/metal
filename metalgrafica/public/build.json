@@ -1,10 +1,4 @@
 {
-    "css/material.css": [
-        "public/css/material.css"
-    ],
-    "css/custom.css": [
-        "public/css/custom.css"
-    ],
     "css/print.css": [
         "public/css/print.css"
     ],
