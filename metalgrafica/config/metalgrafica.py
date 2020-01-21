@@ -9,7 +9,7 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Production Order",
+					"name": "Work Order",
 					"description": _("Orders released for production."),
 				}
 			]
@@ -21,7 +21,7 @@ def get_data():
 				{
 					"type": "doctype",
 					"name": "Planificar Produccion",
-					"description": _("Generate Material Requests (MRP) and Production Orders."),
+					"description": _("Generate Material Requests (MRP) and Work Orders."),
 				},
 				{
 					"type": "doctype",

@@ -1,5 +1,5 @@
 
-frappe.views.calendar["Production Order"] = {
+frappe.views.calendar["Work Order"] = {
 	field_map: {
 		"start": "planned_start_date",
 		"end": "planned_end_date",
@@ -45,5 +45,5 @@ frappe.views.calendar["Production Order"] = {
 			"label": __("WIP Warehouse")
 		}
 	],
-	get_events_method: "metalgrafica.util.get_production_order_events"
+	get_events_method: "metalgrafica.util.get_work_order_events"
 }

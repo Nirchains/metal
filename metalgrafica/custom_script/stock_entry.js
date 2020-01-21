@@ -40,7 +40,7 @@ frappe.ui.form.on('Stock Entry', {
 		});
 	},
 	onload: function(frm) {
-		if(frm.doc.docstatus < 1 && helper.IsNullOrEmpty(frm.doc.production_order)) {
+		if(frm.doc.docstatus < 1 && helper.IsNullOrEmpty(frm.doc.work_order)) {
 			frappe.call({
 				method: "metalgrafica.util.get_next_batch",
 				callback: function(r) {
@@ -49,16 +49,16 @@ frappe.ui.form.on('Stock Entry', {
 					}					
 				}
 			});
-		} else if(frm.doc.docstatus < 1 && !helper.IsNullOrEmpty(frm.doc.production_order)) {
-			frm.set_value("inicio_de_secuencia", frm.doc.production_order);
+		} else if(frm.doc.docstatus < 1 && !helper.IsNullOrEmpty(frm.doc.work_order)) {
+			frm.set_value("inicio_de_secuencia", frm.doc.work_order);
 		}
 
 		if(frm.doc.__islocal) {
 			/*if (frm.doc.purpose == "Manufacture") {
 				frm.set_value("numero_bloques", "");
 			}*/
-			if (!helper.IsNullOrEmpty(frm.doc.production_order)) {
-				frappe.db.get_value("Production Order",frm.doc.production_order,"planned_start_date").then((r) => {
+			if (!helper.IsNullOrEmpty(frm.doc.work_order)) {
+				frappe.db.get_value("Work Order",frm.doc.work_order,"planned_start_date").then((r) => {
 					var planned_start_date = r.message.planned_start_date;
 					frm.set_value("posting_date",planned_start_date);
 					var planned_start_time = moment(planned_start_date).format("hh:mm:ss");
@@ -93,10 +93,10 @@ frappe.ui.form.on('Stock Entry', {
 		cur_frm.cscript.purchase_receipt.check_properties(frm);
 
 		if(!frm.doc.__islocal) {
-			if (frm.doc.production_order) {
+			if (frm.doc.work_order) {
 				frm.add_custom_button(__("Ver orden de producción"),
 					function() {
-						frappe.set_route("Form", "Production Order", frm.doc.production_order);
+						frappe.set_route("Form", "Work Order", frm.doc.work_order);
 					}
 				);
 			}		
@@ -125,7 +125,7 @@ frappe.ui.form.on('Stock Entry Detail', {
 cur_frm.cscript.purchase_receipt = {
 	check_properties: function (frm) {
 		var bloques_section_visible = false;
-		if ((frm.doc.purpose == 'Material Receipt' && frm.doc.docstatus < 1) || !helper.IsNullOrEmpty(frm.doc.production_order)) {
+		if ((frm.doc.purpose == 'Material Receipt' && frm.doc.docstatus < 1) || !helper.IsNullOrEmpty(frm.doc.work_order)) {
 			bloques_section_visible = true;
 		}
 		frm.toggle_display('bloques_section', bloques_section_visible);
@@ -212,7 +212,7 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 
 	var args = {
 		'item_code'			: item.item_code,
-		'production_order'	: frm.fields_dict.production_order.value || '',
+		'work_order'	: frm.fields_dict.work_order.value || '',
 		'fg_completed_qty'	: frm.fields_dict.fg_completed_qty.value || 0,
 		's_warehouse'		: item.s_warehouse || "",
 		't_warehouse'		: item.t_warehouse || ""

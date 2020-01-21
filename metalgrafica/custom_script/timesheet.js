@@ -1,17 +1,17 @@
 frappe.ui.form.on('Timesheet', {
 	refresh: function(frm) {
 		if(!frm.doc.__islocal) {
-			if (frm.doc.production_order) {
+			if (frm.doc.work_order) {
 				frm.add_custom_button(__("Ver orden de producción"),
 					function() {
-						frappe.set_route("Form", "Production Order", frm.doc.production_order);
+						frappe.set_route("Form", "Work Order", frm.doc.work_order);
 					}
 				);
 
 				frm.add_custom_button(__("Actualizar orden de producción"),
 					function() {
 						frappe.call({
-							method:"metalgrafica.util.update_production_order",
+							method:"metalgrafica.util.update_work_order",
 							args: {
 							    "frm": frm.doc,
 							    "doc": frm.doc.name,

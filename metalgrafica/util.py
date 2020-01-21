@@ -43,7 +43,7 @@ def get_timesheet_events(start, end, filters=None):
 		}, as_dict=True, update={"allDay": 0})
 
 @frappe.whitelist()
-def get_production_order_events(start, end, filters=None):
+def get_work_order_events(start, end, filters=None):
 	"""Returns events for Gantt / Calendar view rendering.
 
 	:param start: Start date-time.
@@ -51,23 +51,23 @@ def get_production_order_events(start, end, filters=None):
 	:param filters: Filters (JSON).
 	"""
 	from frappe.desk.calendar import get_event_conditions
-	conditions = get_event_conditions("Production Order", filters)
+	conditions = get_event_conditions("Work Order", filters)
 
-	#(select count(name) from `tabStock Entry` where `tabStock Entry`.production_order = `tabProduction Order`.name) as stock_entries
+	#(select count(name) from `tabStock Entry` where `tabStock Entry`.work_order = `tabWork Order`.name) as stock_entries
 
-	data = frappe.db.sql("""select `tabProduction Order`.name as name, 
-		concat("<b>", `tabProduction Order`.name, "</b><br>", `tabProduction Order`.production_item) as title, 
-		`tabProduction Order`.planned_start_date as planned_start_date,
-		`tabProduction Order`.planned_end_date as planned_end_date, `tabProduction Order`.status,
-		concat('<b>',`tabProduction Order`.name,'</b><br>',`tabProduction Order Operation`.operation, "<br>Fecha prevista de entrega: ", 
-		COALESCE(`tabProduction Order`.expected_delivery_date, '')) as tooltipMessage,
-		`tabProduction Order`.impreso
-		from `tabProduction Order`
-		left join `tabProduction Order Operation` on `tabProduction Order`.name = `tabProduction Order Operation`.parent and `tabProduction Order Operation`.parenttype="Production Order"
-		where ((ifnull(`tabProduction Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
-				and (`tabProduction Order`.planned_start_date <= %(end)s) \
-			and ((ifnull(`tabProduction Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
-				and ifnull(`tabProduction Order`.planned_end_date, '2199-12-31 00:00:00') >= %(start)s)) {conditions}
+	data = frappe.db.sql("""select `tabWork Order`.name as name, 
+		concat("<b>", `tabWork Order`.name, "</b><br>", `tabWork Order`.production_item) as title, 
+		`tabWork Order`.planned_start_date as planned_start_date,
+		`tabWork Order`.planned_end_date as planned_end_date, `tabWork Order`.status,
+		concat('<b>',`tabWork Order`.name,'</b><br>',`tabWork Order Operation`.operation, "<br>Fecha prevista de entrega: ", 
+		COALESCE(`tabWork Order`.expected_delivery_date, '')) as tooltipMessage,
+		`tabWork Order`.impreso
+		from `tabWork Order`
+		left join `tabWork Order Operation` on `tabWork Order`.name = `tabWork Order Operation`.parent and `tabWork Order Operation`.parenttype="Work Order"
+		where ((ifnull(`tabWork Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
+				and (`tabWork Order`.planned_start_date <= %(end)s) \
+			and ((ifnull(`tabWork Order`.planned_start_date, '0000-00-00')!= '0000-00-00') \
+				and ifnull(`tabWork Order`.planned_end_date, '2199-12-31 00:00:00') >= %(start)s)) {conditions}
 		""".format(conditions=conditions.encode('utf-8')), {
 			"start": start,
 			"end": end
@@ -75,12 +75,12 @@ def get_production_order_events(start, end, filters=None):
 	return data
 
 
-def get_stock_entry_materials(production_order):
+def get_stock_entry_materials(work_order):
 
 	return frappe.db.sql("""select * 
 		from `tabStock Entry`
-		where  `tabStock Entry`.production_order = %s
-		""", production_order, as_dict=True)
+		where  `tabStock Entry`.work_order = %s
+		""", work_order, as_dict=True)
 
 
 @frappe.whitelist()
@@ -160,9 +160,9 @@ def print_doctype(doctype, doc, print_format):
     return frappe.get_print(doctype, doc, print_format = print_format)
 
 @frappe.whitelist()
-def update_production_order(frm, time_sheet):
-	if frm.production_order:
-		pro = frappe.get_doc('Production Order', frm.production_order)
+def update_work_order(frm, time_sheet):
+	if frm.work_order:
+		pro = frappe.get_doc('Work Order', frm.work_order)
 
 		for timesheet in frm.time_logs:
 			for data in pro.operations:
@@ -185,5 +185,5 @@ def get_actual_timesheet_summary(frm, operation_id):
 	return frappe.db.sql("""select
 		sum(tsd.hours*60) as mins, sum(tsd.completed_qty) as completed_qty, min(tsd.from_time) as from_time,
 		max(tsd.to_time) as to_time from `tabTimesheet Detail` as tsd, `tabTimesheet` as ts where
-		ts.production_order = %s and tsd.operation_id = %s and ts.docstatus=1 and ts.name = tsd.parent""",
-		(frm.production_order, operation_id), as_dict=1)[0]
+		ts.work_order = %s and tsd.operation_id = %s and ts.docstatus=1 and ts.name = tsd.parent""",
+		(frm.work_order, operation_id), as_dict=1)[0]

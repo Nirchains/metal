@@ -1,4 +1,4 @@
-frappe.listview_settings['Production Order'] = {
+frappe.listview_settings['Work Order'] = {
 	add_fields: ["bom_no", "status", "impreso", "sales_order", "qty",
 		"produced_qty", "expected_delivery_date", "planned_start_date", "planned_end_date"],
 	filters: [["status", "!=", "Stopped"]],
@@ -19,14 +19,14 @@ frappe.listview_settings['Production Order'] = {
 };
 
 
-frappe.listview_settings['Production Order']['refresh'] =
+frappe.listview_settings['Work Order']['refresh'] =
 	function(me) {
 		// Filtros
 		me.page.add_sidebar_label(__("---------------------"));
 		me.page.add_sidebar_item(__("FILTRAR POR OPERACIÓN"), function() {
 			var publish_filter = me.filter_list.get_filter("production_item");
 			//Doctype, fieldname, condition, value, hidden
-			me.filter_list.add_filter("Production Order Operation", "operation", '=', "");
+			me.filter_list.add_filter("Work Order Operation", "operation", '=', "");
 			me.run();
 		});
 

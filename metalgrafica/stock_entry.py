@@ -14,12 +14,12 @@ from erpnext.manufacturing.doctype.bom.bom import validate_bom_no
 import json
 
 @frappe.whitelist()
-def get_item_qty_required(item_code, production_order, fg_completed_qty, s_warehouse, t_warehouse):
+def get_item_qty_required(item_code, work_order, fg_completed_qty, s_warehouse, t_warehouse):
 	pro_doc = frappe._dict()
 	qty_required = 0
-	if str(production_order) != '':
-		pro_doc = frappe.get_doc('Production Order', production_order)
-		item_dict = get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse)
+	if str(work_order) != '':
+		pro_doc = frappe.get_doc('Work Order', work_order)
+		item_dict = get_pending_raw_materials(work_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse)
 		for d in item_dict:
 			if item_dict[d].get('item_code') == item_code:
 				qty_required = flt(item_dict[d].get('qty'))
@@ -27,9 +27,9 @@ def get_item_qty_required(item_code, production_order, fg_completed_qty, s_wareh
 		frappe.msgprint("La generaci&oacute;n de lotes no est&aacute; disponible para esta operaci&oacute;n")
 	return qty_required
 
-def get_pro_order_required_items(production_order, s_warehouse, t_warehouse):
+def get_pro_order_required_items(work_order, s_warehouse, t_warehouse):
 	item_dict = frappe._dict()
-	pro_order = frappe.get_doc("Production Order", production_order)
+	pro_order = frappe.get_doc("Work Order", work_order)
 	if not frappe.db.get_value("Warehouse", pro_order.wip_warehouse, "is_group"):
 		wip_warehouse = pro_order.wip_warehouse
 	else:
@@ -47,12 +47,12 @@ def get_pro_order_required_items(production_order, s_warehouse, t_warehouse):
 	return item_dict
 
 @frappe.whitelist()
-def get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse):
+def get_pending_raw_materials(work_order, pro_doc, fg_completed_qty, s_warehouse, t_warehouse):
 	"""
 		issue (item quantity) that is pending to issue or desire to transfer,
 		whichever is less
 	"""
-	item_dict = get_pro_order_required_items(production_order, s_warehouse, t_warehouse)
+	item_dict = get_pro_order_required_items(work_order, s_warehouse, t_warehouse)
 
 	max_qty = flt(pro_doc.qty)
 	for item, item_details in item_dict.items():
@@ -73,6 +73,6 @@ def get_pending_raw_materials(production_order, pro_doc, fg_completed_qty, s_war
 
 	# show some message
 	if not len(item_dict):
-		frappe.msgprint(_("""All items have already been transferred for this Production Order."""))
+		frappe.msgprint(_("""All items have already been transferred for this Work Order."""))
 
 	return item_dict

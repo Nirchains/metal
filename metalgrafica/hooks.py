@@ -48,8 +48,8 @@ doctype_js = {
     "BOM": [
         "custom_script/bom.js"
     ],
-    "Production Order": [
-        "custom_script/production_order.js"
+    "Work Order": [
+        "custom_script/work_order.js"
     ],
     "Purchase Receipt": [
         "custom_script/purchase_receipt.js"
@@ -77,7 +77,7 @@ doctype_js = {
 doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
     "Customer": ["custom_script/customer_list.js"],
-    "Production Order": ["custom_script/production_order_list.js"],
+    "Work Order": ["custom_script/work_order_list.js"],
     "BOM": ["custom_script/bom_list.js"],
     "Quotation": ["custom_script/quotation_list.js"],
     "Material Request": ["custom_script/material_request_list.js"]
@@ -89,7 +89,7 @@ doctype_tree_js = {
 
 doctype_calendar_js = {
     "Timesheet": ["custom_script/timesheet_calendar.js"],
-    "Production Order": ["custom_script/production_order_calendar.js"]
+    "Work Order": ["custom_script/work_order_calendar.js"]
 }
 
 dump_report_map = "metalgrafica.report_data_map.data_map"
