@@ -8,7 +8,6 @@ from frappe import _
 
 from frappe.modules import get_doc_path
 from frappe.utils import cint, strip_html
-from markdown2 import markdown
 from six import string_types
 
 no_cache = 1
@@ -97,9 +96,9 @@ def get_html(doc, name=None, print_format=None, meta=None,
 
 	# determine template
 	if print_format:
-		doc._show_section_headings = print_format.show_section_headings
-		doc._line_breaks = print_format.line_breaks
-		doc._align_labels_right = print_format.align_labels_right
+		doc.print_section_headings = print_format.show_section_headings
+		doc.print_line_breaks = print_format.line_breaks
+		doc.align_labels_right = print_format.align_labels_right
 
 		def get_template_from_string():
 			return jenv.from_string(get_print_format(doc.doctype,
@@ -169,7 +168,7 @@ def convert_markdown(doc, meta):
 		if field.fieldtype=='Text Editor':
 			value = doc.get(field.fieldname)
 			if value and '<!-- markdown -->' in value:
-				doc.set(field.fieldname, markdown(value))
+				doc.set(field.fieldname, frappe.utils.md_to_html(value))
 
 @frappe.whitelist()
 def get_html_and_style(doc, name=None, print_format=None, meta=None,
@@ -327,7 +326,7 @@ def is_visible(df, doc):
 		if df.fieldname in doc.hide_in_print_layout:
 			return False
 
-	if df.permlevel > 0 and not doc.has_permlevel_access_to(df.fieldname, df):
+	if (df.permlevel or 0) > 0 and not doc.has_permlevel_access_to(df.fieldname, df):
 		return False
 
 	return not doc.is_print_hide(df.fieldname, df)
@@ -402,7 +401,7 @@ def get_visible_columns(data, table_meta, df):
 	doc = data[0] or frappe.new_doc(df.options)
 	def add_column(col_df):
 		return is_visible(col_df, doc) \
-			and column_has_value(data, col_df.get("fieldname"))
+			and column_has_value(data, col_df.get("fieldname"), col_df)
 
 	if df.get("visible_columns"):
 		# columns specified by column builder

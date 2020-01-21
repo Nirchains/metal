@@ -8,23 +8,23 @@
         "public/js/custom.js",
         "public/js/util.js",
         "public/js/helper.js",
-        "public/js/print.js"
+        "public/js/frappe/form/print.js"
     ],
     "js/core.js": [
-        "public/js/core/upload.js",
-        "public/js/core/calendar.js",
-        "public/js/core/page.js",
-        "public/js/core/grid.js",
-        "public/js/core/grid_row.js",
-        "public/js/core/grid_row_form.js",
+        "public/js/frappe/upload.js",
+        "public/js/frappe/views/calendar/calendar.js",
+        "public/js/frappe/ui/page.js",
+        "public/js/frappe/form/grid.js",
+        "public/js/frappe/form/grid_row.js",
+        "public/js/frappe/form/grid_row_form.js",
         "public/js/core/conf.js",
-        "public/js/core/keyboard.js",
-        "public/js/core/filters.js"
+        "public/js/frappe/ui/keyboard.js",
+        "public/js/frappe/ui/filters/filters.js"
     ],
     "js/templates.min.js": [
-		"public/js/list/list_item_main.html",
-		"public/js/list/list_item_row.html",
-        "public/js/list/list_item_subject.html"
+		"public/js/frappe/list/list_item_main.html",
+		"public/js/frappe/list/list_item_row.html",
+        "public/js/frappe/list/list_item_subject.html"
 	],
     "js/item-dashboard.min.js": [
         "metalgrafica/dashboard/item_dashboard.html",
