@@ -50,7 +50,7 @@ frappe.ui.form.on("Item", {
 			$('input[data-fieldname="item_group"]').focus();
 		}
 
-		show_tooltips();
+		util.show_tooltips();
 	},
 
 	onload_post_render: function(frm) {
@@ -335,7 +335,7 @@ cur_frm.cscript.item = {
 					case 'Todos los Grupos de Artículos':
 						//Si seleccionamos el tipo "PRODUCTO" finales, seleccionamos algunas opciones por defecto para facilitar la inserción de datos
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Materias primas - MDS');
+						cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',1);
 						frm.set_value('has_batch_no',1);
@@ -344,7 +344,7 @@ cur_frm.cscript.item = {
 
 					case 'OPERACION':
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Ficticio - MDS');
+						cur_frm.cscript.item.load_default_warehouse(frm, 'Ficticio - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('has_batch_no',0);
@@ -354,7 +354,7 @@ cur_frm.cscript.item = {
 					case 'SUB-ENSAMBLE':
 					case 'TIRA':
 						frm.set_value('default_material_request_type','Manufacture');
-						frm.set_value('default_warehouse','Materias primas - MDS');
+						cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
 						frm.set_value('is_purchase_item',0);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('has_batch_no',1);
@@ -363,7 +363,7 @@ cur_frm.cscript.item = {
 
 					case 'HOJA':
 						frm.set_value('default_material_request_type','Purchase');
-						frm.set_value('default_warehouse','Materias primas - MDS');
+						cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
 						frm.set_value('is_sub_contracted_item', 1);
@@ -375,10 +375,10 @@ cur_frm.cscript.item = {
 					case 'CONSUMIBLE':
 						frm.set_value('default_material_request_type','Purchase');
 						if (frm.doc.item_group == 'HOJA VIRGEN') {
-							frm.set_value('default_warehouse','LITALSA - MDS');
+							cur_frm.cscript.item.load_default_warehouse(frm, 'LITALSA - MDS');
 							frm.set_value('purchase_uom','Kilogramo')
 						} else {
-							frm.set_value('default_warehouse','Materias primas - MDS');
+							cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
 						}
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
@@ -389,11 +389,19 @@ cur_frm.cscript.item = {
 					default:
 						frm.set_value('has_batch_no',1);
 						frm.set_value('create_new_batch',0);
-						frm.set_value('default_warehouse','Materias primas - MDS');
+						cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
 						break;
 				}
 			});
 		}
+	},
+
+	load_default_warehouse: function(frm, default_warehouse) {
+		var d = frappe.model.add_child(frm.doc, "Item Defaut", "item_defaults");
+		frappe.model.set_value(d.doctype, d.name, "company", "Metalgráfica del Sur");
+		frappe.model.set_value(d.doctype, d.name, "default_warehouse", default_warehouse);
+		refresh_field("item_defaults");
+
 	},
 
 	load_bom_materials_from_template: function(frm) {
@@ -444,7 +452,8 @@ cur_frm.cscript.item = {
 			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
 						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
 			
-			doc = {}
+			var doc = {};
+
 			$.each(keys, function(index, value) {
 				if (!helper.IsNullOrEmpty(frm.doc[value])) {
 					doc[value] = frm.doc[value];
@@ -495,7 +504,8 @@ cur_frm.cscript.item = {
 		
 			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia']
 			
-			doc = {}
+			var doc = {};
+
 			$.each(keys, function(index, value) {
 				if (!helper.IsNullOrEmpty(frm.doc[value])) {
 					doc[value] = frm.doc[value];
@@ -552,7 +562,7 @@ cur_frm.cscript.item = {
 						'color', 'color_codigo']
 						//'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
 			
-			doc = {}
+			var doc = {};
 			$.each(keys, function(index, value) {
 				if (!helper.IsNullOrEmpty(frm.doc[value])) {
 					doc[value] = frm.doc[value];

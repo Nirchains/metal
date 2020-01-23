@@ -1,4 +1,6 @@
-helper = {
+frappe.provide("helper");
+
+$.extend(helper, {
 	IsNull: function (obj) {
         return (obj === null || obj === undefined || obj === 'undefined');
     },
@@ -47,4 +49,4 @@ helper = {
     	return (arr.indexOf(obj) != -1);
     }
 
-}
+});

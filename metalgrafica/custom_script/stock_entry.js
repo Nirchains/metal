@@ -69,6 +69,7 @@ frappe.ui.form.on('Stock Entry', {
 		}
 	},
 	generar_bloques: function(frm) {
+		var item, numero_bloques;
 		//Generamos los bloques
 		if (!helper.ArrayIsNullOrEmpty(frm.doc.items)) {
 			item = frm.doc.items[frm.doc.items.length-1];
@@ -104,6 +105,10 @@ frappe.ui.form.on('Stock Entry', {
 	},
 	purpose: function(frm) {
 		cur_frm.cscript.purchase_receipt.check_properties(frm);
+	},
+	work_order: function(frm) {
+		cur_frm.cscript.purchase_receipt.check_properties(frm);
+		frm.set_value("inicio_de_secuencia", frm.doc.work_order);
 	},
 	get_batch_items: function(frm) {
 		

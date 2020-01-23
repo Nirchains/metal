@@ -39,6 +39,23 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 	load_bom_materials_from_item: function(frm) {
 		if (frm.doc["item"]) {
 			frappe.model.clear_table(frm.doc,"items");
+				
+			frappe.call({
+				doc: frm.doc,
+				method: "load_bom_materials_from_item",
+				freeze: true,
+				callback: function(r) {
+					if (!r.exc) {
+						frm.refresh_fields();
+						erpnext.bom.calculate_rm_cost(doc);
+						erpnext.bom.calculate_scrap_materials_cost(doc);
+						erpnext.bom.calculate_total(doc);
+					}
+				}
+			});
+		
+/*
+
 			frappe.call({
 				method: "metalgrafica.bom.load_bom_materials_from_item",
 				args: {
@@ -48,11 +65,11 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 					if(!r.message) {
 						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
 					} else {
-						i = 0;
-						frm.cscript.set_materiales(frm, r);
+						var i = 0;
+						frm.cscript.set_materiales(frm, r, i);
 					}					
 				}
-			});
+			});*/
 		}
 	},
 
@@ -111,8 +128,8 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 
 
 	//Función recursiva para colocar la lista de materiales
-	set_materiales: function(frm, r) {
-	
+	set_materiales: function(frm, r, i) {
+		
 		var j = r.message.length;
 		var d;
 		setTimeout(function () {
@@ -123,7 +140,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 			frappe.model.set_value(d.doctype, d.name, "qty", r.message[i].qty);
 			i++;
 			if (i < j) {
-				frm.cscript.set_materiales(frm, r);
+				frm.cscript.set_materiales(frm, r, i);
 			}
 		}, 500);
 

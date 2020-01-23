@@ -83,10 +83,11 @@ erpnext.SerialNoBatchSelector = Class.extend({
 							item_code: me.item_code
 						},
 						callback: (r) => {
+							//console.log(r);
 							me.dialog.fields_dict.batches.df.data = [];
 							total_qty = 0;
 							$.each(r.message || [], function(i, d) {
-								if (total_qty < me.dialog.fields_dict.required_qty.get_value()){
+								if (total_qty < me.dialog.fields_dict.required_qty.get_value() && d.qty > 0 ){
 									total_qty += d.qty;
 					    			me.dialog.fields_dict.batches.df.data.push({
 					    				'name': 'batch ' + i,
@@ -504,7 +505,7 @@ function automatic_batch_fill(warehouse, item_code) {
 			item_code: item_code
 		},
 		callback: (r) => {
-			console.log(r);
+			//console.log(r);
 		}
 	});
 	/*

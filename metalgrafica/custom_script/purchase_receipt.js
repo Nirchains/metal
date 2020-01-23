@@ -18,6 +18,7 @@ frappe.ui.form.on("Purchase Receipt", {
 		}
 	},
 	generar_bloques: function(frm) {
+		var item;
 		//Generamos los bloques
 		if (!helper.ArrayIsNullOrEmpty(frm.doc.items)) {
 			item = frm.doc.items[0];

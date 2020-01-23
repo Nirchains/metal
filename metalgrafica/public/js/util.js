@@ -1,4 +1,6 @@
-util = {
+frappe.provide("util");
+
+$.extend(util, {
 	get: function(frm, doctype, name, filters, callback) {
 		return frappe.call({
 			method: "frappe.client.get",
@@ -45,5 +47,12 @@ util = {
 	toggle_display_and_not_required: function(frm,name,condition) {
 		frm.toggle_display(name, condition);
 		frm.toggle_reqd(name, false);
+	},
+	show_tooltips: function () {
+		$('input').hover(
+		  	function(){
+		    	$(this).attr('title', $(this).val());
+		  	}
+		);
 	}
-};
+});
