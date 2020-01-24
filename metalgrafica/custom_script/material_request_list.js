@@ -24,19 +24,5 @@ frappe.listview_settings['Material Request'] = {
 			list_view.call_for_selected_items(method, { doctype: "Material Request" });
 		});
 		
-	},
-	refresh: function(me) {
-		// Filtros
-		me.page.add_sidebar_label(__('----------'));
-		me.page.add_sidebar_label(__('Filtros:'));
-        me.page.add_sidebar_item(__('Buscar por producto'), function() {
-			var publish_filter = me.filter_list.get_filter("items.item_code");
-			publish_filter && publish_filter.remove(true);
-			//Doctype, fieldname, condition, value, hidden
-			me.filter_list.add_filter("Material Request Item", "item_code", '=', "");
-			me.run();
-		});
-        
-	
 	}
 };

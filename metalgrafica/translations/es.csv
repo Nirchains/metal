@@ -27,3 +27,6 @@ DocType: Sales Order,"Create for full quantity, ignoring quantity already on ord
 DocType: BOM,Transfer Material Against, Transferencia de materiales contra
 Doctype: BOM,Allow Same Item Multiple Times,Permitir introducir un elemento varias veces
 DocType: Stock Entry,Target Warehouse Name,Dirección del Almacén de Destino
+DocType: Purchase Order,Set Target Warehouse, Almacén de destino
+DocType: Purchase Order,Supply Raw Materials,Suministro de materia prima subcontratada
+DocType: Purchase Invoice Item,Include Exploded Items,Incluir Elementos Explotados

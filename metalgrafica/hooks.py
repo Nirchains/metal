@@ -22,7 +22,8 @@ app_include_css = [
 app_include_js = [
 	"/assets/js/custom.js",
     "/assets/js/core.js",
-	"/assets/js/templates.min.js"
+	"/assets/js/templates.min.js",
+    "/assets/js/fix.js"
 ]
 
 # include js, css files in header of web template
@@ -76,9 +77,7 @@ doctype_js = {
 
 doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
-    "Customer": ["custom_script/customer_list.js"],
-    "Work Order": ["custom_script/work_order_list.js"],
-    "BOM": ["custom_script/bom_list.js"],
+    "Work Order": ["custom_script/production_order_list.js"],
     "Quotation": ["custom_script/quotation_list.js"],
     "Material Request": ["custom_script/material_request_list.js"]
 }

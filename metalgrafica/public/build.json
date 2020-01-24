@@ -2,8 +2,10 @@
     "css/print.css": [
         "public/css/print.css"
     ],
+    "js/fix.js": [
+        "public/js/fix.js"
+    ],
     "js/custom.js": [
-        "public/js/fix.js",
         "public/js/extra.js",
         "public/js/custom.js",
         "public/js/util.js",
