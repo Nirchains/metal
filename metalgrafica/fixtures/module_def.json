@@ -1,11 +1,98 @@
 [
  {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2017-10-03 19:05:04.081546", 
+  "module_name": "Education", 
+  "name": "Education", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": "Education"
+ }, 
+ {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2019-11-26 13:22:46.253000", 
+  "module_name": "Non Profit", 
+  "name": "Non Profit", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2019-11-26 13:23:06.055738", 
+  "module_name": "Assets", 
+  "name": "Assets", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2019-11-26 13:25:21.477556", 
+  "module_name": "Agriculture", 
+  "name": "Agriculture", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2020-01-21 16:18:12.907646", 
+  "module_name": "ERPNext Integrations", 
+  "name": "ERPNext Integrations", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
+  "app_name": "frappe", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2020-01-21 16:21:03.106738", 
+  "module_name": "Chat", 
+  "name": "Chat", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
+  "app_name": "erpnext", 
+  "docstatus": 0, 
+  "doctype": "Module Def", 
+  "modified": "2020-01-21 16:23:34.487838", 
+  "module_name": "Hotels", 
+  "name": "Hotels", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
+  "restrict_to_domain": null
+ }, 
+ {
   "app_name": "frappe", 
   "docstatus": 0, 
   "doctype": "Module Def", 
   "modified": "2017-01-30 18:46:14.006994", 
   "module_name": "Core", 
   "name": "Core", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -15,6 +102,9 @@
   "modified": "2017-01-30 18:46:14.657456", 
   "module_name": "Website", 
   "name": "Website", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -24,6 +114,9 @@
   "modified": "2017-01-30 18:46:15.529131", 
   "module_name": "Workflow", 
   "name": "Workflow", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -33,6 +126,9 @@
   "modified": "2017-01-30 18:46:15.737452", 
   "module_name": "Email", 
   "name": "Email", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -42,6 +138,9 @@
   "modified": "2017-01-30 18:46:16.375521", 
   "module_name": "Custom", 
   "name": "Custom", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -51,6 +150,9 @@
   "modified": "2017-01-30 18:46:16.486400", 
   "module_name": "Geo", 
   "name": "Geo", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -60,6 +162,9 @@
   "modified": "2017-01-30 18:46:16.572862", 
   "module_name": "Desk", 
   "name": "Desk", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -69,6 +174,9 @@
   "modified": "2017-01-30 18:46:17.103799", 
   "module_name": "Integrations", 
   "name": "Integrations", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -78,6 +186,9 @@
   "modified": "2017-01-30 18:48:48.296344", 
   "module_name": "Accounts", 
   "name": "Accounts", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -87,6 +198,9 @@
   "modified": "2018-05-25 20:19:24.494773", 
   "module_name": "CRM", 
   "name": "CRM", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": "Oculto"
  }, 
  {
@@ -96,6 +210,9 @@
   "modified": "2017-01-30 18:48:48.302211", 
   "module_name": "Buying", 
   "name": "Buying", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -105,6 +222,9 @@
   "modified": "2017-01-30 18:48:48.305341", 
   "module_name": "Projects", 
   "name": "Projects", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -114,6 +234,9 @@
   "modified": "2017-01-30 18:48:48.307392", 
   "module_name": "Selling", 
   "name": "Selling", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -123,6 +246,9 @@
   "modified": "2017-01-30 18:48:48.308936", 
   "module_name": "Setup", 
   "name": "Setup", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -132,6 +258,9 @@
   "modified": "2017-01-30 18:48:48.310476", 
   "module_name": "HR", 
   "name": "HR", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -141,6 +270,9 @@
   "modified": "2017-01-30 18:48:48.311994", 
   "module_name": "Manufacturing", 
   "name": "Manufacturing", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -150,6 +282,9 @@
   "modified": "2017-01-30 18:48:48.313474", 
   "module_name": "Stock", 
   "name": "Stock", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -159,6 +294,9 @@
   "modified": "2017-01-30 18:48:48.314975", 
   "module_name": "Support", 
   "name": "Support", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -168,6 +306,9 @@
   "modified": "2017-01-30 18:48:48.316447", 
   "module_name": "Utilities", 
   "name": "Utilities", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -177,6 +318,9 @@
   "modified": "2017-01-30 18:48:48.318051", 
   "module_name": "Shopping Cart", 
   "name": "Shopping Cart", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -186,6 +330,9 @@
   "modified": "2017-01-30 18:48:48.319627", 
   "module_name": "Hub Node", 
   "name": "Hub Node", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -195,6 +342,9 @@
   "modified": "2017-01-30 18:48:48.321134", 
   "module_name": "Portal", 
   "name": "Portal", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -204,6 +354,9 @@
   "modified": "2018-05-25 20:16:51.859311", 
   "module_name": "Maintenance", 
   "name": "Maintenance", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": "Oculto"
  }, 
  {
@@ -213,6 +366,9 @@
   "modified": "2017-10-03 19:05:04.081546", 
   "module_name": "Schools", 
   "name": "Schools", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": "Education"
  }, 
  {
@@ -222,6 +378,9 @@
   "modified": "2017-02-06 20:13:07.837658", 
   "module_name": "Metalgrafica", 
   "name": "Metalgrafica", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -231,6 +390,9 @@
   "modified": "2017-05-19 13:44:58.688329", 
   "module_name": "Printing", 
   "name": "Printing", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -240,6 +402,9 @@
   "modified": "2017-10-03 18:25:20.896166", 
   "module_name": "Contacts", 
   "name": "Contacts", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -249,6 +414,9 @@
   "modified": "2017-10-03 19:05:01.674759", 
   "module_name": "Regional", 
   "name": "Regional", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -258,6 +426,9 @@
   "modified": "2018-05-25 20:22:46.357653", 
   "module_name": "Healthcare", 
   "name": "Healthcare", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": "Oculto"
  }, 
  {
@@ -267,6 +438,9 @@
   "modified": "2017-12-01 20:01:36.107437", 
   "module_name": "Data Migration", 
   "name": "Data Migration", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": null
  }, 
  {
@@ -276,6 +450,9 @@
   "modified": "2018-05-25 20:22:33.175710", 
   "module_name": "Restaurant", 
   "name": "Restaurant", 
+  "parent": null, 
+  "parentfield": null, 
+  "parenttype": null, 
   "restrict_to_domain": "Oculto"
  }
 ]
