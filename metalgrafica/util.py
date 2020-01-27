@@ -124,7 +124,9 @@ def clean_batch():
 @frappe.whitelist()
 def get_next_batch():
 	'''Devuelve el siguiente numero de lote disponible'''
-	batch_no = frappe.db.sql("""select IFNULL(max(name)+1, 1) valor from tabBatch where automatic = 1""")[0][0]
+	batch_no = frappe.db.sql("""select IFNULL(max(CAST(name) as unsigned)+1, 1) valor 
+							from tabBatch 
+							where automatic = 1 and name REGEXP '^[1-9][0-9]*$' """)[0][0]
 	exist = frappe.db.sql("""select count(name) from tabBatch where name=%s""", batch_no)[0][0]
 	if exist > 0:
 		batch_no = str(int(batch_no) + 1)

@@ -444,7 +444,8 @@ cur_frm.cscript.item = {
 			var keys = ['item_group', 'litografia', 'composicion', 'acabado', 'formato', 'formato_del_cuerpo', 'formato_contenedor', 'brand', 'fondo', 'tapa', 'diametro', 'largo', 'ancho', 'alto', 'espesor', 'color',
 						'posicion', 'panelado', 'palet', 'numero_de_capas', 'numero_envases_capa', 'plano_de_litografia']
 			
-			doc = {}
+			var doc = {};
+			
 			$.each(keys, function(index, value) {
 				if (!helper.IsNullOrEmpty(frm.doc[value])) {
 					doc[value] = frm.doc[value];
