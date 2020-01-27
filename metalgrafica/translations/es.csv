@@ -30,3 +30,9 @@ DocType: Stock Entry,Target Warehouse Name,Dirección del Almacén de Destino
 DocType: Purchase Order,Set Target Warehouse, Almacén de destino
 DocType: Purchase Order,Supply Raw Materials,Suministro de materia prima subcontratada
 DocType: Purchase Invoice Item,Include Exploded Items,Incluir Elementos Explotados
+DocType: Planificar Produccion, Create Production Orders, Crear órdenes de producción
+DocType: Planificar Produccion, Create Material Requests, Crear requisición de materiales
+DocType: Planificar Produccion, Download Materials Required, Descargar materiales necesarios
+DocType: Planificar Produccion,Download a report containing all raw materials with their latest inventory status,Descargar un informe con todas las materias primas y su inventario actual
+DocType: Planificar Produccion, Only Obtain Raw Materials, Sólo obtención de materias primas
+
