@@ -397,10 +397,10 @@ cur_frm.cscript.item = {
 	},
 
 	load_default_warehouse: function(frm, default_warehouse) {
-		var d = frappe.model.add_child(frm.doc, "Item Defaut", "item_defaults");
+		/*var d = frappe.model.add_child(frm.doc, "Item Defaut", "item_defaults");
 		frappe.model.set_value(d.doctype, d.name, "company", "Metalgráfica del Sur");
 		frappe.model.set_value(d.doctype, d.name, "default_warehouse", default_warehouse);
-		refresh_field("item_defaults");
+		refresh_field("item_defaults");*/
 
 	},
 
