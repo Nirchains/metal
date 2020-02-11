@@ -497,13 +497,15 @@ class PlanificarProduccion(Document):
 	def get_item_projected_qty(self,item,default_warehouse):
 		conditions = ""
 		#if self.purchase_request_for_warehouse:
-		conditions = " and warehouse='{0}'".format(frappe.db.escape(default_warehouse or self.purchase_request_for_warehouse))
+		conditions = " and warehouse={0}".format(frappe.db.escape(default_warehouse or self.purchase_request_for_warehouse))
 
-		item_projected_qty = frappe.db.sql("""
+		sql = """
 			select ifnull(sum(projected_qty),0) as qty
 			from `tabBin`
 			where item_code = %(item_code)s {conditions}
-		""".format(conditions=conditions), { "item_code": item }, as_dict=1)
+		""".format(conditions=conditions)
+
+		item_projected_qty = frappe.db.sql(sql, { "item_code": item }, as_dict=1)
 
 		return item_projected_qty[0].qty
 

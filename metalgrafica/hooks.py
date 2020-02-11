@@ -16,8 +16,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 app_include_css = [
-	"/assets/metalgrafica/css/custom-material.css", 
-	"/assets/metalgrafica/css/custom.css"
+	"/assets/css/custom-material.css"
 ]
 app_include_js = [
 	"/assets/js/custom.js",

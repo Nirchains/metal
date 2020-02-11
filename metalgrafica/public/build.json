@@ -1,4 +1,8 @@
 {
+    "css/custom-material.css": [
+        "public/less/custom-material.less",
+        "public/less/custom.less"
+    ],
     "css/print.css": [
         "public/css/print.css"
     ],
