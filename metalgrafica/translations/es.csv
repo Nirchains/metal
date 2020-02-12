@@ -35,4 +35,5 @@ DocType: Planificar Produccion, Create Material Requests, Crear requisición de 
 DocType: Planificar Produccion, Download Materials Required, Descargar materiales necesarios
 DocType: Planificar Produccion,Download a report containing all raw materials with their latest inventory status,Descargar un informe con todas las materias primas y su inventario actual
 DocType: Planificar Produccion, Only Obtain Raw Materials, Sólo obtención de materias primas
+DocType: Work Order, Timesheet created:, Registro de horas creado
 

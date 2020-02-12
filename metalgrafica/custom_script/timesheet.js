@@ -7,23 +7,25 @@ frappe.ui.form.on('Timesheet', {
 						frappe.set_route("Form", "Work Order", frm.doc.work_order);
 					}
 				);
-
+				/*
 				frm.add_custom_button(__("Actualizar orden de producción"),
 					function() {
+						var args = {
+							    "work_order": frm.doc.work_order, 
+							    "time_logs": frm.doc.time_logs, 
+							    "time_sheet": frm.doc.name
+							};
+						console.log(args);
 						frappe.call({
 							method:"metalgrafica.util.update_work_order",
-							args: {
-							    "frm": frm.doc,
-							    "doc": frm.doc.name,
-							    "print_format": "Orden de Produccion Etiquetas"
-							},
+							args: args,
 							callback: function(r) {
 							    var new_window = window.open();
 							    new_window.document.write(r.message);
 							}
 					    });
 					}
-				);
+				);*/
 			}		
 		}
 	},
@@ -32,7 +34,7 @@ frappe.ui.form.on('Timesheet', {
 			var timesheet_detail = frm.doc.time_logs;
 			$.each(timesheet_detail, function(i, item){
 				if (!helper.IsNullOrEmpty(item.hours)) {
-					frappe.model.set_value(item.doctype, item.name, 'minutos', (item.hours*60).toString());
+					frappe.model.set_value(item.doctype, item.name, 'minutos', (item.hours*60));
 				}
 			});
 		}

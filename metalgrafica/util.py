@@ -161,15 +161,16 @@ def cancel_documents(names, doctype):
 def print_doctype(doctype, doc, print_format):
     return frappe.get_print(doctype, doc, print_format = print_format)
 
+#deprecatedPFG
 @frappe.whitelist()
-def update_work_order(frm, time_sheet):
-	if frm.work_order:
-		pro = frappe.get_doc('Work Order', frm.work_order)
+def update_work_order(work_order, time_logs, time_sheet):
+	if work_order:
+		pro = frappe.get_doc('Work Order', work_order)
 
-		for timesheet in frm.time_logs:
+		for timesheet in json.loads(time_logs or []):
 			for data in pro.operations:
-				if data.name == timesheet.operation_id:
-					summary = get_actual_timesheet_summary(frm, timesheet.operation_id)
+				if data.name == timesheet["operation_id"]:
+					summary = get_actual_timesheet_summary(work_order, timesheet["operation_id"])
 					data.time_sheet = time_sheet
 					data.completed_qty = summary.completed_qty
 					data.actual_operation_time = summary.mins
@@ -182,10 +183,11 @@ def update_work_order(frm, time_sheet):
 		pro.set_actual_dates()
 		pro.save()
 
-def get_actual_timesheet_summary(frm, operation_id):
+#deprecatedPFG
+def get_actual_timesheet_summary(work_order, operation_id):
 	"""Returns 'Actual Operating Time'. """
 	return frappe.db.sql("""select
 		sum(tsd.hours*60) as mins, sum(tsd.completed_qty) as completed_qty, min(tsd.from_time) as from_time,
 		max(tsd.to_time) as to_time from `tabTimesheet Detail` as tsd, `tabTimesheet` as ts where
 		ts.work_order = %s and tsd.operation_id = %s and ts.docstatus=1 and ts.name = tsd.parent""",
-		(frm.work_order, operation_id), as_dict=1)[0]
+		(work_order, operation_id), as_dict=1)[0]
