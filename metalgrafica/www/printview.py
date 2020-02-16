@@ -393,7 +393,7 @@ def get_print_style(style=None, print_format=None, for_legacy=False):
 		"font": get_font(print_settings, print_format, for_legacy)
 	}
 
-	css = frappe.get_template("templates/styles/standard.css").render(context)
+	css = frappe.get_template("templates/styles/standard.css").render(context) + frappe.get_template("public/css/print.css").render(context)
 
 	if style and frappe.db.exists('Print Style', style):
 		css = css + '\n' + frappe.db.get_value('Print Style', style, 'css')
