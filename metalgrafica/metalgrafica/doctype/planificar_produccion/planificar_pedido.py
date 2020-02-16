@@ -182,7 +182,7 @@ def get_subitems(bom_wise_item_details, bom, parent_qty, include_sublevel, only_
 def get_item_projected_qty(item,default_warehouse, alternative_default_warehouse):
 	conditions = ""
 	#if self.purchase_request_for_warehouse:
-	conditions = " and warehouse='{0}'".format(frappe.db.escape(default_warehouse or alternative_default_warehouse))
+	conditions = " and warehouse={0}".format(frappe.db.escape(default_warehouse or alternative_default_warehouse))
 
 	item_projected_qty = frappe.db.sql("""
 		select ifnull(sum(projected_qty),0) as qty
