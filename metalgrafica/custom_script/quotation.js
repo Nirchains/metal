@@ -60,6 +60,7 @@ cur_frm.cscript.quotation = {
 		var with_letterhead = true;
 		var lang_code = "ES";
 		var printit = true;
-		print.pdf(format, with_letterhead, lang_code, printit);
+		//print.pdf(format, with_letterhead, lang_code, printit);
+		print.html(format, with_letterhead, lang_code, printit);
 	}
 }
