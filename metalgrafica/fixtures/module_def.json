@@ -502,5 +502,17 @@
   "parentfield": null,
   "parenttype": null,
   "restrict_to_domain": "Oculto"
+ },
+ {
+  "app_name": "metalgrafica",
+  "docstatus": 0,
+  "doctype": "Module Def",
+  "modified": "2020-02-19 13:13:39.172396",
+  "module_name": "Metalgrafica Contabilidad",
+  "name": "Metalgrafica Contabilidad",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "restrict_to_domain": null
  }
 ]

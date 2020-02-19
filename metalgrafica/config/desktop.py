@@ -10,5 +10,13 @@ def get_data():
 			"icon": "octicon octicon-file-directory",
 			"type": "module",
 			"label": _("Metalgrafica")
+		},
+		{
+			"module_name": "Metalgrafica Contabilidad",
+			"color": "blue",
+			"icon": "octicon octicon-repo",
+			"type": "module",
+			"label": _("Metalgrafica Contabilidad")
 		}
+
 	]
