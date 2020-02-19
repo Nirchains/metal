@@ -9,7 +9,7 @@ frappe.ui.form.on('Stock Entry', {
 			if(!item.item_code) {
 				frappe.throw(__("Please enter Item Code to get Batch Number"));
 			} else {
-				if (in_list(["Material Transfer for Manufacture", "Manufacture", "Repack", "Subcontract"], doc.purpose)) {
+				if (in_list(["Material Transfer for Manufacture", "Manufacture", "Repack", "Subcontract"], doc.stock_entry_type)) {
 					var mapids = frm.doc.items.map(function(d) {
 									if (!helper.IsNullOrEmpty(d.batch_no)) {
 										return "'" + d.batch_no + "'";
@@ -78,7 +78,7 @@ frappe.ui.form.on('Stock Entry', {
 				cur_frm.cscript.purchase_receipt.duplicar_productos(frm, item, frm.doc.numero_bloques, null);		
 			} else {
 				//En caso de productos manufacturados, siempre se generará un solo bloque de salida
-				if (frm.doc.purpose == "Manufacture") {
+				if (frm.doc.stock_entry_type == "Manufacture") {
 					numero_bloques = 1;
 				} else {
 					numero_bloques = frm.doc.numero_bloques;
@@ -106,6 +106,9 @@ frappe.ui.form.on('Stock Entry', {
 	purpose: function(frm) {
 		cur_frm.cscript.purchase_receipt.check_properties(frm);
 	},
+	stock_entry_type: function(frm) {
+		cur_frm.cscript.purchase_receipt.check_properties(frm);
+	},
 	work_order: function(frm) {
 		cur_frm.cscript.purchase_receipt.check_properties(frm);
 		frm.set_value("inicio_de_secuencia", frm.doc.work_order);
@@ -130,7 +133,7 @@ frappe.ui.form.on('Stock Entry Detail', {
 cur_frm.cscript.purchase_receipt = {
 	check_properties: function (frm) {
 		var bloques_section_visible = false;
-		if ((frm.doc.purpose == 'Material Receipt' && frm.doc.docstatus < 1) || !helper.IsNullOrEmpty(frm.doc.work_order)) {
+		if ((frm.doc.stock_entry_type == 'Material Receipt' && frm.doc.docstatus < 1) || !helper.IsNullOrEmpty(frm.doc.work_order)) {
 			bloques_section_visible = true;
 		}
 		frm.toggle_display('bloques_section', bloques_section_visible);
@@ -211,7 +214,7 @@ erpnext.stock.select_batch_and_serial_no = (frm, item, show_dialog) => {
 	}
 
 	if(item && item.has_serial_no
-		&& frm.doc.purpose === 'Material Receipt') {
+		&& frm.doc.stock_entry_type === 'Material Receipt') {
 		return;
 	}
 

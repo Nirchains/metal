@@ -200,6 +200,7 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, uom, 
 			frappe.model.with_doctype('Stock Entry', function() {
 				var doc = frappe.model.get_new_doc('Stock Entry');
 				doc.purpose = 'Material Receipt';
+				doc.stock_entry_type = 'Material Receipt';
 				doc.from_warehouse = dialog.get_value('source');
 				doc.to_warehouse = dialog.get_value('target');
 				var row = frappe.model.add_child(doc, 'items');

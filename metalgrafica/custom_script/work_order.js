@@ -14,7 +14,7 @@ frappe.ui.form.on("Work Order", {
 				function() {
 					frappe.route_options = {
 						"work_order": frm.doc.name,
-						"purpose": "Material Transfer for Manufacture"
+						"stock_entry_type": "Material Transfer for Manufacture"
 					};
 					frappe.set_route("List", "Stock Entry");
 				}
