@@ -19,17 +19,9 @@
     "js/core.js": [
 
         "public/js/frappe/views/calendar/calendar.js",
-        "public/js/frappe/ui/page.js",
-
         "public/js/core/conf.js",
         "public/js/frappe/ui/keyboard.js",
-        "public/js/frappe/ui/filters/filters.js"
     ],
-    "js/templates.min.js": [
-		"public/js/frappe/list/list_item_main.html",
-		"public/js/frappe/list/list_item_row.html",
-        "public/js/frappe/list/list_item_subject.html"
-	],
     "js/item-dashboard.min.js": [
         "metalgrafica/dashboard/item_dashboard.html",
         "metalgrafica/dashboard/item_dashboard_list.html",
