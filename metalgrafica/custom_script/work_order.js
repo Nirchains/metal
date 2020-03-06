@@ -19,25 +19,6 @@ frappe.ui.form.on("Work Order", {
 					frappe.set_route("List", "Stock Entry");
 				}
 			);
-			/*
-			frm.add_custom_button(__("Imprimir etiquetas"),
-				function() {
-
-					frappe.call({
-						method:"metalgrafica.util.print_doctype",
-						args: {
-						    "doctype": "Work Order",
-						    "doc": frm.doc.name,
-						    "print_format": "Orden de Produccion Etiquetas"
-						},
-						callback: function(r) {
-						    var new_window = window.open();
-						    new_window.document.write(r.message);
-						}
-				    });
-				}
-			);*/
-
 			frm.add_custom_button(__("Imprimir parte de trabajo"),
 				function() {
 					erpnext.work_order.print_work_order(frm);
