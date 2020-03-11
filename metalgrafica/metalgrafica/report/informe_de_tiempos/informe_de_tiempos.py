@@ -14,7 +14,7 @@ def execute(filters=None):
 def get_data(filters):
 	conditions = ""
 	conditions_timesheet = " "
-	joins_time_sheet = " inner join `tabTimesheet` tim on tim.name = tie.parent "
+	joins_time_sheet = " "
 	colums = ""
 	order_by = ""
 	columns = []
@@ -72,12 +72,16 @@ def get_data(filters):
 	if filters.get("employee"):
 		conditions += " and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
 
+	sql_t_presencial = """(select sum(tim.activities_time) from `tabTimesheet` tim %s where 1=1 %s)
+	""" % (joins_time_sheet, conditions_timesheet)
+
+	joins_time_sheet = "inner join `tabTimesheet` tim on tim.name = tie.parent %s" % joins_time_sheet
+
 	sql_t_productivos = """(select sum(tie.time_in_mins) from `tabTimesheet Extra` tie %s where tie.activity_type='PRODUCCIÓN' %s)
 	""" % (joins_time_sheet, conditions_timesheet)
 
 	sql = """ select %(colums)s
-		sum(op.time_in_mins) as tiempo_presencial,
-		cast(ti.activities_time as unsigned) as activities_time, 
+		%(sql_t_presencial)s as tiempo_presencial,
 		%(sql_t_productivos)s as tiempo_productivo,
 		sum(wo.produced_qty) as fab, ws.vel_min as vel_min,
 		ws.rendimiento_inverso as rendimiento_inverso,
@@ -92,7 +96,7 @@ def get_data(filters):
 		inner join `tabWork Order Item` woi on woi.parent = wo.name
 		where  wo.status='Completed' %(conditions)s
 		%(group_by)s
-		%(order_by)s """  % {"colums": colums, "sql_t_productivos": sql_t_productivos, "conditions": conditions, "group_by": group_by, "order_by": order_by }
+		%(order_by)s """  % {"colums": colums, "sql_t_presencial": sql_t_presencial,"sql_t_productivos": sql_t_productivos, "conditions": conditions, "group_by": group_by, "order_by": order_by }
 
 	frappe.log_error("{0}".format(sql))
 	l_tiempos = frappe.db.sql(sql, as_dict=1)
