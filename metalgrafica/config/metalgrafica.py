@@ -11,7 +11,13 @@ def get_data():
 					"type": "doctype",
 					"name": "Work Order",
 					"description": _("Orders released for production."),
-				}
+				},
+				{
+					"type": "report",
+					"name": "Informe de tiempos",
+					"doctype": "Work Order",
+					"is_query_report": True
+				},
 			]
 		},
 		{
