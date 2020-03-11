@@ -19,6 +19,7 @@ def get_data(filters):
 	order_by = ""
 	columns = []
 	group_by = "group by"
+	maquina = ""
 	
 	from_date, to_date = getdate(filters.from_date), getdate(filters.to_date)
 	
@@ -55,7 +56,7 @@ def get_data(filters):
 	columns.append({"label": _("Presencial"),"fieldname": "tiempo_presencial","fieldtype": "Int","width": 100})
 	columns.append({"label": _("Productivo"),"fieldname": "tiempo_productivo","fieldtype": "Int","width": 80})
 	columns.append({"label": _("Improductivo"),"fieldname": "tiempo_improductivo","fieldtype": "Int","width": 80})
-	columns.append({"label": _("Fab"),"fieldname": "fab","fieldtype": "Int","width": 80})
+	columns.append({"label": _("Fab"),"fieldname": "fabricado","fieldtype": "Int","width": 80})
 	columns.append({"label": _("Rdto"),"fieldname": "rendimiento","fieldtype": "Percent","width": 80})
 	columns.append({"label": _("Rdto.Total"),"fieldname": "rendimiento_total","fieldtype": "Percent","width": 80})
 
@@ -83,7 +84,7 @@ def get_data(filters):
 	sql = """ select %(colums)s
 		%(sql_t_presencial)s as tiempo_presencial,
 		%(sql_t_productivos)s as tiempo_productivo,
-		sum(wo.produced_qty) as fab, ws.vel_min as vel_min,
+		(wo.produced_qty) as fabricado, ws.vel_min as vel_min,
 		ws.rendimiento_inverso as rendimiento_inverso,
 		woi.transferred_qty as fab_inverso
 		from
@@ -102,15 +103,28 @@ def get_data(filters):
 	l_tiempos = frappe.db.sql(sql, as_dict=1)
 
 	for registro in l_tiempos:
-		try:
+		try:		
 			if registro.rendimiento_inverso:
-				registro.fab = registro.fab_inverso
+				registro.fabricado = registro.fab_inverso
 			registro["tiempo_improductivo"] = int(registro.tiempo_presencial) - int(registro.tiempo_productivo)
 			registro["rendimiento_linea"] = "{0}/min".format(int(registro.vel_min))
-			registro["rendimiento"] = (registro.fab/(registro.tiempo_productivo*registro.vel_min))*100
-			registro["rendimiento_total"] = (registro.fab/(registro.tiempo_presencial*registro.vel_min))*100
+			registro["rendimiento"] = (registro.fabricado/(registro.tiempo_productivo*registro.vel_min))*100
+			registro["rendimiento_total"] = (registro.fabricado/(registro.tiempo_presencial*registro.vel_min))*100
 		except:
 			registro["rendimiento"] = 0
 			registro["rendimiento_total"] = 0
+
+		"""if filters.get("group_by_employee") and filters.get("group_by_ws"):
+				if maquina <> registro.maquina:
+					maquina = registro.maquina
+				else:
+					registro.maquina = ""
+					registro.fabricado = 0
+					registro.tiempo_productivo = 0
+					registro.tiempo_improductivo = 0
+					registro["rendimiento_linea"] = 0
+					registro["rendimiento"] = 0
+					registro["rendimiento_total"] = 0
+					"""
 
 	return l_tiempos, columns
