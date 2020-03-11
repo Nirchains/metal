@@ -59,7 +59,6 @@ def get_data(filters):
 	columns.append({"label": _("Rdto"),"fieldname": "rendimiento","fieldtype": "Percent","width": 80})
 	columns.append({"label": _("Rdto.Total"),"fieldname": "rendimiento_total","fieldtype": "Percent","width": 80})
 
-
 	if group_by <> "group by":
 		group_by = group_by.replace("group by, ", "group by ")
 	else:
@@ -80,7 +79,9 @@ def get_data(filters):
 		sum(op.time_in_mins) as tiempo_presencial,
 		cast(ti.activities_time as unsigned) as activities_time, 
 		%(sql_t_productivos)s as tiempo_productivo,
-		sum(wo.produced_qty) as fab, ws.vel_min as vel_min
+		sum(wo.produced_qty) as fab, ws.vel_min as vel_min,
+		ws.rendimiento_inverso as rendimiento_inverso,
+		woi.transferred_qty as fab_inverso
 		from
 		`tabWork Order` wo
 		inner join `tabWork Order Operation` wop on wop.parent = wo.name
@@ -88,6 +89,7 @@ def get_data(filters):
 		inner join `tabWorkstation` ws on ws.name = wopdetail.workstation
 		inner join `tabTimesheet` ti on ti.work_order = wo.name
 		inner join `tabOperarios` op on op.parent = ti.name
+		inner join `tabWork Order Item` woi on woi.parent = wo.name
 		where  wo.status='Completed' %(conditions)s
 		%(group_by)s
 		%(order_by)s """  % {"colums": colums, "sql_t_productivos": sql_t_productivos, "conditions": conditions, "group_by": group_by, "order_by": order_by }
@@ -97,10 +99,12 @@ def get_data(filters):
 
 	for registro in l_tiempos:
 		try:
+			if registro.rendimiento_inverso:
+				registro.fab = registro.fab_inverso
 			registro["tiempo_improductivo"] = int(registro.tiempo_presencial) - int(registro.tiempo_productivo)
-			registro["rendimiento_linea"] = "{0}*min".format(int(registro.vel_min))
-			registro["rendimiento"] = registro.fab/(registro.tiempo_productivo*registro.vel_min)
-			registro["rendimiento_total"] = registro.fab/(registro.tiempo_presencial*registro.vel_min)
+			registro["rendimiento_linea"] = "{0}/min".format(int(registro.vel_min))
+			registro["rendimiento"] = (registro.fab/(registro.tiempo_productivo*registro.vel_min))*100
+			registro["rendimiento_total"] = (registro.fab/(registro.tiempo_presencial*registro.vel_min))*100
 		except:
 			registro["rendimiento"] = 0
 			registro["rendimiento_total"] = 0
