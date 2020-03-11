@@ -41,7 +41,8 @@ def get_data(filters):
 		columns.append({"label": _("Rdto.Linea"),"fieldname": "rendimiento_linea","fieldtype": "Data","width": 70})
 		group_by += ", ws.name"
 		conditions_timesheet += " and wope.operation = wop.operation "
-		joins_time_sheet += " inner join `tabWork Order` woe on woe.name = tim.work_order inner join `tabWork Order Operation` wope on wope.parent = woe.name "
+	
+	joins_time_sheet += " inner join `tabWork Order` woe on woe.name = tim.work_order inner join `tabWork Order Operation` wope on wope.parent = woe.name "
 
 	if filters.get("group_by_employee") or filters.get("employee"):
 		colums+= " op.employee as cod_emp, op.employee_name as empleado, "
@@ -67,7 +68,7 @@ def get_data(filters):
 	order_by = group_by.replace("group by", "order by")
 
 	conditions += 			" and (ti.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
-	conditions_timesheet += " and (tim.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
+	conditions_timesheet += " and woe.status='Completed' and (tim.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 
 	if filters.get("employee"):
 		conditions += " and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
@@ -87,7 +88,7 @@ def get_data(filters):
 		inner join `tabWorkstation` ws on ws.name = wopdetail.workstation
 		inner join `tabTimesheet` ti on ti.work_order = wo.name
 		inner join `tabOperarios` op on op.parent = ti.name
-		where 1=1 %(conditions)s
+		where  wo.status='Completed' %(conditions)s
 		%(group_by)s
 		%(order_by)s """  % {"colums": colums, "sql_t_productivos": sql_t_productivos, "conditions": conditions, "group_by": group_by, "order_by": order_by }
 
