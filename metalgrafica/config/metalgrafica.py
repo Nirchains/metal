@@ -18,6 +18,16 @@ def get_data():
 					"doctype": "Work Order",
 					"is_query_report": True
 				},
+				{
+					"type": "doctype",
+					"name": "Registro de Tiempos Indirectos",
+					"description": _("Registro de tiempos indirectos")
+				},
+				{
+					"type": "doctype",
+					"name": "Registro de Tiempos Improductivos",
+					"description": _("Registro de tiempos improductivos")
+				},
 			]
 		},
 		{
@@ -184,6 +194,18 @@ def get_data():
 					"name": "Operation",
 					"description": _("Details of the operations carried out."),
 					"label": _("Operaciones")
+				},
+				{
+					"type": "doctype",
+					"name": "Activity Type",
+					"description": _("Tipos de actividad (general)"),
+					"label": _("Tipos de actividad (general)")
+				},
+				{
+					"type": "doctype",
+					"name": "Actividades de mantenimiento",
+					"description": _("Tipos de actividad (detalladas)"),
+					"label": _("Tipos de actividad (detalladas)")
 				},
 			]
 		},

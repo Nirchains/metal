@@ -1,0 +1,146 @@
+{
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:cod",
+ "creation": "2020-03-27 07:26:50.533880",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "type",
+  "sc1",
+  "disabled",
+  "sb_especifico",
+  "workstation",
+  "activity_workstation_cod",
+  "column_break_3",
+  "workstation_cod",
+  "activity_workstation",
+  "sb_codigo",
+  "cod",
+  "sc2",
+  "activity_type"
+ ],
+ "fields": [
+  {
+   "allow_in_quick_entry": 1,
+   "default": "General",
+   "description": "General: Actividades generales de las l\u00edneas<br>\nEspec\u00edfico: Actividades espec\u00edficas por l\u00ednea<br>\nVarios",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo",
+   "options": "General\nEspec\u00edfico\nVarios",
+   "reqd": 1
+  },
+  {
+   "fieldname": "activity_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Nombre",
+   "reqd": 1
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "cod",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Puesto de trabajo",
+   "options": "Workstation"
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  },
+  {
+   "fieldname": "activity_workstation",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "activity_workstation_cod",
+   "fieldtype": "Link",
+   "label": "Actividad",
+   "options": "Actividades de mantenimiento"
+  },
+  {
+   "fieldname": "workstation_cod",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sc1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sc2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sb_especifico",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sb_codigo",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "icon": "icon-flag",
+ "modified": "2020-03-27 17:57:32.202795",
+ "modified_by": "Administrator",
+ "module": "Metalgrafica",
+ "name": "Actividades de mantenimiento",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Manufacturing Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "activity_type",
+ "sort_field": "cod",
+ "sort_order": "ASC"
+}

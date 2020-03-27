@@ -941,7 +941,7 @@
   "ignore_xss_filter": 0,
   "in_global_search": 0,
   "in_list_view": 1,
-  "in_standard_filter": 0,
+  "in_standard_filter": 1,
   "insert_after": "salto_propiedades",
   "label": "C\u00f3digo",
   "length": 0,

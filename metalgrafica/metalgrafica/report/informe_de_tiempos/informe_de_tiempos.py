@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.utils import getdate
+from datetime import timedelta
 
 def execute(filters=None):
 	data, columns = get_data(filters)
@@ -14,20 +15,23 @@ def execute(filters=None):
 def get_data(filters):
 	conditions = ""
 	conditions_timesheet = " "
+	conditions_fabricado = " "
 	joins_time_sheet = " "
 	colums = ""
+	column_sql_t_presencial = ""
 	order_by = ""
 	columns = []
 	group_by = "group by"
 	maquina = ""
 	
-	from_date, to_date = getdate(filters.from_date), getdate(filters.to_date)
+	from_date, to_date = getdate(filters.from_date), (getdate(filters.to_date) + timedelta(days=1))
 	
 	if filters.get("group_by_wo"):
 		colums += "wo.name as orden, "
 		columns.append({"label": _("Orden"),"fieldname": "orden","fieldtype": "Link","options": "Work Order","width": 100})
 		group_by += ", wo.name"
 		conditions_timesheet += " and tim.work_order = wo.name "
+		conditions_fabricado += " and wof.name = wo.name "
 		
 	if filters.get("group_by_date"):
 		colums += " ti.start_date as fecha, "
@@ -52,6 +56,9 @@ def get_data(filters):
 		group_by += ", op.employee "
 		conditions_timesheet += " and ope.employee = op.employee "
 		joins_time_sheet += " inner join `tabOperarios` ope on ope.parent = tim.name"
+		column_sql_t_presencial = "ope.time_in_mins"
+	else:
+		column_sql_t_presencial = "tim.activities_time"
 
 	columns.append({"label": _("Presencial"),"fieldname": "tiempo_presencial","fieldtype": "Int","width": 100})
 	columns.append({"label": _("Productivo"),"fieldname": "tiempo_productivo","fieldtype": "Int","width": 80})
@@ -67,24 +74,32 @@ def get_data(filters):
 
 	order_by = group_by.replace("group by", "order by")
 
-	conditions += 			" and (ti.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
+	conditions += 			" and (wo.actual_start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 	conditions_timesheet += " and woe.status='Completed' and (tim.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 
 	if filters.get("employee"):
 		conditions += " and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
 
-	sql_t_presencial = """(select sum(tim.activities_time) from `tabTimesheet` tim %s where 1=1 %s)
-	""" % (joins_time_sheet, conditions_timesheet)
+	sql_t_presencial = """(select sum(%s) from `tabTimesheet` tim %s where 1=1 %s)
+	""" % (column_sql_t_presencial, joins_time_sheet, conditions_timesheet)
 
 	joins_time_sheet = "inner join `tabTimesheet` tim on tim.name = tie.parent %s" % joins_time_sheet
 
 	sql_t_productivos = """(select sum(tie.time_in_mins) from `tabTimesheet Extra` tie %s where tie.activity_type='PRODUCCIÓN' %s)
 	""" % (joins_time_sheet, conditions_timesheet)
 
+
+	conditions_fabricado +=	" and (wof.actual_start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
+	sql_fabricado = """ (select sum(produced_qty) from `tabWork Order` wof  
+		inner join  `tabWork Order Operation` wopf on wopf.parent = wof.name 
+		where wopf.operation = wop.operation
+		%s  ) """ % (conditions_fabricado)
+
 	sql = """ select %(colums)s
 		%(sql_t_presencial)s as tiempo_presencial,
 		%(sql_t_productivos)s as tiempo_productivo,
-		(wo.produced_qty) as fabricado, ws.vel_min as vel_min,
+		%(sql_fabricado)s as fabricado, 
+		ws.vel_min as vel_min,
 		ws.rendimiento_inverso as rendimiento_inverso,
 		woi.transferred_qty as fab_inverso
 		from
@@ -95,9 +110,18 @@ def get_data(filters):
 		inner join `tabTimesheet` ti on ti.work_order = wo.name
 		inner join `tabOperarios` op on op.parent = ti.name
 		inner join `tabWork Order Item` woi on woi.parent = wo.name
+		inner join `tabRegistro de Tiempos Improductivos` rti on ti.start_date = rti.date
 		where  wo.status='Completed' %(conditions)s
 		%(group_by)s
-		%(order_by)s """  % {"colums": colums, "sql_t_presencial": sql_t_presencial,"sql_t_productivos": sql_t_productivos, "conditions": conditions, "group_by": group_by, "order_by": order_by }
+		%(order_by)s """  % {
+			"colums": colums, 
+			"sql_t_presencial": sql_t_presencial,
+			"sql_t_productivos": sql_t_productivos,
+			"sql_fabricado": sql_fabricado,
+			"conditions": conditions, 
+			"group_by": group_by, 
+			"order_by": order_by 
+		}
 
 	frappe.log_error("{0}".format(sql))
 	l_tiempos = frappe.db.sql(sql, as_dict=1)

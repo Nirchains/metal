@@ -17,10 +17,9 @@
         "public/js/frappe/form/print.js"
     ],
     "js/core.js": [
-
         "public/js/frappe/views/calendar/calendar.js",
         "public/js/core/conf.js",
-        "public/js/frappe/ui/keyboard.js",
+        "public/js/frappe/ui/keyboard.js"
     ],
     "js/item-dashboard.min.js": [
         "metalgrafica/dashboard/item_dashboard.html",

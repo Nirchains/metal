@@ -1,0 +1,76 @@
+{
+ "creation": "2020-03-20 19:50:50.372033",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cod",
+  "workstation",
+  "employee",
+  "sb1",
+  "employee_name",
+  "time_in_mins"
+ ],
+ "fields": [
+  {
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "M\u00e1quina",
+   "options": "Workstation"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cod Emp",
+   "options": "Employee"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "time_in_mins",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tiempo"
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Empleado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "cod",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Cod Maq",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-03-26 21:12:20.534457",
+ "modified_by": "Administrator",
+ "module": "Metalgrafica",
+ "name": "Registro de Tiempos Indirectos Detalle",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
