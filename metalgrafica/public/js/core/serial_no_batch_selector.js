@@ -5,12 +5,11 @@ erpnext.SerialNoBatchSelector = Class.extend({
 		this.show_dialog = show_dialog;
 		// frm, item, warehouse_details, has_batch, oldest
 		let d = this.item;
-
-		// Don't show dialog if batch no or serial no already set
-		if(d && d.has_batch_no && (!d.batch_no || this.show_dialog)) {
+		if (d && d.has_batch_no && (!d.batch_no || this.show_dialog)) {
 			this.has_batch = 1;
 			this.setup();
-		} else if(d && d.has_serial_no && (!d.serial_no || this.show_dialog)) {
+		// !(this.show_dialog == false) ensures that show_dialog is implictly true, even when undefined
+		} else if(d && d.has_serial_no && !(this.show_dialog == false)) {
 			this.has_batch = 0;
 			this.setup();
 		}
@@ -53,6 +52,13 @@ erpnext.SerialNoBatchSelector = Class.extend({
 				label: __(me.warehouse_details.type),
 				default: me.warehouse_details.name,
 				onchange: function(e) {
+
+					if(me.has_batch) {
+						fields = fields.concat(me.get_batch_fields());
+					} else {
+						fields = fields.concat(me.get_serial_no_fields());
+					}
+
 					me.warehouse_details.name = this.get_value();
 					var batches = this.layout.fields_dict.batches;
 					if(batches) {
@@ -123,12 +129,14 @@ erpnext.SerialNoBatchSelector = Class.extend({
 							$.each(r.message || [], function(i, d) {
 								//if (total_qty < me.dialog.fields_dict.required_qty.get_value()){
 								//	total_qty += d.qty;
+								if (d.qty > 0) {
 					    			me.dialog.fields_dict.batches.df.data.push({
 					    				'name': 'batch ' + i,
 										'batch_no': d.batch_id,
 										'available_qty': d.qty,
 										'selected_qty': d.qty
 									});
+								}
 				    			//}
 				    		})
 				    		me.dialog.fields_dict.batches.grid.refresh();
@@ -293,6 +301,7 @@ erpnext.SerialNoBatchSelector = Class.extend({
 
 	map_row_values: function(row, values, number, qty_field, warehouse) {
 		row.qty = values[qty_field];
+		row.transfer_qty = flt(values[qty_field]) * flt(row.conversion_factor);
 		row[number] = values[number];
 		if(this.warehouse_details.type === 'Source Warehouse') {
 			row.s_warehouse = values.warehouse || warehouse;
@@ -323,11 +332,12 @@ erpnext.SerialNoBatchSelector = Class.extend({
 			{fieldname: 'batches', fieldtype: 'Table',
 				fields: [
 					{
-						fieldtype:'Link',
-						fieldname:'batch_no',
-						options: 'Batch',
-						label: __('Select Batch'),
-						in_list_view:1,
+						'fieldtype': 'Link',
+						'read_only': 0,
+						'fieldname': 'batch_no',
+						'options': 'Batch',
+						'label': __('Select Batch'),
+						'in_list_view': 1,
 						get_query: function() {
 							var filters = {
 								'item_code': me.item_code
@@ -340,7 +350,7 @@ erpnext.SerialNoBatchSelector = Class.extend({
 								filters: filters
 							};
 						},
-						onchange: function(e) {
+						change: function() {
 							let val = this.get_value();
 							if (!helper.IsNullOrEmpty(this.grid_row) && !helper.IsNullOrEmpty(this.grid_row.on_grid_fields_dict)) {
 								if(val.length === 0) {
@@ -396,23 +406,24 @@ erpnext.SerialNoBatchSelector = Class.extend({
 						}
 					},
 					{
-						fieldtype:'Float',
-						read_only:1,
-						fieldname:'available_qty',
-						label: __('Available'),
-						in_list_view:1,
-						default: 0,
-						onchange: function() {
+						'fieldtype': 'Float',
+						'read_only': 1,
+						'fieldname': 'available_qty',
+						'label': __('Available'),
+						'in_list_view': 1,
+						'default': 0,
+						change: function () {
 							//this.grid_row.on_grid_fields_dict.selected_qty.set_value('0');
 						}
 					},
 					{
-						fieldtype:'Float',
-						fieldname:'selected_qty',
-						label: __('Qty'),
-						in_list_view:1,
+						'fieldtype': 'Float',
+						'read_only': 0,
+						'fieldname': 'selected_qty',
+						'label': __('Qty'),
+						'in_list_view': 1,
 						'default': 0,
-						onchange: function(e) {
+						change: function() {
 							var batch_no = this.grid_row.on_grid_fields_dict.batch_no.get_value();
 							var available_qty = this.grid_row.on_grid_fields_dict.available_qty.get_value();
 							var selected_qty = this.grid_row.on_grid_fields_dict.selected_qty.get_value();

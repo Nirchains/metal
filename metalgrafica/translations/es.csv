@@ -36,5 +36,6 @@ DocType: Planificar Produccion, Download Materials Required, Descargar materiale
 DocType: Planificar Produccion,Download a report containing all raw materials with their latest inventory status,Descargar un informe con todas las materias primas y su inventario actual
 DocType: Planificar Produccion, Only Obtain Raw Materials, Sólo obtención de materias primas
 DocType: Work Order, Timesheet created:, Registro de horas creado
+Doctype: Work Order, Unable to find Time Slot in the next {0} days for Operation {1}, No es posible encontrar huecos en la agenda en los siguientes {0} días para la operación {1}. Por favor revise la prevista de inicio
 DocType: Purchase Order Item,Blanket Order,Previsión de pedidos
 DocType: Pricing Rule,Party Information,Información adicional

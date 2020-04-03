@@ -101,11 +101,20 @@ var calculate_employees_times = function(frm) {
 var calculate_activities_times = function(frm) {
 	var tl = frm.doc.timesheet_extra || [];
 	var total = 0;
+	var productive_time = 0;
+	var unproductive_time = 0;
 	for(var i=0; i<tl.length; i++) {
 		if (tl[i].time_in_mins) {
 			total += tl[i].time_in_mins;
+			if (tl[i].activity_type == "PRODUCCIÓN") {
+				productive_time += tl[i].time_in_mins;
+			} else {
+				unproductive_time += tl[i].time_in_mins;
+			}
 		}
 	}
 
 	frm.set_value("activities_time", total);
+	frm.set_value("productive_time", productive_time);
+	frm.set_value("unproductive_time", unproductive_time);
 }
