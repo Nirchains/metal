@@ -37,6 +37,7 @@
   {
    "fieldname": "activity_type",
    "fieldtype": "Data",
+   "in_global_search": 1,
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
@@ -108,7 +109,7 @@
   }
  ],
  "icon": "icon-flag",
- "modified": "2020-03-27 17:57:32.202795",
+ "modified": "2020-04-23 19:56:34.466130",
  "modified_by": "Administrator",
  "module": "Metalgrafica",
  "name": "Actividades de mantenimiento",

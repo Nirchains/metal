@@ -42,6 +42,19 @@ frappe.ui.form.on('Timesheet', {
 			calculate_employees_times(frm);
 			calculate_activities_times(frm);
 		}
+	},
+	work_order: function(frm) {
+		var args = {
+		    "work_order": frm.doc.work_order
+		};
+		frappe.call({
+			method:"metalgrafica.util.get_operation",
+			args: args,
+			callback: function(r) {
+			    frm.set_value('operation', r.message.operation);
+			    frm.set_value('workstation', r.message.workstation);
+			}
+	    });
 	}
 });
 
@@ -77,11 +90,33 @@ frappe.ui.form.on('Timesheet Extra', {
 	}
 });
 
+cur_frm.add_fetch("activity_cod", "activity_type", "activity_type");
+cur_frm.add_fetch("activity_cod_especifico", "activity_type", "description");
+
 cur_frm.set_query("employee", "operarios", function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
 	return {
 		filters: [
 			['Employee', 'status', '=','Active']
+		]
+	};
+});
+
+cur_frm.set_query("activity_cod", "timesheet_extra", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: [
+			['Actividades de mantenimiento', 'type', '=','General']
+		]
+	};
+});
+
+
+cur_frm.set_query("activity_cod_especifico", "timesheet_extra", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: [
+			['Actividades de mantenimiento', 'workstation', '=', doc.workstation]
 		]
 	};
 });

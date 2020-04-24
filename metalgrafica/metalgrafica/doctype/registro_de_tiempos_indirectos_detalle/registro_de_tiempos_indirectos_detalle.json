@@ -4,28 +4,26 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "cod",
-  "workstation",
+  "activity_cod",
   "employee",
   "sb1",
-  "employee_name",
-  "time_in_mins"
+  "section_break_7",
+  "time_in_mins",
+  "ac1",
+  "observations",
+  "sb_8",
+  "activity_name",
+  "sb_9",
+  "employee_name"
  ],
  "fields": [
   {
-   "fieldname": "workstation",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "M\u00e1quina",
-   "options": "Workstation"
-  },
-  {
    "allow_in_quick_entry": 1,
+   "columns": 1,
    "fieldname": "employee",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Cod Emp",
    "options": "Employee"
@@ -53,17 +51,49 @@
   },
   {
    "columns": 1,
-   "fieldname": "cod",
+   "fieldname": "activity_cod",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo Act.",
+   "options": "Actividades de mantenimiento"
+  },
+  {
+   "fieldname": "activity_name",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Cod Maq",
+   "label": "Actividad",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "observations",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Observaciones"
+  },
+  {
+   "fieldname": "sb_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sb_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ac1",
+   "fieldtype": "Column Break"
   }
  ],
  "istable": 1,
- "modified": "2020-03-26 21:12:20.534457",
+ "modified": "2020-04-23 18:30:08.024284",
  "modified_by": "Administrator",
  "module": "Metalgrafica",
  "name": "Registro de Tiempos Indirectos Detalle",

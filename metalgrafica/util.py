@@ -183,6 +183,23 @@ def update_work_order(work_order, time_logs, time_sheet):
 		pro.set_actual_dates()
 		pro.save()
 
+@frappe.whitelist()
+def get_operation(work_order=""):
+	operation = {
+		"operation": "",
+		"workstation": ""
+	}
+	l_operations = []
+	if work_order:
+		l_operations = frappe.db.sql("""
+			select operation, workstation from `tabWork Order Operation` wop where parent = %s
+			""", (work_order), as_dict=1)
+		if l_operations:
+			operation = l_operations[0]
+		
+	return operation
+
+
 #deprecatedPFG
 def get_actual_timesheet_summary(work_order, operation_id):
 	"""Returns 'Actual Operating Time'. """
