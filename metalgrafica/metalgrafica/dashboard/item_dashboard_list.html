@@ -56,5 +56,14 @@
 					data-uom="{{ d.uom }}">{{ __("Add") }}</a>
 			</div>
 		</div>
+		<div class="row">
+			{% for b in d.batches %}
+			<div class="col-sm-2 batch-row">
+				<div class="batch">
+					<b>{{b.batch_no}}</b> ({{b.qty}})
+				</div>				
+			</div>
+			{% endfor%}
+		</div>
 	</div>
 {% endfor %}

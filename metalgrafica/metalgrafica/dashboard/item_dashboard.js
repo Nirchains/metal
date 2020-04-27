@@ -58,6 +58,7 @@ erpnext.stock.ItemDashboard = Class.extend({
 			},
 			callback: function(r) {
 				me.render(r.message);
+				console.log(r.message);
 			}
 		});
 	},

@@ -27,6 +27,12 @@ frappe.query_reports["Informe de tiempos"] = {
 			reqd: 1
 		},
 		{
+			fieldname: "workstation",
+			label: __("Workstation"),
+			fieldtype: "Link",
+			options: "Workstation"
+		},
+		{
 			fieldname: "employee",
 			label: __("Employee"),
 			fieldtype: "Link",
@@ -57,7 +63,7 @@ frappe.query_reports["Informe de tiempos"] = {
 			fieldname: "group_by_employee",
 			label: __("Agrupar por empleado"),
 			fieldtype: "Check",
-			default: 1
+			default: 0
 		}
 	]
 };

@@ -43,7 +43,7 @@
    "options": "Registro de Tiempos Improductivos Detalle"
   }
  ],
- "modified": "2020-03-27 18:05:16.400212",
+ "modified": "2020-04-24 15:50:59.562627",
  "modified_by": "Administrator",
  "module": "Metalgrafica",
  "name": "Registro de Tiempos Improductivos",
@@ -60,20 +60,9 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Manufacturing Manager",
-   "share": 1,
-   "write": 1
   }
  ],
+ "restrict_to_domain": "Oculto",
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

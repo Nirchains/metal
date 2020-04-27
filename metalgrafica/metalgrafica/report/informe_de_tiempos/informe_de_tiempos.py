@@ -64,6 +64,9 @@ def get_data(filters):
 
 	conditions += 			" and (wo.actual_start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 
+	if filters.get("workstation"):
+		conditions += " and wop.workstation = %s " % (frappe.db.escape(filters.get("workstation")))
+
 	#inner join `tabOperarios` op on op.parent = ti.name
 	#op.employee as employee, op.employee_name as employee_name, op.time_in_mins as time_in_mins
 
@@ -101,10 +104,10 @@ def get_data(filters):
 		}
 
 	if filters.get("group_by_employee") or filters.get("employee"):
-		where = ""
+		where = " where 1=1"
 		inner_join = ""
 		if filters.get("employee"):
-			where = " where op.employee = %s " % (frappe.db.escape(filters.get("employee")))
+			where +=" and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
 		if filters.get("group_by_wo"):
 			inner_join = """inner join `tabOperarios` op on op.parent = e.timesheet"""
 		else:
@@ -131,7 +134,7 @@ def get_data(filters):
 			""".format(sql_group_by, inner_join, where, group_by)
 
 
-	frappe.log_error("{0}".format(sql_group_by))
+	#frappe.log_error("{0}".format(sql_group_by))
 	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1)
 	l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
 

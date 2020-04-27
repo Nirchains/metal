@@ -25,13 +25,13 @@
   {
    "allow_in_quick_entry": 1,
    "default": "General",
-   "description": "General: Actividades generales de las l\u00edneas<br>\nEspec\u00edfico: Actividades espec\u00edficas por l\u00ednea<br>\nVarios",
+   "description": "<b>General:</b> Actividades generales de las l\u00edneas<br>\n<b>Espec\u00edfico:</b> Actividades espec\u00edficas por l\u00ednea<br>\n<b>Indirectos:</b> Para el registro de tiempos indirectos<br>\n<b>Varios</b>",
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo",
-   "options": "General\nEspec\u00edfico\nVarios",
+   "options": "General\nEspec\u00edfico\nIndirectos\nVarios",
    "reqd": 1
   },
   {
@@ -109,7 +109,7 @@
   }
  ],
  "icon": "icon-flag",
- "modified": "2020-04-23 19:56:34.466130",
+ "modified": "2020-04-24 13:42:58.599579",
  "modified_by": "Administrator",
  "module": "Metalgrafica",
  "name": "Actividades de mantenimiento",

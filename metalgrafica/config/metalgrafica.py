@@ -13,20 +13,15 @@ def get_data():
 					"description": _("Orders released for production."),
 				},
 				{
-					"type": "report",
-					"name": "Informe de tiempos",
-					"doctype": "Work Order",
-					"is_query_report": True
-				},
-				{
 					"type": "doctype",
 					"name": "Registro de Tiempos Indirectos",
 					"description": _("Registro de tiempos indirectos")
 				},
 				{
-					"type": "doctype",
-					"name": "Registro de Tiempos Improductivos",
-					"description": _("Registro de tiempos improductivos")
+					"type": "report",
+					"name": "Informe de tiempos",
+					"doctype": "Work Order",
+					"is_query_report": True
 				},
 			]
 		},
@@ -116,8 +111,13 @@ def get_data():
 					"is_query_report": True,
 					"name": "Batch-Wise Balance History",
 					"doctype": "Batch"
-				}
-
+				},
+				{
+					"type": "report",
+					"name": "Stock Ledger by Batch",
+					"doctype": "Stock Ledger Entry",
+					"is_query_report": True
+				},
 			]
 		},
 		{
@@ -197,15 +197,9 @@ def get_data():
 				},
 				{
 					"type": "doctype",
-					"name": "Activity Type",
-					"description": _("Tipos de actividad (general)"),
-					"label": _("Tipos de actividad (general)")
-				},
-				{
-					"type": "doctype",
 					"name": "Actividades de mantenimiento",
-					"description": _("Tipos de actividad (detalladas)"),
-					"label": _("Tipos de actividad (detalladas)")
+					"description": _("Tipos de actividad"),
+					"label": _("Tipos de actividad")
 				},
 			]
 		},

@@ -9,3 +9,12 @@ frappe.ui.form.on('Registro de Tiempos Indirectos', {
 });
 
 cur_frm.add_fetch("activity_cod", "activity_type", "activity_name");
+
+cur_frm.set_query("activity_cod", "time_details", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: [
+			['Actividades de mantenimiento', 'type', '!=','Específico']
+		]
+	};
+});
