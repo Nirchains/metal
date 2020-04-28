@@ -191,7 +191,6 @@ frappe.ui.form.on('BOM Item Producto', {
 								if(!r.message) {
 									//frappe.throw(__("No se encuentra la lista de combinaciones que forman el producto"))
 								} else {
-									var i = 0;
 									frm.cscript.item.set_productos_de_la_combinacion(frm, r);
 								}
 							}
@@ -632,7 +631,7 @@ cur_frm.cscript.item = {
 	},
 
 	set_operaciones_de_la_combinacion: function(frm, r) {
-		$.each(r.message, function(i, item) {
+		$.each(r.message, function(item) {
 			var d = frappe.model.add_child(frm.doc, "BOM Operation Producto", "operaciones");
 			frappe.model.set_value(d.doctype, d.name, "operation", item.operation);
 			frappe.model.set_value(d.doctype, d.name, "workstation", item.workstation);
