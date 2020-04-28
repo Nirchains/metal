@@ -191,7 +191,7 @@ frappe.ui.form.on('BOM Item Producto', {
 								if(!r.message) {
 									//frappe.throw(__("No se encuentra la lista de combinaciones que forman el producto"))
 								} else {
-									i = 0;
+									var i = 0;
 									frm.cscript.item.set_productos_de_la_combinacion(frm, r);
 								}
 							}
