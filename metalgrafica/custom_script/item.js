@@ -620,7 +620,7 @@ cur_frm.cscript.item = {
 	},
 
 	set_productos_de_la_combinacion: function(frm, r) {
-		$.each(r.message, function(i, item) {
+		$.each(r.message, function(item) {
 			var d = frappe.model.add_child(frm.doc, "Productos de la combinacion", "productos_de_la_combinacion");
 			frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
 			frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);
