@@ -174,6 +174,7 @@ frappe.ui.form.on('BOM Item Producto', {
 
 				//Hojas compuestas
 				if (frm.doc.item_group == 'CORTE HOJA COMPUESTA' && response.item_group == 'HOJA COMPUESTA') {
+					console.log("Es una hoja compuesta");
 					if (!helper.IsNullOrEmpty(response.item_code)) {
 
 						//Generamos el código de producto
