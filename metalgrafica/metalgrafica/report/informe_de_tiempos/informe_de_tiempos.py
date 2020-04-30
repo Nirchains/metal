@@ -139,7 +139,10 @@ def get_data(filters):
 	l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
 
 	for registro in l_tiempos:
-		try:		
+		try:
+			if filters.get("group_by_employee") or filters.get("employee"):
+				registro["tiempo_presencial"] = registro["emp_tiempo_presencial"]
+				registro["tiempo_improductivo"] = registro.tiempo_presencial - registro.tiempo_productivo
 			if registro.rendimiento_inverso:
 				registro.fabricado = registro.fab_inverso
 			#registro["tiempo_improductivo"] = int(registro.tiempo_presencial) - int(registro.tiempo_productivo)
