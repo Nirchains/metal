@@ -83,7 +83,7 @@ def get_data(filters):
 		inner join `tabOperation` wopdetail on wopdetail.name = wop.operation
 		inner join `tabWorkstation` ws on ws.name = wopdetail.workstation
 		inner join `tabTimesheet` ti on ti.work_order = wo.name
-		where  wo.status='Completed' %(conditions)s
+		where  wo.status='Completed' and ti.docstatus=1 %(conditions)s
 		"""  % {
 			"colums": colums, 
 			"conditions": conditions
@@ -119,7 +119,7 @@ def get_data(filters):
 				inner join `tabOperation` wopdetail on wopdetail.name = wop.operation
 				inner join `tabWorkstation` ws on ws.name = wopdetail.workstation
 				inner join `tabTimesheet` ti on ti.work_order = wo.name
-				where  wo.status='Completed'  and ti.start_date = e.fecha and ws.name = e.workstation )
+				where  wo.status='Completed'  and ti.docstatus=1 and ti.start_date = e.fecha and ws.name = e.workstation )
 				"""
 		
 

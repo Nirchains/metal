@@ -23,6 +23,12 @@ def get_data():
 					"doctype": "Work Order",
 					"is_query_report": True
 				},
+				{
+					"type": "report",
+					"name": "Informe de tiempos indirectos",
+					"doctype": "Registro de Tiempos Indirectos",
+					"is_query_report": True
+				},
 			]
 		},
 		{
@@ -88,12 +94,6 @@ def get_data():
 					"name": "Batch",
 					"description": _("Batch (lot) of an Item."),
 					"label": _("Lotes")
-				},
-				{
-					"type": "page",
-					"name": "analisis-de-existenc",
-					"label": _("Stock Analytics"),
-					"icon": "fa fa-bar-chart"
 				},
 				{
 					"type": "page",
