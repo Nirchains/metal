@@ -19,12 +19,13 @@ erpnext.stock.ItemDashboard = Class.extend({
 		// move
 		this.content.on('click', '.btn-move', function() {
 			erpnext.stock.move_item($(this).attr('data-item'), $(this).attr('data-warehouse'),
-				null, $(this).attr('data-actual_qty'), null, $(this).attr('data-uom'), function() { me.refresh(); });
+				null, $(this).attr('data-actual_qty'), null, $(this).attr('data-uom'), null, null, function() { me.refresh(); });
 		});
 
 		this.content.on('click', '.btn-add', function() {
 			erpnext.stock.move_item($(this).attr('data-item'), null, $(this).attr('data-warehouse'),
-				$(this).attr('data-actual_qty'), $(this).attr('data-rate'), $(this).attr('data-uom'),
+				$(this).attr('data-actual_qty'), $(this).attr('data-rate'), $(this).attr('data-uom'), 
+				$(this).attr('data-batch-no'), $(this).attr('data-batch-no-qty'), 
 				function() { me.refresh(); });
 		});
 
@@ -111,7 +112,10 @@ erpnext.stock.ItemDashboard = Class.extend({
 	}
 })
 
-erpnext.stock.move_item = function(item, source, target, actual_qty, rate, uom, callback) {
+erpnext.stock.move_item = function(item, source, target, actual_qty, rate, uom, batch_no, batch_no_qty, callback) {
+	if (batch_no_qty) {
+		actual_qty = batch_no_qty;
+	}
 	var dialog = new frappe.ui.Dialog({
 		title: target ? __('Add Item') : __('Move Item'),
 		fields: [
@@ -165,6 +169,13 @@ erpnext.stock.move_item = function(item, source, target, actual_qty, rate, uom, 
 		dialog.get_field('uom').set_value(uom);
 		dialog.get_field('uom').df.hidden = 0;
 		dialog.get_field('uom').refresh();
+	}
+
+	if(batch_no) {
+		dialog.get_field('batch_no').set_value(batch_no);
+		dialog.get_field('batch_no').refresh();
+		dialog.get_field('qty').set_value(-(batch_no_qty));
+		dialog.get_field('qty').refresh();
 	}
 
 	

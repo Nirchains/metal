@@ -61,6 +61,14 @@
 			<div class="col-sm-2 batch-row">
 				<div class="batch">
 					<b>{{b.batch_no}}</b> ({{b.qty}})
+					<button class="float-right btn btn-default btn-xs btn-add"
+					data-warehouse="{{ d.warehouse || d.default_warehouse }}"
+					data-actual_qty="{{ d.actual_qty }}"
+					data-item="{{ d.name }}"
+					data-rate="{{ d.valuation_rate }}"
+					data-uom="{{ d.uom }}"
+					data-batch-no="{{b.batch_no}}"
+					data-batch-no-qty="{{b.qty}}"><i class="octicon octicon-x"></i></a>
 				</div>				
 			</div>
 			{% endfor%}
