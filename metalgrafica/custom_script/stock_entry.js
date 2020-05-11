@@ -83,7 +83,7 @@ frappe.ui.form.on('Stock Entry', {
 				} else {
 					numero_bloques = frm.doc.numero_bloques;
 				}
-				cur_frm.cscript.purchase_receipt.crear_lotes(frm, item, frm.doc.inicio_de_secuencia, numero_bloques, item.item_code);
+				cur_frm.cscript.purchase_receipt.crear_lotes(frm, item, frm.doc.inicio_de_secuencia, numero_bloques, item.item_code, frm.doc.posting_date);
 			}
 
 		} else {
@@ -171,7 +171,7 @@ cur_frm.cscript.purchase_receipt = {
 		}
 	},
 
-	crear_lotes: function(frm, item, inicio_de_secuencia, numero_bloques, item_code) {
+	crear_lotes: function(frm, item, inicio_de_secuencia, numero_bloques, item_code, posting_date) {
 		if (!helper.IsNullOrEmpty(inicio_de_secuencia)) {
 
 			frappe.call({
@@ -179,7 +179,8 @@ cur_frm.cscript.purchase_receipt = {
 				args: {
 					"inicio_de_secuencia": inicio_de_secuencia,
 					"producto": item_code,
-					"numero_bloques": numero_bloques
+					"numero_bloques": numero_bloques,
+					"posting_date": posting_date
 				},
 				callback: function(r) {
 					if(!r.message) {

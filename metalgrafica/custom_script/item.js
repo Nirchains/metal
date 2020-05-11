@@ -174,7 +174,7 @@ frappe.ui.form.on('BOM Item Producto', {
 
 				//Hojas compuestas
 				if (frm.doc.item_group == 'CORTE HOJA COMPUESTA' && response.item_group == 'HOJA COMPUESTA') {
-					console.log("Es una hoja compuesta");
+					//console.log("Es una hoja compuesta");
 					if (!helper.IsNullOrEmpty(response.item_code)) {
 
 						//Generamos el código de producto
@@ -192,7 +192,7 @@ frappe.ui.form.on('BOM Item Producto', {
 								if(!r.message) {
 									//frappe.throw(__("No se encuentra la lista de combinaciones que forman el producto"))
 								} else {
-									console.log("Respuesta recibida: load_productos_de_la_combinacion");
+									//console.log("Respuesta recibida: load_productos_de_la_combinacion");
 									var i = 0;
 									frm.cscript.item.set_productos_de_la_combinacion(frm, r);
 								}

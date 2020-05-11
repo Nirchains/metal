@@ -84,7 +84,7 @@ def get_stock_entry_materials(work_order):
 
 
 @frappe.whitelist()
-def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques):
+def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques, posting_date):
 	filas = []
 	cadena = False
 	try:
@@ -109,7 +109,13 @@ def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques):
 				if doc.reference_doctype and doc.reference_name:
 					frappe.msgprint(("El lote {0} ya se est&aacute; utilizando. Aseg&uacute;rese de que es el lote correcto.").format(lote))
 			else:
-				doc = frappe.get_doc({"doctype": "Batch", "batch_id":  lote, "item": producto, "automatic": automatic })
+				doc = frappe.get_doc(
+					{"doctype": "Batch", 
+					 "batch_id":  lote, 
+					 "item": producto, 
+					 "automatic": automatic,
+					 "manufacturing_date": posting_date}
+					)
 				doc.insert()
 				
 			filas.extend([{"id": lote }])

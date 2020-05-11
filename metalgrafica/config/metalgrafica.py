@@ -27,7 +27,7 @@ def get_data():
 					"type": "report",
 					"name": "Informe de tiempos indirectos",
 					"doctype": "Registro de Tiempos Indirectos",
-					"is_query_report": True
+					"is_query_report": False
 				},
 			]
 		},
