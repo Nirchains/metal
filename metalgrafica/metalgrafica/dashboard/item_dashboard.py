@@ -66,7 +66,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 		conditionsw = ' and ' + ' and '.join(conditionsw)
 
 		sql_batches = '''
-			select sle.warehouse, sle.batch_no, round(sum(sle.actual_qty),2) as qty
+			select sle.warehouse, sle.batch_no, sum(sle.actual_qty) as qty
 			from `tabStock Ledger Entry` sle
 				INNER JOIN `tabBatch` batch on sle.batch_no = batch.name
 				INNER JOIN `tabItem` it on sle.item_code = it.name
@@ -81,6 +81,8 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 
 		sql_batches = ''' select * from (%(sql)s) q where q.qty > 0	
 			''' % {	'sql': sql_batches	}
+
+		frappe.log_error(sql_batches)
 
 		warehouse.batches = frappe.db.sql(sql_batches, valuesw, as_dict=1)
 
