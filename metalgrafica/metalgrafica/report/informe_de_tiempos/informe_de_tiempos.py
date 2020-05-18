@@ -62,7 +62,7 @@ def get_data(filters):
 	#ordenamos por los mismos criterios de agrupación
 	order_by = group_by.replace("group by", "order by")
 
-	conditions += 			" and (wo.actual_start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
+	conditions += 			" and (ti.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 
 	if filters.get("workstation"):
 		conditions += " and wop.workstation = %s " % (frappe.db.escape(filters.get("workstation")))

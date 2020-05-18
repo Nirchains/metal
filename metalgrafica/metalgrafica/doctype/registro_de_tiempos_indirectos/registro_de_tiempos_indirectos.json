@@ -15,6 +15,7 @@
    "bold": 1,
    "fieldname": "date",
    "fieldtype": "Date",
+   "in_filter": 1,
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
@@ -43,7 +44,7 @@
    "fieldtype": "Section Break"
   }
  ],
- "modified": "2020-03-27 18:04:01.251678",
+ "modified": "2020-05-12 12:24:10.159681",
  "modified_by": "Administrator",
  "module": "Metalgrafica",
  "name": "Registro de Tiempos Indirectos",
