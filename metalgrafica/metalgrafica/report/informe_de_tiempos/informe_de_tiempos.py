@@ -20,7 +20,8 @@ def get_data(filters):
 	group_by = "group by"
 	maquina = ""
 	
-	from_date, to_date = getdate(filters.from_date), (getdate(filters.to_date) + timedelta(days=1))
+	#from_date, to_date = getdate(filters.from_date), (getdate(filters.to_date) + timedelta(days=1))
+	from_date, to_date = getdate(filters.from_date), (getdate(filters.to_date))
 	
 	#Si se agrupa por orden de trabajo
 	if filters.get("group_by_wo"):
