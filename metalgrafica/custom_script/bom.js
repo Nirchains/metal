@@ -47,9 +47,9 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 				callback: function(r) {
 					if (!r.exc) {
 						frm.refresh_fields();
-						erpnext.bom.calculate_rm_cost(doc);
-						erpnext.bom.calculate_scrap_materials_cost(doc);
-						erpnext.bom.calculate_total(doc);
+						erpnext.bom.calculate_rm_cost(frm.doc);
+						erpnext.bom.calculate_scrap_materials_cost(frm.doc);
+						erpnext.bom.calculate_total(frm.doc);
 					}
 				}
 			});
@@ -112,7 +112,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
 					} else {
 						$.each(r.message, function(i, item) {
-							d = frm.add_child("scrap_items");
+							var d = frm.add_child("scrap_items");
 	                		d.item_code = item.item_code;
 	                		d.item_name = item.item_name;
 			    			d.stock_uom = item.stock_uom;
