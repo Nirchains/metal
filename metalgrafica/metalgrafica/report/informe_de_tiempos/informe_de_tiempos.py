@@ -137,7 +137,7 @@ def get_data(filters):
 
 	#frappe.log_error("{0}".format(sql_group_by))
 	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1)
-	l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
+	#l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
 
 	for registro in l_tiempos:
 		try:
