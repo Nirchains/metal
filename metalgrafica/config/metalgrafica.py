@@ -29,6 +29,12 @@ def get_data():
 					"doctype": "Registro de Tiempos Indirectos",
 					"is_query_report": False
 				},
+				{
+					"type": "report",
+					"name": "Resumen de tiempos",
+					"doctype": "Work Order",
+					"is_query_report": True
+				},
 			]
 		},
 		{

@@ -75,8 +75,6 @@ def get_data(filters):
 	for registro in l_tiempos:
 		total += registro["time_in_mins"]
 
-	frappe.msgprint("{0}".format(total))
-
 	for registro in l_tiempos:
 		registro["total"] = (registro["time_in_mins"] / total)*100
 	
