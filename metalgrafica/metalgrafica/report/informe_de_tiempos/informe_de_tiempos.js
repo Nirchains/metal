@@ -44,13 +44,13 @@ frappe.query_reports["Informe de tiempos"] = {
 			fieldtype: "Check",
 			default: 0
 		},
-		/*
+		
 		{
 			fieldname: "group_by_date",
 			label: __("Agrupar por fecha"),
 			fieldtype: "Check",
 			default: 1
-		},*/
+		},
 		/*
 		{
 			fieldname: "group_by_ws",

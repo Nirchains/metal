@@ -30,10 +30,10 @@ def get_data(filters):
 		columns.append({"label": _("Tiempos"),"fieldname": "timesheet","fieldtype": "Link","options": "Timesheet","width": 100})
 		group_by += ", orden "
 
-	#Siempre agrupamos por fecha
-	colums += " fecha, "
-	columns.append({"label": _("Fecha"),"fieldname": "fecha","fieldtype": "Date","width": 100})
-	group_by += ", fecha "
+	if filters.get("group_by_date"):
+		colums += " fecha, "
+		columns.append({"label": _("Fecha"),"fieldname": "fecha","fieldtype": "Date","width": 100})
+		group_by += ", fecha "
 
 	#Siempre se agrupa por estación de trabajo
 	colums += " cod, workstation, rendimiento_linea, rendimiento_inverso,"
@@ -63,7 +63,7 @@ def get_data(filters):
 	#ordenamos por los mismos criterios de agrupación
 	order_by = group_by.replace("group by", "order by")
 
-	conditions += 			" and (ti.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
+	conditions += " and (ti.start_date between %s and %s) " % (frappe.db.escape(from_date, percent=False), frappe.db.escape(to_date, percent=False))
 
 	if filters.get("workstation"):
 		conditions += " and wop.workstation = %s " % (frappe.db.escape(filters.get("workstation")))

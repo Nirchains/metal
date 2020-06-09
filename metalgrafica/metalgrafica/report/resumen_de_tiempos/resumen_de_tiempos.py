@@ -33,7 +33,7 @@ def get_data(filters):
 	columns.append({"label": _("Código Act."),"fieldname": "activity_cod","fieldtype": "Data","width": 100})
 	columns.append({"label": _("Actividad"),"fieldname": "activity_type","fieldtype": "Data","width": 120})
 	columns.append({"label": _("Tiempo"),"fieldname": "time_in_mins","fieldtype": "Int","width": 100})
-	columns.append({"label": _("Total"),"fieldname": "total","fieldtype": "Percent","width": 80})
+	columns.append({"label": _("Total (%)"),"fieldname": "total","fieldtype": "Data","width": 80})
 
 	if group_by <> "group by":
 		group_by = group_by.replace("group by, ", "group by ")
@@ -76,6 +76,6 @@ def get_data(filters):
 		total += registro["time_in_mins"]
 
 	for registro in l_tiempos:
-		registro["total"] = (registro["time_in_mins"] / total)*100
+		registro["total"] = str(round((registro["time_in_mins"] / total)*100, 2))
 	
 	return l_tiempos, columns
