@@ -58,7 +58,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 		valuesw = []
 
 		conditionsw.append('sle.item_code = %s')
-		valuesw.append(warehouse.item_code)
+		valuesw.append(warehouse.name)
 
 		conditionsw.append('sle.warehouse = %s')
 		valuesw.append(warehouse.warehouse)
@@ -82,7 +82,7 @@ def get_data(item_code=None, warehouse=None, item_group=None, brand=None,formato
 		sql_batches = ''' select * from (%(sql)s) q where q.qty > 0	
 			''' % {	'sql': sql_batches	}
 
-		frappe.log_error(sql_batches)
+		#frappe.log_error(sql_batches)
 
 		warehouse.batches = frappe.db.sql(sql_batches, valuesw, as_dict=1)
 
