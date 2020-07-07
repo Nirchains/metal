@@ -30,6 +30,16 @@ frappe.ui.form.on("Work Order", {
 				}, __("Print"));
 		}
 
+		
+		if(frm.doc.docstatus == 1 && frm.doc.status != 'Stopped'){
+			frm.add_custom_button(__('Make Timesheet'), function(){
+				frappe.model.open_mapped_doc({
+					method: "erpnext.manufacturing.doctype.work_order.work_order.make_new_timesheet",
+					frm: cur_frm
+				})
+			})
+		}
+
 		cur_frm.cscript.work_order.check_properties(frm);
 		frm.refresh_fields();
 	},
