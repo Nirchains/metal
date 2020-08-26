@@ -33,6 +33,12 @@ frappe.query_reports["Informe de tiempos"] = {
 			options: "Workstation"
 		},
 		{
+			fieldname: "turno",
+			label: __("Turno"),
+			fieldtype: "Select",
+			options: ["", "A", "B", "C"]
+		},
+		{
 			fieldname: "employee",
 			label: __("Employee"),
 			fieldtype: "Link",

@@ -6838,25 +6838,5 @@
   "property": "hidden",
   "property_type": "Check",
   "value": "1"
- },
- {
-  "_assign": null,
-  "_comments": null,
-  "_liked_by": null,
-  "_user_tags": null,
-  "default_value": null,
-  "doc_type": "Work Order",
-  "docstatus": 0,
-  "doctype": "Property Setter",
-  "doctype_or_field": "DocField",
-  "field_name": "allow_alternative_item",
-  "modified": "2020-06-05 12:17:20.502863",
-  "name": "Work Order-allow_alternative_item-default",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "property": "default",
-  "property_type": "Text",
-  "value": "1"
  }
 ]
