@@ -212,7 +212,7 @@ def get_operation(work_order=""):
 def extend_quotation_valid_till(name):
 	sql = """
 		update `tabQuotation`
-		set `valid_till`=(date_Add(valid_till, interval 1 year)) where name=%s"""
+		set `valid_till`=(date_Add(valid_till, interval 1 year)), `status`= 'Open' where name=%s"""
 	frappe.db.sql(sql, name)
 	frappe.db.commit()
 
