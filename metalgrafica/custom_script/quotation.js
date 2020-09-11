@@ -16,6 +16,18 @@ frappe.ui.form.on("Quotation", {
 
 	refresh: function (frm) {
 		if(!frm.doc.__islocal) {
+			frm.add_custom_button(__("Extender fecha"),
+				function() {
+					frappe.call({
+						method: "metalgrafica.util.extend_quotation_valid_till",
+						args: {
+							"name": frm.doc.name
+						},
+						callback: function(r) {
+							window.location.reload();
+						}
+					});
+				});
 			frm.add_custom_button(__("Imprimir confirmación"),
 				function() {
 					cur_frm.cscript.quotation.print(frm);

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import frappe
 
 from frappe import _
@@ -205,6 +207,13 @@ def get_operation(work_order=""):
 		
 	return operation
 
+#Extiende la fecha de validez de una confirmación de pedido, por el periodo de 1 año
+@frappe.whitelist()
+def extend_quotation_valid_till(name):
+	sql = """
+		update `tabQuotation`
+		set `valid_till`=(date_Add(valid_till, interval 1 year)) where name=%s"""
+	return frappe.db.sql(sql, name)
 
 #deprecatedPFG
 def get_actual_timesheet_summary(work_order, operation_id):
