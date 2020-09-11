@@ -213,7 +213,8 @@ def extend_quotation_valid_till(name):
 	sql = """
 		update `tabQuotation`
 		set `valid_till`=(date_Add(valid_till, interval 1 year)) where name=%s"""
-	return frappe.db.sql(sql, name)
+	frappe.db.sql(sql, name)
+	frappe.db.commit()
 
 #deprecatedPFG
 def get_actual_timesheet_summary(work_order, operation_id):
