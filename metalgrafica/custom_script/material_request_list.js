@@ -23,6 +23,8 @@ frappe.listview_settings['Material Request'] = {
 		list_view.page.add_menu_item(__("Cancelar solicitudes"), function() {
 			list_view.call_for_selected_items(method, { doctype: "Material Request" });
 		});
+
+		frappe.breadcrumbs.add("Metalgrafica", "Material Request");
 		
 	}
 };

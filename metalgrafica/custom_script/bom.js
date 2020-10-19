@@ -1,6 +1,9 @@
 frappe.provide("erpnext.bom");
 
 frappe.ui.form.on('BOM', {
+	onload: function(frm) {
+		frappe.breadcrumbs.add("Metalgrafica", "BOM");
+	},
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.load_bom_materials_from_item(frm);
 		cur_frm.cscript.load_bom_scraps_from_item(frm);

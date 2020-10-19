@@ -2,6 +2,7 @@ cur_frm.add_fetch("production_item", "item_group", "item_group");
 
 frappe.ui.form.on("Work Order", {
 	onload: function(frm) {
+		frappe.breadcrumbs.add("Metalgrafica", "Work Order");
 		if(frm.doc.__islocal) {
 			frm.trigger('bom_no');
 		}

@@ -10,6 +10,7 @@ cur_frm.add_fetch("formato", "numero_envases_capa", "numero_envases_capa");
 
 frappe.ui.form.on("Item", {
 	onload: function(frm) {
+		frappe.breadcrumbs.add("Metalgrafica", "Item");
 
 		//El grupo no puede ser un árbol
 		frm.fields_dict['item_group'].get_query = function(doc) {

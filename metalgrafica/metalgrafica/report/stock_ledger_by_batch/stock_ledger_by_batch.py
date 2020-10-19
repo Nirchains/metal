@@ -33,6 +33,9 @@ def get_data(filters):
 	if filters.get("item_group"):
 		conditions += " and it.item_group = %s " % (frappe.db.escape(filters.get("item_group")))		
 
+	if filters.get("formato"):
+		conditions += " and it.formato = %s " % (frappe.db.escape(filters.get("formato")))	
+
 	sql = """
 		select sle.item_code, sle.warehouse, sle.batch_no, round(sum(sle.actual_qty),2) as qty, sle.stock_uom
 			from `tabStock Ledger Entry` sle

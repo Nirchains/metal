@@ -12,6 +12,12 @@ frappe.query_reports["Stock Ledger by Batch"] = {
 			"reqd": 1
 		},
 		{
+			"fieldname":"formato",
+			"label": __("Formato"),
+			"fieldtype": "Link",
+			"options": "Formato"
+		},
+		{
 			"fieldname":"warehouse",
 			"label": __("Warehouse"),
 			"fieldtype": "Link",
@@ -30,3 +36,4 @@ frappe.query_reports["Stock Ledger by Batch"] = {
 		}
 	]
 };
+

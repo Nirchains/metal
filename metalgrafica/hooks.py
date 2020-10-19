@@ -36,49 +36,32 @@ fixtures=['Custom Field', 'Property Setter','Print Format','Custom Script', 'Dom
 
 
 doctype_js = {
-    "Workstation":[
-        "custom_script/workstation.js"
-    ],
-    "Custom Field": [
-        "custom_script/custom_field.js"
-    ],
-    "Item": [
-        "custom_script/item.js"
-    ],
-    "BOM": [
-        "custom_script/bom.js"
-    ],
-    "Work Order": [
-        "custom_script/work_order.js"
-    ],
-    "Purchase Receipt": [
-        "custom_script/purchase_receipt.js"
-    ],
-    "Quotation": [
-        "custom_script/quotation.js"
-    ],
-    "Sales Order": [
-        "custom_script/sales_order.js"
-    ],
-    "Production Planning Tool": [
-        "custom_script/production_planning_tool.js"
-    ],
-    "Timesheet": [
-        "custom_script/timesheet.js"
-    ],
-    "Stock Entry": [
-        "custom_script/stock_entry.js"
-    ],
-    "Delivery Note": [
-        "custom_script/delivery_note.js"
-    ]
+    "Workstation":["custom_script/workstation.js"],
+    "Custom Field":["custom_script/custom_field.js"],
+    "Item": ["custom_script/item.js"],
+    "BOM": ["custom_script/bom.js"],
+    "Work Order": ["custom_script/work_order.js"],
+    "Purchase Receipt": ["custom_script/purchase_receipt.js"],
+    "Quotation": ["custom_script/quotation.js"],
+    "Material Request": ["custom_script/material_request.js"],
+    "Sales Order": ["custom_script/sales_order.js"],
+    "Production Planning Tool": ["custom_script/production_planning_tool.js"],
+    "Timesheet": ["custom_script/timesheet.js"],
+    "Stock Entry": ["custom_script/stock_entry.js"],
+    "Delivery Note": ["custom_script/delivery_note.js"],
+    "BOM Update Tool": ["custom_script/bom_update_tool.js"],
+    "Batch": ["custom_script/batch.js"]
 }
 
 doctype_list_js = {
 	"Item": ["custom_script/item_list.js"],
-    "Work Order": ["custom_script/production_order_list.js"],
+    "BOM": ["custom_script/bom_list.js"],
+    "Work Order": ["custom_script/work_order_list.js"],
     "Quotation": ["custom_script/quotation_list.js"],
-    "Material Request": ["custom_script/material_request_list.js"]
+    "Material Request": ["custom_script/material_request_list.js"],
+    "Stock Entry": ["custom_script/stock_entry_list.js"],
+    "Purchase Receipt": ["custom_script/purchase_receipt_list.js"],
+    "Batch": ["custom_script/batch_list.js"]
 }
 
 doctype_tree_js = {

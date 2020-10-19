@@ -40,6 +40,8 @@ frappe.ui.form.on('Stock Entry', {
 		});
 	},
 	onload: function(frm) {
+		frappe.breadcrumbs.add("Metalgrafica", "Stock Entry");
+
 		if(frm.doc.docstatus < 1 && helper.IsNullOrEmpty(frm.doc.work_order)) {
 			frappe.call({
 				method: "metalgrafica.util.get_next_batch",

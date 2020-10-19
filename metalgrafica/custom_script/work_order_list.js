@@ -15,6 +15,8 @@ frappe.listview_settings['Work Order'] = {
 				"Cancelled": "darkgrey"
 			}[doc.status], "status,=," + doc.status];
 		}
+	},
+	onload: function(list_view) {
+		frappe.breadcrumbs.add("Metalgrafica", "Work Order");	
 	}
 };
-

@@ -4,6 +4,7 @@ cur_frm.refresh_fields();
 
 frappe.ui.form.on("Purchase Receipt", {
 	onload: function(frm) {
+		frappe.breadcrumbs.add("Metalgrafica", "Purchase Receipt");
 		if(frm.doc.docstatus < 1) {
 			frappe.call({
 				method: "metalgrafica.util.get_next_batch",
