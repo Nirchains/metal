@@ -37,7 +37,16 @@ def get_data(filters):
 
 	#Siempre se agrupa por estación de trabajo
 	colums += " cod, turno, workstation, rendimiento_linea, rendimiento_inverso,"
-	columns.append({"label": _("Turno"),"fieldname": "turno",	"fieldtype": "Data","width": 40	})
+	if filters.get("group_by_turno") or filters.get("turno"):
+		columns.append({"label": _("Turno"),"fieldname": "turno",	"fieldtype": "Data","width": 40	})	
+
+	if filters.get("turno"):
+		conditions += "and ti.turno = %s " % (frappe.db.escape(filters.get("turno")))
+
+	if filters.get("group_by_turno"):
+		group_by += ", turno "
+
+	
 	columns.append({"label": _("n"),"fieldname": "cod",	"fieldtype": "Data","width": 40	})
 	columns.append({"label": _("Máquina"),"fieldname": "workstation","fieldtype": "Link","options":"Workstation","width": 170})
 	columns.append({"label": _("Rdto.Linea"),"fieldname": "rendimiento_linea","fieldtype": "Data","width": 70})
@@ -69,8 +78,6 @@ def get_data(filters):
 	if filters.get("workstation"):
 		conditions += " and wop.workstation = %s " % (frappe.db.escape(filters.get("workstation")))
 
-	if filters.get("turno"):
-		conditions += "and ti.turno = %s " % (frappe.db.escape(filters.get("turno")))
 
 	#inner join `tabOperarios` op on op.parent = ti.name
 	#op.employee as employee, op.employee_name as employee_name, op.time_in_mins as time_in_mins

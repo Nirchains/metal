@@ -70,6 +70,12 @@ frappe.query_reports["Informe de tiempos"] = {
 			label: __("Agrupar por empleado"),
 			fieldtype: "Check",
 			default: 0
+		},
+		{
+			fieldname: "group_by_turno",
+			label: __("Agrupar por turno"),
+			fieldtype: "Check",
+			default: 0
 		}
 	]
 };
