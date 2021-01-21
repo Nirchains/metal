@@ -291,16 +291,16 @@ cur_frm.cscript.item = {
 
 		frm.toggle_enable("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA"]));
 		//ESPESOR
-		frm.toggle_enable("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","HOJA COMPUESTA","SEPARADOR"]));
+		frm.toggle_enable("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","HOJA COMPUESTA","SEPARADOR","BOBINA"]));
 
 
-		frm.toggle_reqd("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO"]));
+		frm.toggle_reqd("espesor", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO","BOBINA"]));
 		
 		//LARGO
 		util.toggle_enable_and_required(frm, "largo", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO", "HOJA COMPUESTA","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
 		
 		//ANCHO
-		util.toggle_enable_and_required(frm, "ancho", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO", "HOJA COMPUESTA","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET"]));
+		util.toggle_enable_and_required(frm, "ancho", helper.In(frm.doc.item_group, ["HOJA VIRGEN","HOJA CUERPO","HOJA TAPA","HOJA FONDO", "HOJA COMPUESTA","TIRA TAPA","TIRA FONDO","SEPARADOR","PALET","BOBINA"]));
 	
 		util.toggle_enable_and_required(frm, "formato_del_cuerpo", frm.doc.item_group=="HOJA CUERPO");
 
@@ -382,6 +382,9 @@ cur_frm.cscript.item = {
 							frm.set_value('purchase_uom','Kilogramo')
 						} else {
 							cur_frm.cscript.item.load_default_warehouse(frm, 'Materias primas - MDS');
+						}
+						if (frm.doc.item_group == 'BOBINA') {
+							frm.set_value('stock_uom', "Kilogramo")
 						}
 						frm.set_value('is_purchase_item',1);
 						frm.set_value('is_sales_item',0);
@@ -624,10 +627,10 @@ cur_frm.cscript.item = {
 	},
 
 	set_productos_de_la_combinacion: function(frm, r) {
-		console.log("set_productos_de_la_combinacion");
+		//console.log("set_productos_de_la_combinacion");
 		$.each(r.message, function(i, item) {
-			console.log("Bucle");
-			console.log(item);
+			//console.log("Bucle");
+			//console.log(item);
 			var d = frappe.model.add_child(frm.doc, "Productos de la combinacion", "productos_de_la_combinacion");
 			frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
 			frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);

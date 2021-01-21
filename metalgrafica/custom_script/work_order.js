@@ -92,6 +92,26 @@ erpnext.work_order["set_custom_buttons"] = function(frm) {
 			if ((flt(doc.produced_qty) < flt(doc.material_transferred_for_manufacturing))
 					&& frm.doc.status != 'Stopped') {
 				frm.has_finish_btn = true;
+
+				if (frm.doc.__onload && frm.doc.__onload.material_consumption == 1) {
+					// Only show "Material Consumption" when required_qty > consumed_qty
+					var counter = 0;
+					var tbl = frm.doc.required_items || [];
+					var tbl_lenght = tbl.length;
+					for (var i = 0, len = tbl_lenght; i < len; i++) {
+						if (flt(frm.doc.required_items[i].required_qty) > flt(frm.doc.required_items[i].consumed_qty)) {
+							counter += 1;
+						}
+					}
+					if (counter > 0) {
+						var consumption_btn = frm.add_custom_button(__('Material Consumption'), function() {
+							const backflush_raw_materials_based_on = frm.doc.__onload.backflush_raw_materials_based_on;
+							erpnext.work_order.make_consumption_se(frm, backflush_raw_materials_based_on);
+						});
+						consumption_btn.addClass('btn-primary');
+					}
+				}
+
 				var finish_btn = frm.add_custom_button(__('Finish'), function() {
 					erpnext.work_order.make_se(frm, 'Manufacture');
 				});
