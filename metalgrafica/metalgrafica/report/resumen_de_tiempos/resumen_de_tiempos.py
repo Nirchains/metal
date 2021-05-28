@@ -29,16 +29,21 @@ def get_data(filters):
 	columns.append({"label": _("Máquina"),"fieldname": "workstation","fieldtype": "Link","options":"Workstation","width": 250})
 	group_by += ", workstation, activity_cod "
 
+	if group_by <> "group by":
+		group_by = group_by.replace("group by, ", "group by ")
+	else:
+		group_by = ""
+
+	if filters.get("group_by_date"):
+		colums += ", start_date "
+		columns.append({"label": _("Fecha"),"fieldname": "start_date","fieldtype": "Date","width": 100})
+		group_by += ", start_date "
+
 	colums += " , activity_cod, activity_type, activities_time, sum(time_in_mins) as time_in_mins"
 	columns.append({"label": _("Código Act."),"fieldname": "activity_cod","fieldtype": "Data","width": 100})
 	columns.append({"label": _("Actividad"),"fieldname": "activity_type","fieldtype": "Data","width": 120})
 	columns.append({"label": _("Tiempo"),"fieldname": "time_in_mins","fieldtype": "Int","width": 100})
 	columns.append({"label": _("Total (%)"),"fieldname": "total","fieldtype": "Data","width": 80})
-
-	if group_by <> "group by":
-		group_by = group_by.replace("group by, ", "group by ")
-	else:
-		group_by = ""
 
 	#ordenamos por los mismos criterios de agrupación
 	order_by = group_by.replace("group by", "order by")
@@ -49,7 +54,7 @@ def get_data(filters):
 		conditions += " and ti.workstation = %s " % (frappe.db.escape(filters.get("workstation")))
 
 	sql = """ select 
-		ti.workstation as workstation, 
+		ti.workstation as workstation, ti.start_date,
 		tie.activity_cod as activity_cod, tie.activity_type as activity_type,
 		(ti.activities_time) as activities_time, tie.time_in_mins
 		from
@@ -69,7 +74,7 @@ def get_data(filters):
 		}
 
 	#frappe.log_error("{0}".format(sql_group_by))
-	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1)
+	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1,debug=True)
 
 	total = 0
 	for registro in l_tiempos:

@@ -32,6 +32,12 @@ frappe.query_reports["Resumen de tiempos"] = {
 			fieldtype: "Link",
 			options: "Workstation",
 			reqd: 1
-		}
+		},
+		{
+			fieldname: "group_by_date",
+			label: __("Agrupar por fecha"),
+			fieldtype: "Check",
+			default: 1
+		},
 	]
 };
