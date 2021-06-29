@@ -620,7 +620,9 @@ cur_frm.cscript.item = {
 				callback: function(r) {
 					//frm.set_value('item_name', r.message.replace(/-/g, ' '));
 					frm.set_value('item_name', r.message);
-					frm.set_value('nombre_para_cliente', r.message);
+					if (frm.doc.is_sales_item == 1) {
+						frm.set_value('nombre_para_cliente', r.message);
+					}
 				}
 			});
 		}
