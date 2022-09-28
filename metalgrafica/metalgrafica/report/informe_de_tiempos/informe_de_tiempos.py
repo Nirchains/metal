@@ -102,7 +102,7 @@ def get_data(filters):
 		}
 
 	colums += """
-				 timesheet, 
+				 timesheet, fecha,
 				 sum(fab_inverso) as fab_inverso,
 				 sum(fabricado) as fabricado,
 				 sum(tiempo_presencial) as tiempo_presencial, 
@@ -147,7 +147,7 @@ def get_data(filters):
 
 
 	#frappe.log_error("{0}".format(sql_group_by))
-	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1)
+	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1, debug=False)
 	#l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
 
 	for registro in l_tiempos:
