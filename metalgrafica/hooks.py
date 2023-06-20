@@ -134,7 +134,29 @@ dump_report_map = "metalgrafica.report_data_map.data_map"
 doc_events = {
     "Product Bundle": {
         "validate": "metalgrafica.util.product_bundle_validate"
+    },
+    "Work Order": {
+        "on_update": "metalgrafica.util.update_document_codes_work_order",
+    },
+    "Purchase Order": {
+        "on_update": "metalgrafica.util.update_document_codes_purchase_order"
+    },
+    "Purchase Receipt": {
+        "on_update": "metalgrafica.util.update_document_codes_purchase_receipt"
+    },
+    "Purchase Order": {
+        "on_update": "metalgrafica.util.update_document_codes_purchase_order"
+    },
+    "Quotation": {
+        "on_update": "metalgrafica.util.update_document_codes_quotation"
+    },
+    "Sales Order": {
+        "on_update": "metalgrafica.util.update_document_codes_sales_order"
+    },
+    "Delivery Note": {
+        "on_update": "metalgrafica.util.update_document_codes_sales_delivery_note"
     }
+    
 }
 
 # Scheduled Tasks

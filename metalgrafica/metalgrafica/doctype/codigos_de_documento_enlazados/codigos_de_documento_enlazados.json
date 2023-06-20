@@ -1,0 +1,115 @@
+{
+ "creation": "2023-04-28 11:03:40.786677",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "docname",
+  "print_format_name",
+  "code",
+  "version",
+  "date",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "docname",
+   "fieldtype": "Data",
+   "label": "Docname"
+  },
+  {
+   "columns": 3,
+   "fieldname": "print_format_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Documento",
+   "options": "Print Format",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "version",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Versi\u00f3n",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Fecha",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Codigos de documento enlazados",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "modified": "2023-05-12 17:21:07.952786",
+ "modified_by": "Administrator",
+ "module": "Metalgrafica",
+ "name": "Codigos de documento enlazados",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Manufacturing Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Quality Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Purchase Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -81,6 +81,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 			frappe.model.clear_table(frm.doc,"operations");
 			frappe.call({
 				method: "metalgrafica.bom.load_bom_operations_from_item",
+				freeze: true,
 				args: {
 					"item": frm.doc["item"]
 				},
@@ -103,17 +104,20 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 	},
 
 	load_bom_scraps_from_item: function(frm) {
+		console.log("Procediendo a la carga de mermas");
 		if (frm.doc["item"]) {
 			frappe.model.clear_table(frm.doc,"scrap_items");
 			frappe.call({
 				method: "metalgrafica.bom.load_bom_scraps_from_item",
+				freeze: true,
 				args: {
 					"item": frm.doc["item"]
 				},
 				callback: function(r) {
 					if(!r.message) {
-						//frappe.throw(__("El grupo de productos no contiene ninguna plantilla de materiales"))
+						console.log(__("El grupo de productos no contiene ninguna plantilla de materiales"));
 					} else {
+						console.log(r.message);
 						$.each(r.message, function(i, item) {
 							var d = frm.add_child("scrap_items");
 	                		d.item_code = item.item_code;
