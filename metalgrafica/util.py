@@ -225,6 +225,7 @@ def get_actual_timesheet_summary(work_order, operation_id):
 		ts.work_order = %s and tsd.operation_id = %s and ts.docstatus=1 and ts.name = tsd.parent""",
 		(work_order, operation_id), as_dict=1)[0]
 
+
 def update_document_codes_work_order(doc, method):
 	print_format_name = "Orden de produccion"
 	update_document_codes(print_format_name, doc)
@@ -263,11 +264,14 @@ def update_document_codes_sales_delivery_note(doc, method):
 
 def update_document_codes(print_format_name, doc):
 	doc_code_list = frappe.get_all("Codigos de documento", filters = {"docname": print_format_name, "is_default": 1}, fields=["name", "docname", "code", "version", "date"])
-	#frappe.msgprint(json.dumps(doc_code_list))
+	#frappe.msgprint(print_format_name)
+
 	if len(doc_code_list) == 1:
 		doc_code = doc_code_list[0]
 
-		if not frappe.db.exists("Codigos de documento enlazados", doc.get("name") + "#" + doc_code.get("code") + " - " + doc_code.get("version")):
+		#frappe.msgprint("{0}-{1}".format("Codigos de documento enlazados", doc.get("name") + "#" + print_format_name))
+
+		if not frappe.db.exists("Codigos de documento enlazados", doc.get("name") + "#" + print_format_name):
 			doc_enlazado = frappe.new_doc("Codigos de documento enlazados")
 			doc_enlazado.print_format_name = print_format_name
 			doc_enlazado.docname = doc.get("name")

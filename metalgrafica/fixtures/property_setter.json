@@ -5534,5 +5534,53 @@
   "property": "allow_in_quick_entry",
   "property_type": "Check",
   "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Purchase Order",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "grand_total",
+  "modified": "2023-06-12 17:07:19.849892",
+  "name": "Purchase Order-grand_total-precision",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "precision",
+  "property_type": "Select",
+  "value": "2"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Purchase Order Item",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "amount",
+  "modified": "2023-06-12 17:10:29.482270",
+  "name": "Purchase Order Item-amount-precision",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "precision",
+  "property_type": "Select",
+  "value": "2"
+ },
+ {
+  "default_value": null,
+  "doc_type": "BOM",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "scrap_section",
+  "modified": "2023-06-20 18:28:27.983511",
+  "name": "BOM-scrap_section-collapsible",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "property": "collapsible",
+  "property_type": "Check",
+  "value": "0"
  }
 ]
