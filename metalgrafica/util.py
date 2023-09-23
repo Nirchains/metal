@@ -263,7 +263,7 @@ def update_document_codes_sales_delivery_note(doc, method):
 
 
 def update_document_codes(print_format_name, doc):
-	doc_code_list = frappe.get_all("Codigos de documento", filters = {"docname": print_format_name, "is_default": 1}, fields=["name", "docname", "code", "version", "date"])
+	doc_code_list = frappe.get_all("Codigos de documento", filters = {"print_format_name": print_format_name, "is_default": 1}, fields=["name", "print_format_name", "code", "version", "date"])
 	#frappe.msgprint(print_format_name)
 
 	if len(doc_code_list) == 1:
