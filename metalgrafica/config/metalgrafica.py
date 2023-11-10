@@ -35,6 +35,12 @@ def get_data():
 					"doctype": "Work Order",
 					"is_query_report": True
 				},
+				{
+					"type": "report",
+					"name": "Informe de empleados",
+					"doctype": "Work Order",
+					"is_query_report": True
+				},
 			]
 		},
 		{

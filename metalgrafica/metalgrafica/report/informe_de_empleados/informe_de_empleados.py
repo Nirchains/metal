@@ -35,15 +35,13 @@ def get_data(filters):
 			conditions += " and ti.workstation = %s " % (frappe.db.escape(filters.get("workstation")))
 
 	#Si se agrupa por empleado o se realiza una búsqueda por empleado
-	if filters.get("group_by_employee") or filters.get("employee"):
-		colums += " op.employee as cod_emp, op.employee_name as empleado, "
-		columns.append({"label": _("Cod Emp"),"fieldname": "cod_emp","fieldtype": "Link","options":"Employee","width": 100})
-		columns.append({"label": _("Empleado"),"fieldname": "empleado","fieldtype": "Data","width": 150})
-		columns.append({"label": _("Tiempo (minutos)"),"fieldname": "tiempo","fieldtype": "Data","width": 150})
-		if filters.get("employee"):
-			where +=" and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
-		if filters.get("group_by_employee"):
-			group_by += ", op.employee"
+	colums += " op.employee as cod_emp, op.employee_name as empleado, "
+	columns.append({"label": _("Cod Emp"),"fieldname": "cod_emp","fieldtype": "Link","options":"Employee","width": 100})
+	columns.append({"label": _("Empleado"),"fieldname": "empleado","fieldtype": "Data","width": 150})
+	columns.append({"label": _("Tiempo (minutos)"),"fieldname": "tiempo","fieldtype": "Data","width": 150})
+	if filters.get("employee"):
+		where +=" and op.employee = %s " % (frappe.db.escape(filters.get("employee")))
+	group_by += ", op.employee"
 
 	if filters.get("group_by_date"):
 		colums += " ti.end_date as fecha, "

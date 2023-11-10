@@ -51,12 +51,6 @@ frappe.query_reports["Informe de empleados"] = {
 			default: 1
 		},
 		{
-			fieldname: "group_by_employee",
-			label: __("Agrupar por empleado"),
-			fieldtype: "Check",
-			default: 1
-		},
-		{
 			fieldname: "group_by_date",
 			label: __("Agrupar por fecha"),
 			fieldtype: "Check",
