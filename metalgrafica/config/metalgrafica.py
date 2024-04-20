@@ -319,5 +319,16 @@ def get_data():
 					"label": _("Tipos de portes")
 				}
 			]
+		},
+		{
+			"label": _("Calidad"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Codigos de documento",
+					"description": _("Codigos de documento"),
+					"label": _("C&oacute;digos de documento")
+				}
+			]
 		}
 	]
