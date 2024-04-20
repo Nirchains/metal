@@ -6,7 +6,6 @@ frappe.ui.form.on('BOM', {
 	},
 	cargar_materiales: function(frm) {
 		cur_frm.cscript.load_bom_materials_from_item(frm);
-		cur_frm.cscript.load_bom_scraps_from_item(frm);
 	},
 
 	cargar_cantidad: function(frm) {
@@ -15,6 +14,10 @@ frappe.ui.form.on('BOM', {
 
 	cargar_operaciones: function(frm) {
 		cur_frm.cscript.load_bom_operations_from_item(frm);
+	},
+
+	cargar_mermas: function(frm) {
+		cur_frm.cscript.load_bom_scraps_from_item(frm);
 	}
 });
 
@@ -53,6 +56,7 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 						erpnext.bom.calculate_rm_cost(frm.doc);
 						erpnext.bom.calculate_scrap_materials_cost(frm.doc);
 						erpnext.bom.calculate_total(frm.doc);
+						//refresh_field("items");
 					}
 				}
 			});
@@ -119,12 +123,12 @@ erpnext.bom.BomExtendController = erpnext.bom.BomController.extend({
 					} else {
 						console.log(r.message);
 						$.each(r.message, function(i, item) {
-							var d = frm.add_child("scrap_items");
-	                		d.item_code = item.item_code;
-	                		d.item_name = item.item_name;
-			    			d.stock_uom = item.stock_uom;
-	                		d.stock_qty = item.stock_qty;
-	                		frm.refresh_field("scrap_items");
+							var d = frappe.model.add_child(frm.doc, "BOM Scrap Item", "scrap_items");
+							frappe.model.set_value(d.doctype, d.name, "item_code", item.item_code);
+	                		frappe.model.set_value(d.doctype, d.name, "item_name", item.item_name);
+							frappe.model.set_value(d.doctype, d.name, "stock_uom", item.stock_uom);
+							frappe.model.set_value(d.doctype, d.name, "stock_qty", item.stock_qty);
+	                		refresh_field("scrap_items");
 						});	
 						
 					}				
