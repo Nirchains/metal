@@ -103,8 +103,8 @@ def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques, posting
 				lote = ("{0}").format(inicio)
 				automatic = 0
 			else:
-				lote = ("{0}").format(int(inicio) + int(x))
-				automatic = 1
+				lote = ("C{0}").format(int(inicio) + int(x))
+				automatic = int(inicio)
 
 			if frappe.db.exists("Batch", {"batch_id": lote}):
 				doc = frappe.get_doc("Batch", {"batch_id": lote})
@@ -126,18 +126,18 @@ def create_batch_secuence(inicio_de_secuencia, producto, numero_bloques, posting
 
 def clean_batch():
 	'''Limpia los lotes que no estan asociados en ninguna recepcion de compra'''
-	frappe.db.sql("""delete from tabBatch where automatic = 1 and 
+	frappe.db.sql("""delete from tabBatch where automatic > 0 and 
 		name not in (select batch_no from `tabPurchase Receipt Item`)""")
 
 @frappe.whitelist()
 def get_next_batch():
 	'''Devuelve el siguiente numero de lote disponible'''
-	batch_no = frappe.db.sql(""" select IFNULL(max(CAST(name as signed)), 1)+1 valor 
+	batch_no = frappe.db.sql(""" select IFNULL(max(CAST(automatic as signed)), 1)+1 valor 
 							from tabBatch 
-							where automatic = 1 and name REGEXP '^[1-9][0-9]*$' """)[0][0]
-	exist = frappe.db.sql("""select count(name) from tabBatch where name=%s""", batch_no)[0][0]
-	if exist > 0:
-		batch_no = str(int(batch_no) + 1)
+							where automatic >= 1 """)[0][0]
+	#exist = frappe.db.sql("""select count(name) from tabBatch where name=%s""", batch_no)[0][0]
+	#if exist > 0:
+	batch_no = str(int(batch_no) + 1)
 	return batch_no
 
 @frappe.whitelist()
