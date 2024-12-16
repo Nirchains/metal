@@ -466,13 +466,6 @@ cur_frm.cscript.item = {
 				}
 			});
 
-			//COMPROBAMOS SI TIENE RESPIRADOR
-			$.each(frm.doc.materiales || [], function(i, v) {
-				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
-					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
-				}
-			});
-
 			frappe.call({
 				type: "POST",
 				method: "metalgrafica.bom.item_description_generate",
@@ -508,7 +501,7 @@ cur_frm.cscript.item = {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia']
+			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia', 'recubrimiento_de_soldadura', 'paletización']
 			
 			var doc = {};
 
@@ -517,13 +510,6 @@ cur_frm.cscript.item = {
 					doc[value] = frm.doc[value];
 				}
 			});
-
-			//COMPROBAMOS SI TIENE RESPIRADOR
-			$.each(frm.doc.materiales || [], function(i, v) {
-				if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
-					doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
-				}
-			})
 
 			if (frm.doc.item_group == "HOJA COMPUESTA") {
 				var nombre_personalizado = "";
@@ -553,9 +539,34 @@ cur_frm.cscript.item = {
 					"doc": doc
 				},
 				callback: function(r) {
-					frm.set_value('observaciones', r.message);
+					var descripcion = r.message;
+
+					//CARGAMOS LA LISTA DE MATERIALES
+					if (frm.doc.materiales.length > 0) {
+						descripcion += "<br><b>MATERIALES DE COMPOSICIÓN:</b>";
+						descripcion += "<table CLASS='table table-bordered table-condensed'>";
+						descripcion += "<thead>";
+						descripcion += "<tr>";
+						descripcion += "<td><b>Material</b></td>";
+						descripcion += "<td><b>Cantidad</b></td>";
+						descripcion += "</tr>";
+						descripcion += "</thead>";
+						descripcion += "<tbody>";
+						$.each(frm.doc.materiales || [], function(i, v) {
+							if (v.item_group == "RESPIRADOR" && !helper.IsNullOrEmpty(v.item_code)) {
+								doc['respirador'] = v.item_name.replace("RESPIRADOR ", "");
+							}
+							descripcion += "<tr><td>" + v.item_name + "</td><td>" + v.qty + "</td></tr>";
+						});
+						descripcion += "</tbody>";
+						descripcion += "</table>";
+					}
+
+					frm.set_value('observaciones', descripcion);
 				}
 			});
+
+
 		}
 	},
 
