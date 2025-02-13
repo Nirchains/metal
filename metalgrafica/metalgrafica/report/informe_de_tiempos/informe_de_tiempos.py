@@ -36,7 +36,7 @@ def get_data(filters):
 		group_by += ", fecha "
 
 	#Siempre se agrupa por estación de trabajo
-	colums += " cod, turno, workstation, rendimiento_linea, rendimiento_inverso,"
+	colums += " cod, turno, workstation, rendimiento_linea, completed, rendimiento_inverso,"
 	if filters.get("group_by_turno") or filters.get("turno"):
 		columns.append({"label": _("Turno"),"fieldname": "turno",	"fieldtype": "Data","width": 40	})	
 
@@ -49,7 +49,8 @@ def get_data(filters):
 	
 	columns.append({"label": _("n"),"fieldname": "cod",	"fieldtype": "Data","width": 40	})
 	columns.append({"label": _("Máquina"),"fieldname": "workstation","fieldtype": "Link","options":"Workstation","width": 170})
-	columns.append({"label": _("Rdto.Linea"),"fieldname": "rendimiento_linea","fieldtype": "Data","width": 70})
+	columns.append({"label": _("Rdto.1"),"fieldname": "rendimiento_linea","fieldtype": "Data","width": 70})
+	columns.append({"label": _("Rdto.2"),"fieldname": "rdto","fieldtype": "Data","width": 70})
 	group_by += ", workstation "
 
 	columns.append({"label": _("Presencial"),"fieldname": "tiempo_presencial","fieldtype": "Int","width": 100})
@@ -85,7 +86,9 @@ def get_data(filters):
 	sql = """ select 
 		wo.name as orden, wo.produced_qty as fabricado, ti.turno,		
 		woi.transferred_qty as fab_inverso,
-		wop.workstation as workstation, ws.vel_min as rendimiento_linea, ws.rendimiento_inverso as rendimiento_inverso, ws.cod as cod,
+		wop.workstation as workstation, ws.vel_min as rendimiento_linea, 
+		wop.time_in_mins as time_in_mins, wop.completed_qty as completed,
+		ws.rendimiento_inverso as rendimiento_inverso, ws.cod as cod,
 		ti.name as timesheet, ti.start_date as fecha, (ti.activities_time) as tiempo_presencial, (ti.productive_time) as tiempo_productivo, 
 		(ti.unproductive_time) as tiempo_improductivo
 		from
@@ -107,7 +110,11 @@ def get_data(filters):
 				 sum(fabricado) as fabricado,
 				 sum(tiempo_presencial) as tiempo_presencial, 
 				 sum(tiempo_productivo) as tiempo_productivo, 
-				 sum(tiempo_improductivo) as tiempo_improductivo """
+				 sum(tiempo_improductivo) as tiempo_improductivo, 
+				 sum(time_in_mins) as time_in_mins,
+				 sum(completed) as completed 
+
+				 """
 
 	sql_group_by = """ select %(colums)s from (%(sql)s) g
 		%(group_by)s 
@@ -166,7 +173,10 @@ def get_data(filters):
 			if registro.fabricado > 0 and registro.tiempo_productivo > 0 and registro.rendimiento_linea > 0:
 				registro["rendimiento"] = (registro.fabricado/(registro.tiempo_productivo*registro.rendimiento_linea))*100
 				registro["rendimiento_total"] = (registro.fabricado/(registro.tiempo_presencial*registro.rendimiento_linea))*100
-			registro["rendimiento_linea"] = "{0}/min".format(int(registro.rendimiento_linea))
+			
+			
+			registro["rdto"] = "{0}/min".format( round((registro["completed"]/registro["time_in_mins"]), 2))
+			registro["rendimiento_linea"] = "{0}/min".format(round(registro.rendimiento_linea), 2)
 		except:
 			registro["rendimiento"] = 0
 			registro["rendimiento_total"] = 0
