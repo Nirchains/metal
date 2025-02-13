@@ -36,7 +36,7 @@ def get_data(filters):
 		group_by += ", fecha "
 
 	#Siempre se agrupa por estación de trabajo
-	colums += " cod, turno, workstation, rendimiento_linea, completed, rendimiento_inverso,"
+	colums += " cod, turno, workstation, rendimiento_linea, rendimiento_inverso,"
 	if filters.get("group_by_turno") or filters.get("turno"):
 		columns.append({"label": _("Turno"),"fieldname": "turno",	"fieldtype": "Data","width": 40	})	
 
@@ -87,7 +87,7 @@ def get_data(filters):
 		wo.name as orden, wo.produced_qty as fabricado, ti.turno,		
 		woi.transferred_qty as fab_inverso,
 		wop.workstation as workstation, ws.vel_min as rendimiento_linea, 
-		wop.time_in_mins as time_in_mins, wop.completed_qty as completed,
+		wop.time_in_mins as time_in_mins,
 		ws.rendimiento_inverso as rendimiento_inverso, ws.cod as cod,
 		ti.name as timesheet, ti.start_date as fecha, (ti.activities_time) as tiempo_presencial, (ti.productive_time) as tiempo_productivo, 
 		(ti.unproductive_time) as tiempo_improductivo
@@ -111,8 +111,7 @@ def get_data(filters):
 				 sum(tiempo_presencial) as tiempo_presencial, 
 				 sum(tiempo_productivo) as tiempo_productivo, 
 				 sum(tiempo_improductivo) as tiempo_improductivo, 
-				 sum(time_in_mins) as time_in_mins,
-				 sum(completed) as completed 
+				 sum(time_in_mins) as time_in_mins 
 
 				 """
 
@@ -153,7 +152,7 @@ def get_data(filters):
 			""".format(sql_group_by, inner_join, where, group_by)
 
 
-	#frappe.log_error("{0}".format(sql_group_by))
+	frappe.log_error("{0}".format(sql_group_by))
 	l_tiempos = frappe.db.sql(sql_group_by, as_dict=1, debug=False)
 	#l_tiempos_detallado = frappe.db.sql(sql, as_dict=1)
 
@@ -175,7 +174,7 @@ def get_data(filters):
 				registro["rendimiento_total"] = (registro.fabricado/(registro.tiempo_presencial*registro.rendimiento_linea))*100
 			
 			
-			registro["rdto"] = "{0}/min".format( round((registro["completed"]/registro["time_in_mins"]), 2))
+			registro["rdto"] = "{0}/min".format( round((registro["fabricado"]/registro["time_in_mins"]), 2))
 			registro["rendimiento_linea"] = "{0}/min".format(round(registro.rendimiento_linea), 2)
 		except:
 			registro["rendimiento"] = 0
