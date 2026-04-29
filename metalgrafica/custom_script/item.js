@@ -284,6 +284,13 @@ cur_frm.cscript.item = {
 
 		util.toggle_enable_and_required(frm, "diametro", frm.doc.item_group=="TAPON");
 
+		//Aplica a producto solo
+		frm.toggle_display("recubrimiento_de_soldadura", frm.doc.item_group=="PRODUCTO");
+		frm.toggle_display("paletización", frm.doc.item_group=="PRODUCTO");
+		frm.toggle_display("separador", frm.doc.item_group=="PRODUCTO");
+		frm.toggle_display("protección_exterior_cartón", frm.doc.item_group=="PRODUCTO");
+		frm.toggle_display("posición_de_taladro", frm.doc.item_group=="PRODUCTO");
+
 		//COLOR						
 		frm.toggle_display("color", helper.In(frm.doc.item_group,["TAPON","RESPIRADOR","ASA","TAPA"]));
 
@@ -501,7 +508,7 @@ cur_frm.cscript.item = {
 
 		if (frm.doc.item_group) {
 		
-			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia', 'recubrimiento_de_soldadura', 'paletización']
+			var keys = ['posicion', 'panelado', 'palet', 'plano_de_litografia', 'recubrimiento_de_soldadura', 'paletización', 'separador', 'protección_exterior_cartón', 'posición_de_taladro']
 			
 			var doc = {};
 
