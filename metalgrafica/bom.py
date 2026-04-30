@@ -55,9 +55,12 @@ def item_observations_generate():
 	append_description_if_no_null(doc, descripciones, "PANELADO", "panelado")
 	append_description_if_no_null(doc, descripciones, "PALET", "palet")
 	append_description_if_no_null(doc, descripciones, "UNIDADES PALET", "unidades_palet")
-	append_description_if_no_null(doc, descripciones, "PALETIZACION", "paletización")
+	append_description_if_no_null(doc, descripciones, "TIPO DE PALLET", "paletización")
 	append_description_if_no_null(doc, descripciones, "PLANO DE LITOGRAFIA", "plano_de_litografia")
 	append_description_if_no_null(doc, descripciones, "RECUBRIMIENTO SOLDADURA", "recubrimiento_de_soldadura")
+	append_description_if_no_null(doc, descripciones, "SEPARADOR", "separador")
+	append_description_if_no_null(doc, descripciones, "PROTECCIÓN EXTERIOR CARTÓN", "protección_exterior_cartón")
+	append_description_if_no_null(doc, descripciones, "POSICIÓN DE TALADRO", "posición_de_taladro")
 		
 	doc["observaciones"] = "{0}".format("<br>".join(descripciones))
 		
