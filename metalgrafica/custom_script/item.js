@@ -107,6 +107,11 @@ frappe.ui.form.on("Item", {
 
 	generar_descripcion: function(frm) {
 		cur_frm.cscript.item.item_description_generate(frm);
+		cur_frm.cscript.item.item_observations_generate(frm);
+	},
+
+	generar_descripcion_y_codigo: function(frm) {
+		cur_frm.cscript.item.item_description_generate(frm);
 		cur_frm.cscript.item.item_name_generate(frm);
 		cur_frm.cscript.item.item_observations_generate(frm);
 	},
